@@ -1,23 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
+import './jakakolwieknazwa.scss'
 
 function App() {
+  const t = "tekst"
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Dzień Dobry!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div class="main">
+    JD
     </div>
   );
 }
