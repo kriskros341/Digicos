@@ -1,2 +1,5 @@
 python/
 .idea/
+certs.py
+__pycache__
+*/__pycache__/
