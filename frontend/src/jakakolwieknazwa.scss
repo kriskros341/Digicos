@@ -1,11 +1,7 @@
-$m: red;
-
-
-.main{
-  color:$m;
-
-  p {
-
-  }
-  &::before
+.main {
+  position: relative;
+  height: 100%;
+}
+#root {
+  height: 100%;
 }

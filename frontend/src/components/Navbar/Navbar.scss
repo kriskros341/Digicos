@@ -1,0 +1,91 @@
+body{
+  height: 11500px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.item{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover{
+
+  }
+}
+
+.navbar{
+  position: sticky;
+  display: flex;
+  flex-direction:row;
+  text-align: center;
+  top: 0;
+
+  width:80%;
+  padding: 0 10%;
+  color: white;
+  background-color: #0A102D;
+  transition: background-color 0.3s,  color 0.3s;
+
+  & .navbar__left{
+    display: flex;
+    width:20%;
+    align-items: center;
+    justify-content: left;
+  }
+  & .navbar__right{
+    display: flex;
+    flex-direction:row-reverse;
+    text-align: center;
+    width:80%;
+
+
+
+    & > div {
+      position: relative;
+      padding: 0 2%;
+      transform-origin: center;
+      transition: color 0.3s ease-in-out, filter 1s ease-in-out;
+      text-align: center;
+      overflow: hidden;
+      height:8vh;
+
+      &::before {
+        position: absolute;
+        transition: background-color 0.25s ease-in-out;
+        top: 90%; right: 0; bottom: 0; left: 0;
+        transform: scaleX(0);
+        content:"";
+        z-index: -1;
+        background-color: #B7162B;
+      }
+      &.focused {
+        filter: brightness(120%);
+      }
+      &:hover {
+        color: #B7162B;
+
+      }
+      &:hover::before {
+        transform: scaleX(1);
+        background-color: #B7162B;
+      }
+      &.far::before {
+        opacity: 0;
+      }
+      &.mouseToLeft::before {
+        transition: transform 0.25s 0.06s linear;
+        transform-origin: right !important;
+      }
+      &.mouseToRight::before {
+        transition: transform 0.25s 0.06s linear;
+        transform-origin: left !important;
+      }
+    }
+  }
+}
+.item:hover{
+  cursor: pointer;
+}
+.transparent {
+  background-color: transparent !important;
+  color: #0A102D !important;
+}
