@@ -1,36 +1,36 @@
 import './Navbar.scss'
 import { useEffect, useRef } from 'react'
 
-const Navbar = ({ navMouseStateProps, scrollY }) => {
+const Navbar = ({ Link, navMouseStateProps, scrollY }) => {
   const [navMouseState, setMouseState] = navMouseStateProps
   const navRef = useRef()
   const menuItems = [
-    "Firma",
-    "Oferta",
-    "Realizacje",
-    "Kontakt",
-    "Kariera",
-    "Inwestorzy",
-    "Aktualności"
+    {"nazwa":"Firma", "link":"/firma"},
+    {"nazwa":"Oferta", "link":"/oferta"},
+    {"nazwa":"Realizacje", "link":"/realizacje"},
+    {"nazwa":"Kontakt", "link":"/kontakt"},
+    {"nazwa":"Kariera", "link":"/kariera"},
+    {"nazwa":"Inwestorzy", "link":"/inwestorzy"},
+    {"nazwa":"Aktualnosci", "link":"/aktualnosci"}
   ]
 
   const mouseOverHandler = (e) => {
-    setMouseState(parseInt(e.target.getAttribute("data-foo"), 10))
+    setMouseState(parseInt(e.target.getAttribute("data-index"), 10))
     console.log(navRef.current)
   }
 
   return(
     <div className={scrollY ? "navbar" : "navbar transparent" }>
-      <div className="navbar__left">
+      <Link className="navbar__left" to="/">
         <div className="item logo">
           <img src="" alt="logo"/>
         </div>
-      </div>
+      </Link>
       <div ref={ navRef } className="navbar__right">
         {menuItems.map((item, key) => {
           return (
-            <div
-            data-foo={ key }
+            <Link to={ item.link }><div
+            data-index={ key }
             key={ key }
             onMouseEnter={ mouseOverHandler }
             className= {
@@ -40,8 +40,8 @@ const Navbar = ({ navMouseStateProps, scrollY }) => {
                   (key > navMouseState ? "item mouseToLeft" : "item mouseToRight")
                 )
               }>
-              <div>{ item }</div>
-            </div>)
+              <div>{ item.nazwa }</div>
+            </div></Link>)
         })}
       </div>
     </div>

@@ -1,7 +1,15 @@
 import './App.css';
 import './jakakolwieknazwa.scss'
-import Navbar from './components/Navbar/Navbar.js'
+import Home from './components/pages/home_page.js'
+import Aktualnosci from './components/pages/aktualnosci.js'
+import HomeNew from './components/pages/HomeNew.js'
 import { useState, useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom"
 
 function App() {
   const [scrollY, setScrollY] = useState();
@@ -23,12 +31,14 @@ function App() {
       window.removeEventListener("scroll", scrollHandler);
     };
   }, []);
-
-
   return (
-    <div className="main">
-      <Navbar navMouseStateProps={ [navMouseState, setNavMouseState] } scrollY={ scrollY }/>
-    </div>
+    <Router>
+        <Switch>
+          <Route exact path="/">
+            <HomeNew />
+          </Route>
+        </Switch>
+    </Router>
 
   );
 }
