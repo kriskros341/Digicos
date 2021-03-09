@@ -34,6 +34,7 @@ async def get_all_items(request: Request):
 
 @router.get("/get_file")
 async def get_gridfile_by_id(request: Request, filename: str):
+    print("Zapytane od", request.client.host)
     file = await request.app.mongofs.find({"filename": filename}).next()
     return StreamingResponse(io.BytesIO(file.read()), media_type=file.content_type)
 

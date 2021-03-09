@@ -1,6 +1,9 @@
 .App {
   text-align: center;
 }
+* {
+  box-sizing: content-box;
+}
 body{
   font-family: 'Roboto Slab', serif;
 }

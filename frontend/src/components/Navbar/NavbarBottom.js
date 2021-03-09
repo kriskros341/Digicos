@@ -24,7 +24,7 @@ const Navbar = () => {
         <ul>
           { menuItems.map((item, index) => {
             console.log(item, index)
-            return(<Link to={ item.link }><li key={ index }>{ item.nazwa }</li></Link>)
+            return(<Link key={ index } to={ item.link }><li key={ index }>{ item.nazwa }</li></Link>)
             }) }
         </ul>
       </div>
@@ -32,7 +32,7 @@ const Navbar = () => {
 
         <div onClick={ cogClickHandler } className={ cogState ? "cogConteiner cogActive" : "cogConteiner"}>
           <div className="cogIcon">
-            <img src={ CogChamp } />
+            <img alt="" src={ CogChamp } />
           </div>
           <div className="cogMenu">d</div>
         </div>
