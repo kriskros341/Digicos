@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for item in files %}
+        <div>
+            filename: {{ item.filename }} <br>
+            size: {{ item.size }} <br>
+            uploaded: {{ item.uploaded }} <br>
+            link: <a href="{{ item.link }}">?filename={{ item.filename }}</a>
+            <img style="width: 4em" src="http://digicos.ddns.net:8001/pliki/get_file_chunk?filename={{ item.filename }}" alt="{{ item.filename }}" />
+        <hr />
+        </div>
+
+    {% endfor %}
+</body>
+</html>

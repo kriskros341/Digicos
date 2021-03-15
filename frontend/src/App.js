@@ -1,9 +1,9 @@
 import './App.css';
 import './jakakolwieknazwa.scss'
-import Home from './components/pages/home_page.js'
-import Aktualnosci from './components/pages/aktualnosci.js'
 import HomeNew from './components/pages/HomeNew.js'
-import Realizacje from './components/pages/Realizacje.js'
+import Navbar from './components/Navbar/Navbar.js'
+import CogMenu from './components/CogMenu/CogMenu.js'
+import Realizacje from './components/pages/realizacje.js'
 import { useState, useEffect } from 'react'
 import {
   BrowserRouter as Router,
@@ -15,7 +15,11 @@ import {
 function App() {
   const [scrollY, setScrollY] = useState();
   const [ navMouseState, setNavMouseState ] = useState();
-
+  
+  const [cogState, setCogState] = useState(false)
+  const switchCog = () => {
+    setCogState(!cogState)
+  }
   function scrollHandler() {
     if(window.pageYOffset > 100) {
       setScrollY(true);
@@ -34,6 +38,7 @@ function App() {
   }, []);
   return (
     <Router>
+        <Navbar Link={Link}></Navbar>
         <Switch>
           <Route exact path="/">
             <HomeNew />
@@ -42,6 +47,9 @@ function App() {
             <Realizacje />
           </Route>
         </Switch>
+        <CogMenu cogStateUtil={ [cogState, switchCog] }>
+
+        </CogMenu>
     </Router>
 
   );

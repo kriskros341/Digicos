@@ -8,5 +8,6 @@ body{
   font-family: 'Roboto Slab', serif;
 }
 #root {
+  background-color: #ECECDA;
     min-height: 2000px
 }
