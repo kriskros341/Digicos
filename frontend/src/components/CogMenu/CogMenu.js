@@ -13,8 +13,6 @@ const CogMenu = ({cogStateUtil}) => {
             >
                 <div className="CogMenu"></div> 
             </CSSTransition> 
-        
-
         <div onClick={ switchCog } className="CogChamp">
             <img src={ CogChamp }></img>
         </div>

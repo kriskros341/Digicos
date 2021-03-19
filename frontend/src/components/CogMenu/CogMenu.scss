@@ -1,4 +1,23 @@
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  @media (min-width: 768px) {
+    width: 750px;
+  }
+  @media (min-width: 992px) {
+    width: 970px;
+  }
+  @media (min-width: 1200px) {
+    width: 1170px;
+  }
+}
 .CogMenu__container {
+  display: none;
+  @media (min-width: 992px) {
+    display: block;
+  }
   pointer-events: none;
   position: fixed;
   top: 0;
@@ -6,9 +25,11 @@
   left: 60vw;
   height: 100vh;
   content: "";
+  z-index: 5000;
   background-color: transparent;
   & .CogMenu {
     pointer-events: none;
+    z-index: 5000;
     max-width: 300px;
     position: absolute;
     right: 6.25vw;

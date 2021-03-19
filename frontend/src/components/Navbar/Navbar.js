@@ -13,18 +13,25 @@ const Navbar = ({Link}) => {
   ]
   return(
     <>
-    <div class="Navigation__padding"></div>
-    <div className="Navigation__container">
-      <div className="Navigation">
-        <div className="Navigation__Logo__container">
+    <div class="Navigation__padding_n"></div>
+    <div className="Navigation__container_n">
+      <div className="Navigation_n container">
+        <div className="Navigation__Logo__container_n">
           <a href="/"><img src={ logo1 }/></a>
         </div>
-        <div className="Navigation__Items__container">
+        <div className="Navigation__Items__container_n">
           {
           menuItems.map((item, key) => {
-            return(<Link to={item.link}><div className="Navigation__Item" key={ key }>{ item.nazwa }</div></Link>)
+            return(<Link to={item.link}><div className="Navigation__Item_n" key={ key }>{ item.nazwa }</div></Link>)
           })
           }
+        </div>
+        <div className="Navigation__Hbgr__container_n">
+          <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="25" height="5" fill="white"/>
+            <rect y="10" width="25" height="5" fill="white"/>
+            <rect y="20" width="25" height="5" fill="white"/>
+          </svg>
         </div>
       </div>
     </div>
