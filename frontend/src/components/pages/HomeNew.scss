@@ -179,7 +179,7 @@
   font-family: "Oswald", sans-serif;
   font-style: normal;
   font-weight: normal;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   color: white;
   font-size: 1rem;
   text-decoration: none;
@@ -273,45 +273,7 @@
   height: 10em;
   background-color: black;
 }
-.test1,
-.test2,
-.test3 {
-  position: relative;
-  z-index: 0;
-  transition: opacity 0.5s, transform 0.5s ease-out;
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-100px);
-  &.enter {
-    visibility:visible;
-    display: flex;
-    opacity: 0;
-  }
-  &.enter-active {
-    visibility:visible;
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
-  &.enter-done {
-    visibility:visible;
-    display: flex;
-    opacity: 1;
-    transform: translateY(0);
-  }
-  &.exit-active {
-    display: flex;
-    opacity: 0;
-  }
-  &.exit-done {
-
-    display: none;
-    opacity: 0;
-    
-  }
-}
-.test3 {
+.Pres-Iframe__Container {
   z-index: 1;
   position: relative;
   overflow: hidden;
@@ -319,71 +281,197 @@
   padding-top: #{"clamp(300px, 60%, 600px)"};
   margin: 0em auto;
   background-color: black;
-}
-.Pres-Iframe {
-  position: absolute;
-  top: 0; right: 0; bottom: 0; left: 0;
-  border: none;
-  z-index: 0;
-  height: 100%;
-  width: 100%;
-  margin: 0em auto;
-}
-@media (min-width: 768px) {
-  .test3 {
+  @media (min-width: 768px) {
     width: 80%;
   }
+  .Pres-Iframe {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    border: none;
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0em auto;
+  }
+}
+.overlay {
+  position: absolute;
+  top: -50vh; bottom: -50vw; right: 0; left: 0;
+  content: "";
 }
 .TransitionBox__container {
+  overflow-y: hidden;;
   min-height: 600px;
   background-color: #4893EA;
+  .TransitionBox {
+    padding: 2em 0;
+    background-color: #4893EA;
+  }
 }
-.TransitionBox {
-  padding: 2em 0;
-  background-color: #4893EA;
-}
-.Card_Cotnainer {
+.Card_Container {
+  letter-spacing: 1px;
   display: flex;
   width: 100%;
   height: 100%;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 0;
   .Card__Oferta {
+    cursor: pointer;
     position: relative;
     border-radius: 10px;
     flex: 0 0 80%;
     margin: 2em 10%;
-    height: 9em;
+    min-height: 5em;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+    &:hover .Card__Oferta__content .akaBefore {
+      transform: scaleY(0)
+    }
+    &:hover .Card__Oferta__content .akaAfter {
+      transform: scaleX(0)
+    }
+    &:hover .Card__Oferta__content .Card__Oferta-title {
+      transition: transform 0.2s ease-in-out;
+      transform: scale(1.1)
+    }
+  }
+  .Card__Big {
+    font-family: "Oswald", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+    font-size: #{"clamp(2em, 8vw, 2em)"};
+    z-index: 2;
+    position: absolute;
+    top: 20%; bottom: 20%; left: 0; right: 0;
+    overflow: hidden;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    @media (min-width: 992px) {
+      top: 0; right: 10%; left: 10%; bottom: 0;
+    }
+    & .Card__Big__content {
+      overflow: hidden;
+      position: relative;
+      z-index: 0;
+      flex-direction: column;
+      align-items: center;
+      max-height: 90%;
+      .Card__Big-ul {
+        margin-block-start: 0.25em;
+        margin-block-end: 0em;
+        padding-inline-start: 40px;
+        font-size: 1.5rem;
+        @media (min-width: 992px) {
+          width: 75%;
+        }
+      }
+      
+      & .akaBefore {
+        z-index: -1;
+        position: absolute;
+        width: 20px;
+        height: 90%;
+        right: 0.5em; bottom: 0;
+        background-color: #F03B29;
+        content: "";
+        transition: transform 0.5s ease-in-out;
+        transform-origin: bottom;
+        transform: scaleY(0);
+      }
+      & .akaAfter {
+        z-index: -1;
+        position: absolute;
+        height: 20px;
+        width: 60%;
+        bottom: 0.5em; right: 0;
+        background-color: #F03B29;
+        content: "";
+        transition: transform 0.5s ease-in-out;
+        transform-origin: right;
+        transform: scaleY(0);
+      }
+      & .Card__Big-title {
+        max-height: 20%;
+        margin: 0.5em 0 0 1em;
+        font-size: 1.25em
+      }
+    }
+    & .LearnMore {
+      color: white;
+      position: absolute;
+      bottom: 1em; right: 1em;
+      font-size: 1.25rem;
+    }
+    &::before {
+      z-index: -1;
+      position: absolute;
+      top: 0; right: 0; left: 0; bottom: 0;
+      background: rgba(17, 117, 240, 0.8);
+      //background: linear-gradient(360deg, rgba(17, 117, 240, 0.5) 86.33%, rgba(4, 177, 217, 0.75) 100%);
+      content: "";
+    }
+    &::after {
+      mix-blend-mode: luminosity;
+      position: absolute;
+      top: 0; right: 0; left: 0; bottom: 0;
+      z-index: -1;
+      background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_1.jpg") no-repeat 80% center fixed;
+      opacity: 0.6;
+      content: "";
+    }
+    @media (min-width: 992px) {
+      margin: 2em 5%;
+      flex: 0 0 40%;
+      &::after {
+        background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_1.jpg") no-repeat 50% center fixed;
+      }
+      .Card__Oferta__content {
+        &::after {
+          right: 0;
+        }
+      }
+    }
+  }
+  .Card__Oferta {
+    font-family: "Oswald", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+    font-size: #{"clamp(2em, 8vw, 2em)"};
     & .Card__Oferta__content {
       margin-left: 0.5em;
       overflow: hidden;
       height: 100%;
       position: relative;
+      z-index: 0;
       flex-direction: column;
-      font-family: "Oswald", sans-serif;
-      font-style: normal;
-      font-weight: bold;
-      align-content: flex-end;
-      color: white;
-      text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
-      font-size: #{"clamp(2em, 8vw, 2em)"};
-      &::before {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      & .akaBefore {
         z-index: -1;
         position: absolute;
         width: 20px;
-        height: 200px;
+        height: 90%;
         right: 0.5em; bottom: 0;
         background-color: #F03B29;
         content: "";
+        transition: transform 0.5s;
+        transform-origin: bottom;
       }
-      &::after {
+      & .akaAfter {
         z-index: -1;
         position: absolute;
         height: 20px;
-        width: 300px;
+        width: 60%;
         bottom: 0.5em; right: 0;
         background-color: #F03B29;
         content: "";
+        transition: transform 0.5s;
+        transform-origin: right;
       }
     }
     &::before {
@@ -400,12 +488,11 @@
       top: 0; right: 0; left: 0; bottom: 0;
       z-index: -1;
       background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_1.jpg") no-repeat 80% center fixed;
-      opacity: 0.75;
+      opacity: 0.6;
       content: "";
     }
     @media (min-width: 992px) {
       margin: 2em 5%;
-      height: 12em;
       flex: 0 0 40%;
       &::after {
         background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_1.jpg") no-repeat 50% center fixed;
@@ -417,77 +504,5 @@
       }
     }
   }
-}
-  /*
-  grid-area: header;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  mix-blend-mode: normal;
-  overflow: hidden;
-  background-color: yellow;
-  background: rgba(14, 47, 86, 0.75);
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  & img {
-    max-width: 80vw;
-  }
-}
-.logo {
-  margin: 0 auto;
-}
-.Container__CallToAction {
-  display: flex;
-  justify-content: center;
-  grid-area: CallToAction;
-  align-items: center;
 
 }
-.CallToAction {
-  margin: auto 0;
-  width: clamp(100px, 75%, 400px);
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  position: relative;
-  font-family: "Oswald", sans-serif;
-  font-style: normal;
-  font-weight: bold;
-  margin: auto 0;
-  z-index:2;
-  color: #ECECDA;
-  cursor: pointer;
-  font-size: 2em;
-  padding: 0.5em 0;
-  background: linear-gradient(180deg, rgba(17, 117, 240, 0.9) 0%, rgba(4, 177, 217, 0.9) 100%);
-  box-shadow: 0px 8px 15px 15px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  & img {
-    padding-left: 1em;
-  }
-}
-.navbar {
-  position: relative;
-  grid-area: navbar;
-  padding-bottom: 1em;
-  z-index: 1;
-}
-@media (max-width: 1024px) {
-  .Content__header {
-    grid-template-areas:
-      ". . . . . . . . ."
-      "header header header header header header header header header"
-      "header header header header header header header header header"
-
-      ". . . . . . . . ."
-      ". . . . . . . . ."
-      ". . . . . . . . ."
-      ". . . . . . . . ."
-      ". . CallToAction CallToAction CallToAction CallToAction CallToAction . ."
-      "navbar navbar navbar navbar navbar navbar navbar navbar navbar";
-    }
-}
-@media (max-width: 924px) {
-
-}
-*/

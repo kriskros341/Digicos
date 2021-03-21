@@ -28,37 +28,15 @@
   z-index: 5000;
   background-color: transparent;
   & .CogMenu {
-    pointer-events: none;
     z-index: 5000;
     max-width: 300px;
     position: absolute;
     right: 6.25vw;
     top: 20%; bottom: 20%;
     width: 100%;
-    background: linear-gradient(0deg, rgba(17, 117, 240, 0.9) 95%, rgba(4, 177, 217, 1) 100%);
-    content: "";
-    transition: opacity 0.15s ease-in-out, transform 0.2s ease-in-out;
     transform-origin: bottom;
+    background: linear-gradient(0deg, rgba(17, 117, 240, 0.9) 95%, rgba(4, 177, 217, 1) 100%);
     border-radius: 20px;
-
-    transform: scaleY(0.8);
-    opacity: 0;
-    &.enter {
-      transform: scaleY(1);
-      opacity: 1;
-    } 
-    &.enter-done {
-      transform: scaleY(1);
-      opacity: 1
-    }
-    &.exit {
-      transform: scaleY(0.8);
-      opacity: 0
-    }
-    &.exit-done {
-      transform: scaleY(0.8);
-      opacity: 0
-    }
   }
   & .CogChamp {
     pointer-events: visible;
@@ -74,11 +52,11 @@
     align-items: center;
     justify-content: center;
     & img {
-      transition: transform 0.3s ease-out;
+      transition: transform 0.2s ease-out;
       max-width: 75%;
     }
     &::before {
-      transition: opacity 0.25s;
+      transition: opacity 0.2s;
       position: absolute;
       top: 0;
       right: 0;
@@ -90,7 +68,7 @@
       background: linear-gradient(135deg, rgba(240, 59, 41, 0.675) 0%, rgba(14, 47, 86, 0.375) 100%);
     }
     &::after {
-      transition: opacity 0.25s;
+      transition: opacity 0.2s;
       position: absolute;
       top: 0;
       right: 0;
@@ -102,19 +80,16 @@
       background: 
       linear-gradient(135deg, rgba(17, 117, 240, 0.375) 0%,rgba(4, 177, 217, 0.675) 100%);
     }
-  }
-  &.Cog__active {
-    .CogMenu {
-      pointer-events: visible;
-    }
-    .CogChamp::before {
-      opacity: 1;
-    }
-    .CogChamp::after {
-      opacity: 0;
-    }
-    .CogChamp img {
-      transform: rotate(270deg)
+    &.CogActive {
+      img {
+        transform: rotate(270deg)
+      }
+      &::before {
+        opacity: 1;
+      }
+      &::after {
+        opacity: 0;
+      }
     }
   }
 }

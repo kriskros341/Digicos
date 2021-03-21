@@ -68,6 +68,15 @@
       }
   }
 }
+.underline {
+  position: absolute;
+  top: 90%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: red;
+  z-index: -1;
+}
 .Navigation__padding_n {
   height: 4.4em;
   content: "";
@@ -103,9 +112,12 @@
       flex-direction: row;
       align-items: center;
       justify-content: flex-end;
+      &>div {
+        position: relative
+      }
       & a {
         text-decoration: none;
-        margin-left: calc(max(1em, 2vw));
+        margin: 0 calc(max(0.5em, 1vw));
         height: 100%;
         display: flex;
         align-items: center;

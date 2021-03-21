@@ -1,20 +1,35 @@
 import './CogMenu.scss'
-import { CSSTransition } from 'react-transition-group'
 import CogChamp from '../static/cog2.svg'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const CogMenu = ({cogStateUtil}) => {
-    const [cogState, switchCog] = cogStateUtil
+
+const CogMenu = () => {
+    const [cogState, setCogState] = useState(false)
     return(
-    <div className={cogState ? "CogMenu__container Cog__active" : "CogMenu__container" }>
-            <CSSTransition
-                in={ cogState }
-                timeout={ 1000 }
-                className="CogMenu"
-            >
-                <div className="CogMenu"></div> 
-            </CSSTransition> 
-        <div onClick={ switchCog } className="CogChamp">
-            <img src={ CogChamp }></img>
+    <div className="CogMenu__container">
+              <AnimatePresence>
+                {cogState && (
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      scaleY: 0.7 }} 
+                    exit={{
+                      opacity: 0,
+                      scaleY: 0.7
+                    }}
+                    animate={{
+                      opacity: 1,
+                      scaleY: 1, }}
+                    transition={{
+                      duration: 0.2,
+                      transition: "tween"
+                    }}
+                    className="CogMenu"></motion.div>
+                )}
+              </AnimatePresence>
+        <div onClick={ () => setCogState(!cogState) } className={cogState ? "CogChamp CogActive" : "CogChamp"}>
+            <img alt="Options" src={ CogChamp }></img>
         </div>
     </div>
     )
