@@ -39,6 +39,7 @@
     ]
   },
   "devDependencies": {
-    "framer-motion": "^4.0.0"
+    "framer-motion": "^4.0.0",
+    "react-intersection-observer": "^8.31.0"
   }
 }

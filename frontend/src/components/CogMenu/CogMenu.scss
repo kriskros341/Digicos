@@ -14,6 +14,26 @@
   }
 }
 .CogMenu__container {
+  .CallToAction__container {
+    position: absolute;
+    top: 95%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }    
+  .CallToAction {    
+    z-index: 10000000090;
+    pointer-events: all;
+    cursor: pointer;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    & svg {
+      margin-top: 0.2em;
+    }
+  }
   display: none;
   @media (min-width: 992px) {
     display: block;
@@ -22,7 +42,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  left: 60vw;
+  left: 0;
   height: 100vh;
   content: "";
   z-index: 5000;
