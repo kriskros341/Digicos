@@ -1,0 +1,181 @@
+.HomeNew_v2__component {
+    .Header__container {
+        position: relative;
+        overflow-x: hidden;
+        background: #118DF0;
+        .Header {
+            display: flex;
+            flex-direction: column;
+            align-content: flex-end;
+            margin: 0 auto;
+            height: 90vh;
+            font-family: "Oswald", sans-serif;
+            font-style: normal;
+            color: white;
+            &::before {
+                filter: brightness(75%);
+                position: absolute;
+                top: 0; right: 0; bottom: 0; left: 0;
+                background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg2-min.jpg") no-repeat 65% center fixed;
+                background-size: cover;
+                opacity: 0.5;
+                mix-blend-mode: luminosity;
+                content: "";
+            }
+            &::after {
+                background: linear-gradient(360deg, #0E2F56 28.37%, rgba(14, 47, 86, 0) 100%);;
+                position: absolute;
+                top: 70%; right: 0; bottom: 0; left: 0;
+                content: "";
+              }
+            .Header-Stripes__container {
+                position: absolute;
+                top: 0; right: 60%; bottom: 40%; left: 0;
+                min-width: 500px;
+                display: flex;
+                flex-direction: column-reverse;
+                font-size: 2rem;
+                .Stripe__1 {
+                    transform: translateY(20px);
+                    width: 75%;
+                    height: 120px;
+                    background-color: black;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    background: #0E2F56;
+                    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                    img {
+                        max-width: 100%;
+                        align-self: flex-end;
+                        max-height: 50%;
+                        margin-right: 1rem;
+                    }
+                }
+                .Stripe__2 {
+                    transform: translateY(10px);
+                    width: 87.5%;
+                    min-height: 120px;
+                    background-color: black;
+                    display: flex;
+                    justify-content: flex-end;
+                    background: rgba(14, 47, 86, 0.75);
+                    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                    text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.25);
+                    .Stripe__Text {
+                        align-self: center;
+                        max-width: 25ch;
+                    }
+                }
+                .Stripe__3 {
+                    text-shadow: 0px 6px 4px rgba(0, 0, 0, 0.25);
+                    width: 100%;
+                    min-height: 120px;
+                    background-color: black;
+                    display: flex;
+                    justify-content: flex-end;
+                    background: rgba(17, 117, 240, 0.75);
+                    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+                    .Stripe__SubText {
+                        margin: 0 1em;
+                        color: #ECECDA;
+                        font-weight: 300;
+                        align-self: center;
+                        max-width: 26ch;
+                    }
+                }
+            }
+            @media (max-width: 576px) { 
+                .Header-Stripes__container {
+                    min-width: 0;
+                    top: 0; right: 0; bottom: 50%; left: 0;
+                    .Stripe__1 {
+                        visibility: hidden;
+                    }
+                    .Stripe__2 {
+                        max-width: 80%;
+                        font-size: 24px;
+                    }
+                    .Stripe__3 {
+                        justify-content: flex-start;
+                        align-self: flex-end;
+                        font-size: 24px;
+                        max-width: 80%;
+                    }
+                }
+                &::before {
+                    background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg3-min.jpg") no-repeat 40% center fixed;
+                }
+
+            }
+        }
+    }
+    .SecondaryNav__container {
+        z-index: 1200;
+        position: sticky;
+        top: 0;
+        padding-top: 70px;
+        font-family: "Oswald", sans-serif;
+        font-style: normal;
+        color: white;
+        background: #0E2F56;
+        box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.25);
+        display: flex;
+        justify-content: center;
+        text-decoration: none;
+        &>div {
+            max-width: 100%;
+            display: flex;
+        }
+        .SecondaryNav__item {
+            background: #0E2F56;
+            border-radius: 10px;
+            width: #{"max(90px, 20vw)"};
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+            &.active {
+                transform: translateY(30px);
+                box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.25);
+            }
+            svg {
+                height: 110px;
+                max-width: 100%;
+            }
+            & + .SecondaryNav__item {
+            }
+            .SecondaryNav__Text {
+                padding-bottom: 0.5em;
+            }
+        }
+      }
+    .Content__container {
+        position: relative;
+        background: #118DF0;
+        &::before {
+            mix-blend-mode: luminosity;
+            position: absolute;
+            top: 0; right: 0; left: 0; bottom: 0;
+            background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg1-min.jpg") no-repeat 80% center fixed;
+            background-size: cover;
+            opacity: 0.6;
+            content: "";
+          }
+        .Content__box {
+            position: relative;
+            min-height: 80vh;
+            &.first {
+                z-index: 2;
+                padding-top: 200px;
+            }
+        }
+    }
+    .overlay {
+        cursor: pointer;
+        position: absolute;
+        top: -50vh; bottom: -50vw; right: 0; left: 0;
+        content: "";
+    }
+}

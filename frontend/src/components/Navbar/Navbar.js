@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { motion, AnimateSharedLayout } from 'framer-motion'
 import logo1 from '../static/logo_stripped.svg'
 
-
 const menuItems = [
   {"nazwa":"Firma", "link":"/firma"},
   {"nazwa":"Oferta", "link":"/oferta"},
@@ -22,7 +21,7 @@ const Navbar = ({Link}) => {
     <div className="Navigation__container_n">
       <div className="Navigation_n container">
         <div className="Navigation__Logo__container_n">
-          <a href="/"><img alt="logo" src={ logo1 }/></a>
+          <Link to="/"><img alt="logo" src={ logo1 }/></Link>
         </div>
         
         <div className="Navigation__Items__container_n">

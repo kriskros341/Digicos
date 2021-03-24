@@ -16,7 +16,7 @@
 .CogMenu__container {
   .CallToAction__container {
     position: absolute;
-    top: 95%;
+    top: 80%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -72,8 +72,9 @@
     align-items: center;
     justify-content: center;
     & img {
+      width: 75%;
+      height: 75%;
       transition: transform 0.2s ease-out;
-      max-width: 75%;
     }
     &::before {
       transition: opacity 0.2s;
@@ -113,3 +114,10 @@
     }
   }
 }
+.Arrows {
+  font-family: "Oswald";
+  color: #fff;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 36px;
+  }

@@ -12,18 +12,14 @@ const CogMenu = () => {
       <div className="CallToAction__container">
       <motion.span
             initial={{
-              opacity: 0
-            }}
+              opacity: 0 }}
             animate={{
-              opacity: 1
-            }}
+              opacity: 1 }}
             whileHover={{
-              scale: 1.1,
-            }}
+              scale: 1.1 }}
             className="CallToAction">
-              <div>
-
-
+              <div className="Arrows">
+                Nasza Oferta
                 <motion.svg
                   animate={{
                     opacity: [1, 0, 1],
@@ -39,7 +35,6 @@ const CogMenu = () => {
                     <polyline style={{stroke:"black",strokeWidth:"18.1",strokeLinecap:"round",strokeLinejoin:"round",strokeMiterlimit:"22.9256",fill:"none"}} points="9.05,9.05 61.38,61.38 113.19,9.57 "/>
                   </g>
                 </motion.svg>
-
                 <motion.svg
                   animate={{
                     opacity: [1, 0, 1],

@@ -1,9 +1,9 @@
 import './App.css';
 import './jakakolwieknazwa.scss'
-import HomeNew from './components/pages/HomeNew.js'
+import Home from './components/pages/Home.js'
+import HomeOld from './components/pages/HomeOld.js'
 import Navbar from './components/Navbar/Navbar.js'
 import CogMenu from './components/CogMenu/CogMenu.js'
-import Realizacje from './components/pages/realizacje.js'
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,15 +17,14 @@ function App() {
         <Navbar Link={Link}></Navbar>
         <Switch>
           <Route exact path="/">
-            <HomeNew />
+            <Home />
           </Route>
           <Route path="/realizacje">
-            <Realizacje />
+            <HomeOld />
           </Route>
         </Switch>
-        <CogMenu>
-
-        </CogMenu>
+        <CogMenu /
+        >
     </Router>
 
   );
