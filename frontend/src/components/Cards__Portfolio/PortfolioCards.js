@@ -1,4 +1,5 @@
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion'
+import { useEffect } from 'react'
 import './PortfolioCards.scss'
 
 const CardList = [
@@ -38,10 +39,7 @@ const CardList = [
       ]
     }
   ]
-
-
-
-export default function Cards__Portfolio({ViewCard}) {
+export default function Cards__Portfolio({ViewCard, overlayHandler}) {
     const container = {
       hidden: { opacity: 0 },
       show: {
@@ -56,8 +54,11 @@ export default function Cards__Portfolio({ViewCard}) {
       show: { opacity: 1 }
     }
     const [ viewCard, setViewCard ] = ViewCard
+    useEffect(() => {
+      viewCard && overlayHandler(() => { console.log("Overlay nie ma jeszcze zastosowań"); setViewCard(false) })
+    }, [viewCard, setViewCard, overlayHandler])
     return (
-          <div className="Cards__Portfolio__component">
+          <div className="Cards__Portfolio__component"  id="c2">
             <AnimateSharedLayout type="crossfade">
               {CardList.map(({index, text}) => {
                   return (
@@ -80,7 +81,6 @@ export default function Cards__Portfolio({ViewCard}) {
               }) }
               {viewCard && (
                 <>
-                  <div onClick={() => setViewCard(null)} className="overlay"></div>
                   <AnimatePresence exitBeforeEnter>
                     <motion.div layout key={"Card-"+viewCard+"__Big"}  layoutId={"Card-"+viewCard} 
                       className="Card__Big Font__Card repeat_bg">
@@ -101,7 +101,7 @@ export default function Cards__Portfolio({ViewCard}) {
                           }) }
                         </motion.ul>
                       </div>
-                      <motion.span className="LearnMore"> Dowiedz się więcej </motion.span>
+                      <motion.span className="LearnMore"> j </motion.span>
                     </motion.div>
                   </AnimatePresence>
                 </>

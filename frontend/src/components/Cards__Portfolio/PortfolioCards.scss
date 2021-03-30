@@ -1,20 +1,22 @@
 .Cards__Portfolio__component {
   position: relative;
-  display: flex;
   flex-wrap: wrap;
+  display: flex;
+  padding: 4rem 0;
   width: 100%;
   height: 100%;
+  background-color: rgba(0,0,0,0.25);
   .Card {
     max-width: 90%;
     position: relative;
     cursor: pointer;
     flex: 0 0 80%;
-    margin: 2em 10%;
+    margin: 0.5rem 10%;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     .Card__content {
-      min-height: 5em;
-      margin-left: 0.5em;
+      min-height: 4em;
+      margin-left: 0.5rem;
       overflow: hidden;
       height: 100%;
       position: relative;
@@ -23,21 +25,27 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      text-align: center;
+      @media (min-width: 992px) {
+        min-height: 4em;
+      }
       & .akaPseudo {
         z-index: -1;
         position: absolute;
-        background-color: #F03B29;
         content: "";
         transition: transform 0.5s;
       }
       & .akaBefore {
-        width: 12px;
+        background: rgba(240, 59, 41, 0.75);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        width: 8px;
         height: 90%;
         right: 0.5em; bottom: 0;
         transform-origin: bottom;
       }
       & .akaAfter {
-        height: 12px;
+        background: linear-gradient(270deg, rgba(240, 59, 41, 0.75) 0%, rgba(240, 59, 41, 0) 100%);
+        height: 8px;
         width: 60%;
         bottom: 0.5em; right: 0;
         transform-origin: right;
@@ -50,7 +58,7 @@
       transform: scale(1.1)
     }
     @media (min-width: 992px) {
-      margin: 2em 5%;
+      margin: 2rem 5%;
       flex: 0 0 40%;
       &::after {
         background: url("http://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg1-min.jpg") repeat 80% center fixed;
@@ -64,9 +72,10 @@
     }
   }
   .Card__Big {
+    filter: brightness(0.9);
     position: absolute;
     top: 20%; right: 0; bottom: 20%; left: 0;
-    z-index: 2;
+    z-index: 101;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     @media (min-width: 992px) {
@@ -81,20 +90,21 @@
       & .Card__Big-title {
         max-height: 20%;
         margin: 0.5em 0 0 1em;
-        font-size: 1.25em
+        font-size: 1em;
       }
       .Card__Big-ul {
-        margin-block-start: 0.25em;
+        margin-block-start: 0.25rem;
         margin-block-end: 0em;
-        padding-inline-start: 40px;
-        font-size: 1.5rem;
+        padding-inline-start: 2rem;
+        font-size: 1.25rem;
+        color: #ECECDA;
         @media (min-width: 992px) {
           width: 75%;
         }
       }
     }
     @media (min-width: 992px) {
-      margin: 2em 5%;
+      margin: 2rem 5%;
       flex: 0 0 40%;
       .Card__Oferta__content {
         &::after {
@@ -103,15 +113,17 @@
       }
     }
   }
+  .Font__Card {
+    font-family: "Oswald", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+    font-size: #{"clamp(2rem, 8vw, 2rem)"};
+    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+  }
 }
 
-.Font__Card {
-  font-family: "Oswald", sans-serif;
-  font-style: normal;
-  font-weight: bold;
-  color: white;
-  font-size: #{"clamp(2em, 8vw, 2em)"};
-}
+
 .repeat_bg {
   &::before {
     z-index: -1;

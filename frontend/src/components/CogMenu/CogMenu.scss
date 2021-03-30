@@ -14,6 +14,32 @@
   }
 }
 .CogMenu__container {
+  .Icons__container {
+    z-index: 100;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    right: 0; left: 0; bottom: 0;
+    height: 12vh;
+    div {
+      max-width: 6em;
+      flex: 0 1 100%;
+      font-family: "Oswald";
+      color: #fff;
+      font-style: normal;
+      font-weight: normal;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  &::after {
+    background: linear-gradient(360deg, #0E2F56 28.37%, rgba(14, 47, 86, 0) 100%);;
+    position: absolute;
+    top: 80%; right: 0; bottom: 0; left: 0;
+    content: "";
+  }
   .CallToAction__container {
     position: absolute;
     top: 80%;
@@ -34,10 +60,6 @@
       margin-top: 0.2em;
     }
   }
-  display: none;
-  @media (min-width: 992px) {
-    display: block;
-  }
   pointer-events: none;
   position: fixed;
   top: 0;
@@ -57,6 +79,10 @@
     transform-origin: bottom;
     background: linear-gradient(0deg, rgba(17, 117, 240, 0.9) 95%, rgba(4, 177, 217, 1) 100%);
     border-radius: 20px;
+    display: none;
+    @media (min-width: 992px) {
+      display: flex;
+    }
   }
   & .CogChamp {
     pointer-events: visible;
@@ -71,9 +97,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    display: none;
+    @media (min-width: 992px) {
+      display: flex;
+    }
     & img {
-      width: 75%;
-      height: 75%;
+      width: 50%;
+      height: 50%;
       transition: transform 0.2s ease-out;
     }
     &::before {
@@ -119,5 +149,5 @@
   color: #fff;
   font-style: normal;
   font-weight: normal;
-  font-size: 36px;
+  font-size: 4vh;
   }
