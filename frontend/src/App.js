@@ -4,6 +4,7 @@ import Home from './components/pages/Home.js'
 import HomeOld from './components/pages/HomeOld.js'
 import Navbar from './components/Navbar/Navbar.js'
 import CogMenu from './components/CogMenu/CogMenu.js'
+import BottomMenu from './components/BottomMenu/BottomMenu.js'
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -15,32 +16,44 @@ import {
 
 function App() {
   const [ overlayFunction, setOverlayFunction ] = useState()
-  const [ pageOffset, updatePageOffset ] = useState();
   const overlayHandler = useCallback(
     (callback) => {
       setOverlayFunction(() => callback)
     }, [setOverlayFunction]
   )
-  useEffect(() => {
-    updatePageOffset(window.pageYOffset)
-    window.addEventListener('scroll', () => updatePageOffset(window.pageYOffset));
-    return window.removeEventListener('scroll', () => updatePageOffset(window.pageYOffset));
-  }, []);
   return (
     <Router>
         <Navbar Link={Link}></Navbar>
         <Switch>
-          <Route exact path="/">
-            <Home overlayHandler={overlayHandler}/>
-          </Route>
-          <Route path="/realizacje">
-            <HomeOld overlayHandler={overlayHandler}/>
-          </Route>
+          <AnimatePresence exitBeforeEnter>
+            <Route exact key="/" path="/">
+              <motion.div
+                initial={{opacity: 0, y: 20}}
+                animate={{opacity: 1, y: 0}}
+                exit={{opacity: 0, y: -20}}
+              >
+                <Home overlayHandler={overlayHandler}/>
+              </motion.div>
+            </Route>
+          </AnimatePresence>
+          <AnimatePresence exitBeforeEnter>
+            <Route key="/realizacje" path="/realizacje">
+              <motion.div
+                initial={{opacity: 0, y: 20}}
+                animate={{opacity: 1, y: 0}}
+                exit={{opacity: 0, y: -20}}
+              >
+                <HomeOld overlayHandler={overlayHandler}/>
+              </motion.div>
+            </Route>
+          </AnimatePresence>
         </Switch>
-        <CogMenu pageOffset={pageOffset} location={""}/>
+
+        <BottomMenu />
+        <CogMenu location={""}/>
         <AnimatePresence>
-          { overlayFunction && 
-            <motion.div 
+          { overlayFunction &&
+            <motion.div
               initial={{opacity: 0}}
               animate={{opacity: 1}}
               exit={{opacity: 0}}

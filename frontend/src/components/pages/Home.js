@@ -85,9 +85,8 @@ const SecondaryNav = ({viewStateUtil}) => {
     )
 }
 export default function HomeNew({overlayHandler}) {
-    const [ viewCard, setViewCard ] = useState()
-    const [ ref1, inView1 ] = useInView({threshold: 1})
-    const [ ref2, inView2 ] = useInView({threshold: 1})
+    const [ ref1, inView1 ] = useInView({threshold: 0.9})
+    const [ ref2, inView2 ] = useInView({threshold: 0.9})
     const [ ref3, inView3 ] = useInView({threshold: 0.3})
     const [ viewState, setViewState ] = useState(1)
     useEffect(() => {
@@ -128,7 +127,7 @@ export default function HomeNew({overlayHandler}) {
                     <RealizacjeCards />
                 </div>
                 <div ref={ref2} className="Content__box darker">
-                    <PortfolioCards ViewCard={[ viewCard, setViewCard ]} overlayHandler={overlayHandler} />
+                    <PortfolioCards overlayHandler={overlayHandler} />
                 </div>
                 <div ref={ref3} className="Content__box">
                     <OFirmieCards />

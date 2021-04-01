@@ -1,5 +1,5 @@
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import './PortfolioCards.scss'
 
 const CardList = [
@@ -39,7 +39,7 @@ const CardList = [
       ]
     }
   ]
-export default function Cards__Portfolio({ViewCard, overlayHandler}) {
+export default function Cards__Portfolio({overlayHandler}) {
     const container = {
       hidden: { opacity: 0 },
       show: {
@@ -53,7 +53,7 @@ export default function Cards__Portfolio({ViewCard, overlayHandler}) {
       hidden: { opacity: 0 },
       show: { opacity: 1 }
     }
-    const [ viewCard, setViewCard ] = ViewCard
+    const [ viewCard, setViewCard ] = useState()
     useEffect(() => {
       viewCard && overlayHandler(() => { console.log("Overlay nie ma jeszcze zastosowań"); setViewCard(false) })
     }, [viewCard, setViewCard, overlayHandler])
@@ -62,23 +62,33 @@ export default function Cards__Portfolio({ViewCard, overlayHandler}) {
             <AnimateSharedLayout type="crossfade">
               {CardList.map(({index, text}) => {
                   return (
+                    <>
+                    {viewCard ? "" : (
+
+                    <AnimatePresence>
                     <motion.div layout layoutId={"Card-"+index} key={"Card-"+index} 
+                      initial={{opacity: 0}}
+                      animate={{opacity: 1}}
+
                       className="Card Font__Card repeat_bg"
                       whileHover={{scale: 1.05}}
                       onClick={() => setViewCard(index)}>
                       <div className="Card__content">
                         <motion.div className="akaBefore akaPseudo" />
-                        <motion.div
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        className="Card-title"> 
-                          { text } 
-                        </motion.div>
+                          <motion.div
+                          initial={{opacity: 0}}
+                          animate={{opacity: 1}}
+                          className="Card-title"> 
+                            { text } 
+                          </motion.div>
                         <motion.div className="akaAfter akaPseudo" />
                       </div>
                     </motion.div>
-                  )
-              }) }
+                    </AnimatePresence>
+                    )}
+                    </>
+                  )}
+                )}
               {viewCard && (
                 <>
                   <AnimatePresence exitBeforeEnter>

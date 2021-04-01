@@ -34,7 +34,7 @@
       align-items: center;
     }
   }
-  &::after {
+  &.b::after {
     background: linear-gradient(360deg, #0E2F56 28.37%, rgba(14, 47, 86, 0) 100%);;
     position: absolute;
     top: 80%; right: 0; bottom: 0; left: 0;

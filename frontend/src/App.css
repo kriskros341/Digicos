@@ -8,8 +8,8 @@ body{
   font-family: 'Roboto Slab', serif;
 }
 #root {
-  background-color: #ECECDA;
-    min-height: 2000px
+  background-color: rgba(14, 47, 86, 1);
+  min-height: 2000px
 }
 .overlay {
   position: fixed;

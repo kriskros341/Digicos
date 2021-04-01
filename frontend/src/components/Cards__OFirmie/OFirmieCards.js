@@ -71,7 +71,7 @@ const Card = ({title, text}) => {
     const [ clicked, setClicked ] = useState(false)
     return (
         <div className="Card">
-            <motion.div layout className="Card__contnet"
+            <motion.div className="Card__contnet"
                 onClick={() => setClicked(!clicked)}
                 variants={opacityTransition}
                 initial="initial"
