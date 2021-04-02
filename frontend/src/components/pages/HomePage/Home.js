@@ -1,10 +1,10 @@
 import './Home.scss'
-import logo1 from '../static/logo_stripped.svg'
+import logo1 from '../../static/logo_stripped.svg'
 import { useState, useEffect } from 'react'
 import { useInView } from 'react-intersection-observer';
-import PortfolioCards from '../Cards__Portfolio/PortfolioCards.js'
-import RealizacjeCards from '../Cards__Realizacje/RealizacjeCards.js'
-import OFirmieCards from '../Cards__OFirmie/OFirmieCards.js'
+import PortfolioCards from './Cards__Portfolio/PortfolioCards.js'
+import RealizacjeCards from './Cards__Realizacje/RealizacjeCards.js'
+import OFirmieCards from './Cards__OFirmie/OFirmieCards.js'
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SecondaryNav = ({viewStateUtil}) => {

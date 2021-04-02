@@ -1,6 +1,6 @@
 import './App.css';
 import './jakakolwieknazwa.scss'
-import Home from './components/pages/Home.js'
+import Home from './components/pages/HomePage/Home.js'
 import HomeOld from './components/pages/HomeOld.js'
 import Navbar from './components/Navbar/Navbar.js'
 import CogMenu from './components/CogMenu/CogMenu.js'
