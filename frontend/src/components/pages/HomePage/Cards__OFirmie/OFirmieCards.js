@@ -55,7 +55,7 @@ const cardsContents = [
 const BeforeTransition = () => {
     return (
         <div className="Cards__placeholder">
-            <img alt="Logo Firmy" className="content" src="http://digicos.ddns.net:8001/pliki/get_file?filename=logo1.png"></img>
+            <img alt="Logo Firmy" className="content" src="https://digicos.ddns.net:8001/pliki/get_file?filename=logo1.png"></img>
         </div>
     )
 }

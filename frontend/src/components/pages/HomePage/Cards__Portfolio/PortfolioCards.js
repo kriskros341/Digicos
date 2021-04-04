@@ -58,19 +58,18 @@ export default function Cards__Portfolio({overlayHandler}) {
       viewCard && overlayHandler(() => { console.log("Overlay nie ma jeszcze zastosowań"); setViewCard(false) })
     }, [viewCard, setViewCard, overlayHandler])
     return (
-          <div className="Cards__Portfolio__component"  id="c2">
+          <motion.div layout className="Cards__Portfolio__component" id="c2">
             <AnimateSharedLayout type="crossfade">
               {CardList.map(({index, text}) => {
                   return (
                     <>
                     {viewCard ? "" : (
-
                     <AnimatePresence>
                     <motion.div layout layoutId={"Card-"+index} key={"Card-"+index} 
                       initial={{opacity: 0}}
                       animate={{opacity: 1}}
 
-                      className="Card Font__Card repeat_bg"
+                      className="Card Font__Card"
                       whileHover={{scale: 1.05}}
                       onClick={() => setViewCard(index)}>
                       <div className="Card__content">
@@ -90,10 +89,9 @@ export default function Cards__Portfolio({overlayHandler}) {
                   )}
                 )}
               {viewCard && (
-                <>
                   <AnimatePresence exitBeforeEnter>
                     <motion.div layout key={"Card-"+viewCard+"__Big"}  layoutId={"Card-"+viewCard} 
-                      className="Card__Big Font__Card repeat_bg">
+                      className="Card__Big Font__Card">
                       <div className="Card__Big__content">
                         <motion.div className="Card__Big-title"
                             initial={{opacity: 0}}
@@ -114,9 +112,8 @@ export default function Cards__Portfolio({overlayHandler}) {
                       <motion.span className="LearnMore"> j </motion.span>
                     </motion.div>
                   </AnimatePresence>
-                </>
               )}
               </AnimateSharedLayout>
-          </div>
+          </motion.div>
     )
   }

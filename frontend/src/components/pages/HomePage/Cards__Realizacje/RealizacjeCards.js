@@ -101,7 +101,8 @@ export default function RealizacjeCards() {
     return (
         <AnimateSharedLayout>
         <motion.div layout ref={carouselRef} className="Cards__Realizacje__component" id="c1">
-            <motion.div dragConstraints={carouselRef} drag="x" className="Carousel">
+            <div className="Placeholder"></div>
+            <motion.div layout dragConstraints={carouselRef} drag="x" className="Carousel">
             
                 {reviews.map(item => {
                     return (<Card key={item.id} focusUtil={[focused, setFocused]} content={item}/>)

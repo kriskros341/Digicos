@@ -1,19 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400&display=swap');
-.container {
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-  @media (min-width: 768px) {
-    width: 750px;
-  }
-  @media (min-width: 992px) {
-    width: 970px;
-  }
-  @media (min-width: 1200px) {
-    width: 1170px;
-  }
-}
 .Navigation__padding {
   height: 4.5rem;
   content: "";
