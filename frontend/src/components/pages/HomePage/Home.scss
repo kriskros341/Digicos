@@ -177,6 +177,8 @@
         height: 170px;
     }
     .Content__container {
+        max-width: 100%;
+        overflow: hidden;
         position: relative;
         background: #118DF0;
 

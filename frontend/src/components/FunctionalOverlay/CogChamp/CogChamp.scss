@@ -1,0 +1,52 @@
+.CogChamp__component {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 4.4em; left: 0;
+  width: 100%;
+  .CogChamp {
+    pointer-events: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 4em; height: 4em;
+    margin: 0 0 0 auto;
+    border-radius: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    content: "";
+    & img {
+      width: 50%;
+      height: 50%;
+      transition: transform 0.2s ease-out;
+    }
+    &::before,
+    &::after {
+      position: absolute; 
+      top: 0; right: 0; left: 0;bottom: 0;
+      z-index: -1;
+      transition: opacity 0.2s;
+      content: "";
+    }
+    &::before {
+      background: linear-gradient(135deg, rgba(240, 59, 41, 0.675) 0%, rgba(14, 47, 86, 0.375) 100%);
+      opacity: 0;
+    }
+    &::after {
+      background: linear-gradient(135deg, rgba(17, 117, 240, 0.375) 0%,rgba(4, 177, 217, 0.675) 100%);
+      opacity: 1
+    }
+    &.CogActive {
+      img {
+        transform: rotate(270deg)
+      }
+      &::before {
+        opacity: 1;
+      }
+      &::after {
+        opacity: 0;
+      }
+    }
+  }
+}

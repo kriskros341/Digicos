@@ -1,13 +1,30 @@
-const CogMenu = lazy(() => import('./components/FunctionalOverlay/CogMenu/CogMenu.js'))
+import { useState } from 'react'
+import BottomMenu from './BottomMenu/BottomMenu.js'
+import CogChamp from './CogChamp/CogChamp.js'
+import Navbar from './Navbar/Navbar.js'
+import './FunctionalOverlay.scss'
 
-const FunctionalOverlay = (props) => {
-    const [cogState, setCogState] = useState(false)
+const Menu = () => {
     return (
-        <div>
-            <Navbar Link={Link} />
-            <BottomMenu />
-            <CogMenu location={""} />
-        </div>
+        <div></div>
     )
 }
+const FunctionalOverlay = () => {
+    const [menuState, setMenuState] = useState(false)
+    const toggleMenu = () => setMenuState(!menuState)
+    return (
+        <>
+            <div className="FunctionalOverlay__component">
+                <Navbar menuState={ menuState } />
+                <BottomMenu />
+                <CogChamp 
+                    menuState={ menuState } 
+                    toggleMenu={ () => toggleMenu() } 
+                    />
+            </div>
+            <div className="Navigation__padding" />
+        </>
+    )
+}
+
 export default FunctionalOverlay

@@ -6,9 +6,9 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from "react-router-dom"
 import './App.scss';
+import './utilities.scss'
 
 const Home = lazy(() => import('./components/pages/HomePage/Home.js'))
 const Contact = lazy(() => import('./components/pages/Contact/Contact.js'))
@@ -21,66 +21,50 @@ const pageVariants = {
   initial:{opacity: 0, y: -20},
   animate:{opacity: 1, y: 0}
 }
-
+const Fallback = () => {
+  return <div className="loading">loading</div>
+}
+const SuspendedPage = (props) => {
+  return (
+    <motion.div
+      variants={pageVariants}
+      initial="initial"
+      animate="animate" >
+        <Suspense fallback={Fallback}>
+          {props.children}
+        </Suspense>
+    </motion.div>
+  )
+}
 function App() {
   return (
     <Router>
-
       <FunctionalOverlay />
-
       <Switch>
         <Route exact key="/" path="/">
-            <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate" >
-                <Suspense fallback={<div className="loading">loading</div>}>
-                  <Home />
-                </Suspense>
-            </motion.div>
+          <SuspendedPage>
+            <Home />
+          </SuspendedPage>
         </Route>
         <Route key="/homeold" path="/homeold">
-          <motion.div
-            variants={pageVariants}
-            initial="initial"
-            animate="animate" 
-          >
-            <Suspense fallback={<div className="loading">loading</div>}>
-              <HomeOld />
-            </Suspense>
-          </motion.div>
+          <SuspendedPage>
+            <HomeOld />
+          </SuspendedPage>
         </Route>
         <Route key="/kontakt" path="/kontakt">
-          <motion.div
-            variants={pageVariants}
-            initial="initial"
-            animate="animate" >
-            <Suspense fallback={<div className="loading">loading</div>}>
-              <Contact />
-            </Suspense>
-          </motion.div>
+          <SuspendedPage>
+            <Contact />
+          </SuspendedPage>
         </Route>
         <Route exact key="/inwestorzy" path="/inwestorzy">
-          <motion.div
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-          >
-            <Suspense fallback={<div className="loading">loading</div>}>
-              <Inwestorzy />
-            </Suspense>
-          </motion.div>
+          <SuspendedPage>
+            <Inwestorzy />
+          </SuspendedPage>
         </Route>
         <Route exact key="/realizacje" path="/realizacje">
-          <motion.div
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-          >
-            <Suspense fallback={<div className="loading">loading</div>}>
-              <Realizacje />
-            </Suspense>
-          </motion.div>
+          <SuspendedPage>
+            <Realizacje />
+          </SuspendedPage>
         </Route>
         <Route path="*">
           <div className="not found"> Not found </div>

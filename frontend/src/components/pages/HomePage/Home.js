@@ -11,13 +11,8 @@ import logo1 from '../../static/logo_stripped.svg'
 import './Home.scss'
 
 const Header = () => {
-    const [ lazyLoadImage, setLazyLoadImage] = useState(false)
-    useEffect(() => {
-            window.onload = () => setLazyLoadImage(true)
-            return () => window.onload = null
-        }, [setLazyLoadImage])
     return (
-        <div className={lazyLoadImage ? "Header lazy_load_image" : "Header"}>
+        <div className="Header lazy_load_image">
                     <div className="Header-Stripes__container">
                         <div className="Stripe__3">
                             <div className="Stripe__SubText">
@@ -39,7 +34,6 @@ const Header = () => {
     )
 }
 export default function HomeNew() {
-    const [ ref0, inView0 ] = useInView({threshold: 0.1, triggerOnce: true})
     const [ ref1, inView1 ] = useInView({threshold: 0.9})
     const [ ref2, inView2 ] = useInView({threshold: 0.9})
     const [ ref3, inView3 ] = useInView({threshold: 0.3})
@@ -66,7 +60,7 @@ export default function HomeNew() {
             <div className="Header__container">
                 <Header />
             </div>
-            <div ref={ ref0 } className={ inView0 ? "Content__container lazy_load_image" : "Content__container" }>
+            <div className="Content__container lazy_load_image">
                 <div className="SecondaryNav__offset"></div>
                 <div className="test">
                     <SecondaryNav 

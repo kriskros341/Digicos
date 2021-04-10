@@ -1,0 +1,37 @@
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    width: calc(100% - 30px);
+    @media (min-width: 768px) {
+      width: 750px;
+    }
+    @media (min-width: 992px) {
+      width: 970px;
+    }
+    @media (min-width: 1200px) {
+      width: 1170px;
+    }
+}
+.Font__Card {
+    font-family: "Oswald", sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    color: white;
+    font-size: #{"clamp(12px, 12vw, 2rem)"};
+    text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+    text-decoration: none;
+}
+.HiddenOnBigScreen {
+    display: initial;
+    @media (min-width: 992px) {
+        display: none !important;
+      }
+}
+.HiddenOnSmallScreen {
+    display: initial;
+    @media (max-width: 992px) {
+        display: none !important;
+      }
+}
