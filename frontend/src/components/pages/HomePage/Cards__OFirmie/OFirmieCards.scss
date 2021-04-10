@@ -18,8 +18,9 @@
             font-style: normal;
             width: 90vw;
             color: #ECECDA;
+            overflow-y: hidden;
             .Card__contnet {
-                padding: 2em;
+                margin: 2em;
                 h3 {
                     display: block;
                     font-weight: normal;

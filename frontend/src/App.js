@@ -1,99 +1,92 @@
-import './App.scss';
-import './jakakolwieknazwa.scss'
-import Home from './components/pages/HomePage/Home.js'
-import Contact from './components/pages/Contact/Contact.js'
-import Realizacje from './components/pages/Realizacje/Realizacje.js'
-import HomeOld from './components/pages/HomeOld.js'
-import Navbar from './components/Navbar/Navbar.js'
-import CogMenu from './components/CogMenu/CogMenu.js'
-import BottomMenu from './components/BottomMenu/BottomMenu.js'
-import { useState, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import cert from './42986CD28A42B60DB4684F67F7ACE8D1.txt'
+//import CogMenu from './components/CogMenu/CogMenu.js'
+import FunctionalOverlay from './components/FunctionalOverlay/FunctionalOverlay.js'
+import { lazy, Suspense } from 'react'
+import { motion } from 'framer-motion'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
 } from "react-router-dom"
+import './App.scss';
+
+const Home = lazy(() => import('./components/pages/HomePage/Home.js'))
+const Contact = lazy(() => import('./components/pages/Contact/Contact.js'))
+const Realizacje = lazy(() => import('./components/pages/Realizacje/Realizacje.js'))
+const Inwestorzy = lazy(() => import('./components/pages/Inwestorzy/Inwestorzy.js'))
+const HomeOld = lazy(() => import('./components/pages/HomeOld.js'))
+
+
+const pageVariants = {
+  initial:{opacity: 0, y: -20},
+  animate:{opacity: 1, y: 0}
+}
 
 function App() {
-  const [ overlayFunction, setOverlayFunction ] = useState()
-  const overlayHandler = useCallback(
-    (callback) => {
-      setOverlayFunction(() => callback)
-    }, [setOverlayFunction]
-  )
   return (
     <Router>
-        <Navbar Link={Link}></Navbar>
-        <Switch>
-          <Route exact key="/" path="/">
-            <AnimatePresence exitBeforeEnter>
-              <motion.div
-                initial={{opacity: 0, y: -20}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: 20}}
-              >
-                <Home overlayHandler={overlayHandler}/>
-              </motion.div>
-            </AnimatePresence>
-          </Route>
-          <Route key="/inwestorzy" path="/inwestorzy">
-            <AnimatePresence exitBeforeEnter>
-              <motion.div
-                initial={{opacity: 0, y: -20}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: 20}}
-              >
-                <HomeOld overlayHandler={overlayHandler}/>
-              </motion.div>
-            </AnimatePresence>
-          </Route>
-          <Route key="/kontakt" path="/kontakt">
-            <AnimatePresence exitBeforeEnter>
-              <motion.div
-                initial={{opacity: 0, y: -20}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: 20}}
-              >
-                <Contact />
-              </motion.div>
-            </AnimatePresence>
-          </Route>
-          <Route exact key="/realizacje" path="/realizacje">
-            <AnimatePresence exitBeforeEnter>
-              <motion.div
-                initial={{opacity: 0, y: -20}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: 20}}
-              >
-                <Realizacje overlayHandler={overlayHandler}/>
-              </motion.div>
-            </AnimatePresence>
-          </Route>
-          <Route path="*">
-            <div className="not found"> Not found </div>
-          </Route>
-        </Switch>
 
-        <BottomMenu />
-        <CogMenu location={""}/>
-        <AnimatePresence>
-          { overlayFunction &&
+      <FunctionalOverlay />
+
+      <Switch>
+        <Route exact key="/" path="/">
             <motion.div
-              initial={{opacity: 0}}
-              animate={{opacity: 1}}
-              exit={{opacity: 0}}
-              transition={{
-                type: "tween"
-              }}
-              className="overlay" onClick={() => {overlayFunction(); setOverlayFunction(false)}} />
-            }
-        </AnimatePresence>
-    
+              variants={pageVariants}
+              initial="initial"
+              animate="animate" >
+                <Suspense fallback={<div className="loading">loading</div>}>
+                  <Home />
+                </Suspense>
+            </motion.div>
+        </Route>
+        <Route key="/homeold" path="/homeold">
+          <motion.div
+            variants={pageVariants}
+            initial="initial"
+            animate="animate" 
+          >
+            <Suspense fallback={<div className="loading">loading</div>}>
+              <HomeOld />
+            </Suspense>
+          </motion.div>
+        </Route>
+        <Route key="/kontakt" path="/kontakt">
+          <motion.div
+            variants={pageVariants}
+            initial="initial"
+            animate="animate" >
+            <Suspense fallback={<div className="loading">loading</div>}>
+              <Contact />
+            </Suspense>
+          </motion.div>
+        </Route>
+        <Route exact key="/inwestorzy" path="/inwestorzy">
+          <motion.div
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+          >
+            <Suspense fallback={<div className="loading">loading</div>}>
+              <Inwestorzy />
+            </Suspense>
+          </motion.div>
+        </Route>
+        <Route exact key="/realizacje" path="/realizacje">
+          <motion.div
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+          >
+            <Suspense fallback={<div className="loading">loading</div>}>
+              <Realizacje />
+            </Suspense>
+          </motion.div>
+        </Route>
+        <Route path="*">
+          <div className="not found"> Not found </div>
+        </Route>
+      </Switch>
     </Router>
-
   );
 };
 export default App;

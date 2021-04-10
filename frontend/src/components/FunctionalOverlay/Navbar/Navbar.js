@@ -1,7 +1,7 @@
-import './Navbar.scss'
 import { useState } from 'react'
 import { motion, AnimateSharedLayout } from 'framer-motion'
-import logo1 from '../static/logo_stripped.svg'
+import logo1 from '../../static/logo_stripped.svg'
+import './Navbar.scss'
 
 const menuItems = [
   {"nazwa":"Firma", "link":"/firma"},

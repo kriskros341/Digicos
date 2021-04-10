@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.loading {
+  background-color: #0e2f56;
+  height: 100vh;
+}

@@ -1,6 +1,6 @@
 .HomeNew_v2__component {
     .Header__container {
-        z-index: 2;
+        z-index: 102;
         position: relative;
         overflow-x: hidden;
         background: #118DF0;
@@ -14,18 +14,22 @@
             font-style: normal;
             color: white;
             &::before {
+                opacity: 0;
+                transition: opacity 0.5s;
                 width: 100%;
                 height: 100%;
                 position: absolute;
                 top: 0; left: 0;
                 filter: brightness(75%);
                 background-color: rgba(14, 47, 86, 1);
-                background: url("https://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg2-min.jpg") no-repeat 65% center;
-                background-size: cover;
-                opacity: 0.5;
                 will-change: transform;
                 mix-blend-mode: luminosity;
                 content: "";
+            }
+            &.lazy_load_image::before {
+                background: url("https://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg2-min.jpg") no-repeat 65% center;
+                background-size: cover;
+                opacity: 0.5;    
             }
             &::after {
                 background: linear-gradient(360deg, #0E2F56 28.37%, rgba(14, 47, 86, 0) 100%);;
@@ -115,8 +119,10 @@
                         max-width: 80%;
                     }
                 }
-                &::before {
+                &.lazy_load_image::before {
                     background: url("https://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg2-min.jpg") no-repeat 75% center;
+                    background-size: cover;
+                    opacity: 0.5;    
                 }
 
             }
@@ -181,11 +187,15 @@
             width: 100%;
             height: 100%;
             will-change: transform;
-            background: url("https://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg1-min.jpg") no-repeat 80% center;
             background-size: cover;
-            opacity: 0.6;
+            opacity: 0;
+            transition: opacity 2s 0.5s;
             content: "";
           }
+        &.lazy_load_image::before {
+            background: url("https://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg1-min.jpg") no-repeat 80% center;
+            opacity: 0.6
+        }
         .Content__box {
             display: flex;
             flex-direction: column;
@@ -195,13 +205,32 @@
                 padding-top: 200px;
             }
         }
+        .BigCard {
+            position: fixed;
+            font-size: 0.5em;
+            top: 30%;
+            left: 5%;
+            width: 90%;
+            height: 60%;
+            z-index: 101;
+            background: #0E2F56;
+            &::before {
+                z-index: -1;
+                position: absolute;
+                top: 0; left: 0;
+                width: 100%;
+                height: 100%;
+                content: "";
+            }
+        }
     }
     .overlay {
-        cursor: pointer;
-        position: absolute;
-        top: -50vh; bottom: -50vw; right: 0; left: 0;
-        content: "";
-    }
+        position: fixed;
+        top: 0; right: 0; left: 0;
+        height: 100vh;
+        z-index: 100;
+        background-color: rgba(0,0,0,0.2);
+      }
 }
 .test {
     position: absolute;

@@ -1,6 +1,6 @@
 import "./Contact.scss"
 import { useState } from "react"
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion"
+import { motion } from "framer-motion"
 
 
 const oddzialy = [
@@ -82,7 +82,7 @@ export default function Contact() {
                                             key={item.type}
                                             layoutId={"item_"+index}>
                                             <div className="data__icon">
-                                                <img src={item.type} />
+                                                <img src={item.type} alt={item.type} />
                                             </div>
                                             <div className="data__text">{item.value}</div>
                                         </motion.div>
@@ -109,8 +109,8 @@ export default function Contact() {
             <div className="Media container">
                 <hr></hr>
                 <div className="Media__content">
-                    <a href="">Facebook</a>
-                    <a href="">Email</a>
+                    <a href="/">Facebook</a>
+                    <a href="/">Email</a>
                 </div>
                 <hr></hr>
             </div>

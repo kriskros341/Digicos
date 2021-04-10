@@ -48,9 +48,9 @@ export default function Realizacje() {
     return (
         <div className="Realizacje__component">
             <div className="Realizacje__Container container">
-                {data.map(item => {
+                {data.map((item, index) => {
                     return (
-                    <div key={item.desc} className="box">
+                    <div key={index} className="box">
                         <div className="time">
                             <p>{item.time}</p>
                         </div>
