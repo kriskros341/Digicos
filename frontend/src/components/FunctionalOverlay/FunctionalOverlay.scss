@@ -2,12 +2,19 @@
     position: fixed;
     top: 0; bottom: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     z-index: 200;
     pointer-events: none;
+    .FunctionalOverlay__container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
 }
 .Navigation__padding {
-    background-color: #118DF0;
-    height: 4.4em;
+    z-index: 19;
+    background-color: rgb(14, 47, 86);
+    width: 100%;
+    height: 4.2em;
     content: "";
-  }
+}

@@ -1,4 +1,5 @@
 .CogChamp__component {
+  z-index: 40;
   display: flex;
   justify-content: center;
   position: absolute;
@@ -17,9 +18,9 @@
     cursor: pointer;
     content: "";
     & img {
-      width: 50%;
-      height: 50%;
-      transition: transform 0.2s ease-out;
+      width: 2em;
+      height: 2em;
+      transition: transform 0.3s ease-out;
     }
     &::before,
     &::after {
@@ -39,7 +40,7 @@
     }
     &.CogActive {
       img {
-        transform: rotate(270deg)
+        transform: rotate(180deg)
       }
       &::before {
         opacity: 1;

@@ -9,15 +9,26 @@
       name="description"
       content="Web site created using create-react-app"
     />
+    <link rel=preconnect href="https://digicos.ddns.net:8001">
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Digicos</title>
-    <script> 
-      if (!crossOriginIsolated) SharedArrayBuffer = ArrayBuffer
+  <script> 
+    if (!(crossOriginIsolated) && !(window.document.documentMode)) {
+      SharedArrayBuffer = ArrayBuffer
+    }
     </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script>
+      /* The final solution to IE Chads */
+      if (window.document.documentMode) {
+        const el = document.createElement("DIV")
+        el.innerHTML = "Twoja przeglądarka jest niekąpatybilna z tą stroną. 21 wiek zaprasza. </br> Your browser is incompatible with this page. 21'st century welcomes."
+        document.getElementById("root").appendChild(el)
+      }
+    </script>
   </body>
 </html>

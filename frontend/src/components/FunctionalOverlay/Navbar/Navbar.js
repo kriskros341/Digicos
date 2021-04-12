@@ -1,80 +1,52 @@
-import { useState } from 'react'
-import { motion, AnimateSharedLayout } from 'framer-motion'
+import { useState, useLayoutEffect, lazy, Suspense } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from "react-router-dom"
-import logo1 from '../../static/logo_stripped.svg'
-import './Navbar.scss'
-import getMenuItems from '../getNavData.js'
+import './NavbarUnified.scss'
 
-const menuItems = getMenuItems()
-const Navbar_old = () => {
-  const [hoveredItem, setHoveredItem] = useState();
-  return(
-    <div className="Navigation__container_n">
-      <div className="Navigation_n container">
-        <div className="Navigation__Logo__container_n">
-          <Link to="/"><img alt="logo" src={ logo1 }/></Link>
-        </div>
-        <div className="Navigation__Items__container_n">
-          <AnimateSharedLayout>
-            { menuItems.map((item, index) => {
-              return(
-                <div key={ "navItem-"+index+"__container" } onMouseEnter={() => setHoveredItem(index)} style={{height: "100%"}}>
-                  <Link to={item.to}><div className="Navigation__Item_n" key={ "navItem-"+index }>{ item.name }</div></Link>
-                  { hoveredItem === index && (
-                    <motion.div key={"underline"} className="underline" layoutId={"underline"}></motion.div>
-                  )}
-                </div>
-              )
-            })
-            }
-          </AnimateSharedLayout>
-        </div>
-        
-        <div className="Navigation__Hbgr__container_n">
-          <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="https://www.w3.org/2000/svg">
-            <rect width="25" height="5" fill="white"/>
-            <rect y="10" width="25" height="5" fill="white"/>
-            <rect y="20" width="25" height="5" fill="white"/>
-          </svg>
-        </div>
-      </div>
-    </div>
-  )
-}
-const Navbar = ({menuState}) => {
+const Logo = lazy(() => import('../../static/logo_stripped.js'))
+const DesktopNavigation = lazy(() => import('./NavbarComponents/DesktopNavigation.js'))
+const MobileNavigation = lazy(() => import('./NavbarComponents/MobileNavigation.js'))
+const MobileMenu = lazy(() => import('./NavbarComponents/MobileMenu.js'))
+const BlackDrop = lazy(() => import('./BlackDrop.js'))
+ 
+const Navbar = ({setMenuState, menuState, toggleMenu}) => {
+  const [ windowWidth, setWindowWidth ] = useState(window.innerWidth)
+  useLayoutEffect(() => {
+    window.onresize = () => setWindowWidth(window.innerWidth)
+    return () => window.onresize = null
+  }, [])
   return (
     <div className="Navbar__component">
-      <div className="Navbar container">
-        <Link className="Logo__container" to="/">
-          <img className="Logo" alt="Logo" src={ logo1 }/>
-        </Link>
-        <motion.div 
-          className="Nav__group Font__Card HiddenOnSmallScreen"
-          animate={ menuState ? { x: 30, opacity: 0} : { x: 0, opacity: 1} }
-        >
-          {
-            menuItems.map((item, index) => {
-              return (
-                <Link className="Nav__link" key={index} to={item.to}>
-                  <div>
-                    {item.name}
-                  </div>
-                </Link>
-              )
-            })
-          }
-        </motion.div>
-        <div className="Nav__group Font__Card HiddenOnBigScreen Hbgr_container">
-          <div className="Hbgr">
-            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="https://www.w3.org/2000/svg">
-              <rect width="25" height="5" fill="white"/>
-              <rect y="10" width="25" height="5" fill="white"/>
-              <rect y="20" width="25" height="5" fill="white"/>
-            </svg>
-          </div>
+      <div className="Navbar__container">
+        <div className="Navbar container">
+          <Link onClick={ () => setMenuState(false) } className="Logo__container" to="/">
+            <Suspense fallback={<div />}>
+              <Logo />
+            </Suspense>
+          </Link>
+            { windowWidth > 992 ? (
+              <Suspense fallback={<div></div>}>
+                <DesktopNavigation menuState={menuState} />
+              </Suspense>
+            ) : (
+              <Suspense fallback={<div></div>}>
+                <MobileNavigation toggleMenu={toggleMenu} />
+              </Suspense>
+            ) }
         </div>
+      </div>
+      <div>
+        <AnimatePresence>
+          { (windowWidth <= 992 && menuState) && (
+            <Suspense fallback={<div></div>}>
+              <MobileMenu setMenuState={ setMenuState } toggleMenu={ toggleMenu } />
+              <BlackDrop menuState={ menuState } toggleMenu={ toggleMenu } />
+            </Suspense>
+          ) }
+        </AnimatePresence>
       </div>
     </div>
   )
 }
+
 export default Navbar

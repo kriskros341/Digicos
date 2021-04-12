@@ -22,7 +22,7 @@ const pageVariants = {
   animate:{opacity: 1, y: 0}
 }
 const Fallback = () => {
-  return <div className="loading">loading</div>
+  return (<div className="loading">loading</div>)
 }
 const SuspendedPage = (props) => {
   return (
@@ -30,7 +30,7 @@ const SuspendedPage = (props) => {
       variants={pageVariants}
       initial="initial"
       animate="animate" >
-        <Suspense fallback={Fallback}>
+        <Suspense fallback={<Fallback />}>
           {props.children}
         </Suspense>
     </motion.div>

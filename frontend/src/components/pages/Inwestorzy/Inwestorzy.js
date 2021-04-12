@@ -23,6 +23,7 @@ const suma_akcji = inwestorzy.reduce((reducer, item) => {
 export default function Inwestorzy() {
     return (
     <div className="Inwestorzy__component">
+        <div className="bg" />
         <div className="Content container">
             <div className="column">
                 <div className="cell">

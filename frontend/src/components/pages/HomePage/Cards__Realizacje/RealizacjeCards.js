@@ -1,5 +1,5 @@
 import './RealizacjeCards.scss'
-import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useRef, useState } from 'react'
 
 const reviews = [
@@ -99,17 +99,15 @@ export default function RealizacjeCards() {
     const [ focused, setFocused ] = useState(false)
     const carouselRef = useRef(null)
     return (
-        <AnimateSharedLayout>
-        <motion.div layout ref={carouselRef} className="Cards__Realizacje__component" id="c1">
-            <div className="Placeholder"></div>
-            <motion.div layout dragConstraints={carouselRef} drag="x" className="Carousel">
-            
-                {reviews.map(item => {
-                    return (<Card key={item.id} focusUtil={[focused, setFocused]} content={item}/>)
-                })}
+      <motion.div layout ref={carouselRef} className="Cards__Realizacje__component" id="c1">
+          <div className="Placeholder"></div>
+          <motion.div layout dragConstraints={carouselRef} drag="x" className="Carousel">
+          
+              {reviews.map(item => {
+                  return (<Card key={item.id} focusUtil={[focused, setFocused]} content={item}/>)
+              })}
 
-            </motion.div>  
-        </motion.div>
-        </AnimateSharedLayout>
+          </motion.div>  
+      </motion.div>
     )
 }

@@ -4,27 +4,22 @@ import CogChamp from './CogChamp/CogChamp.js'
 import Navbar from './Navbar/Navbar.js'
 import './FunctionalOverlay.scss'
 
-const Menu = () => {
-    return (
-        <div></div>
-    )
-}
+
 const FunctionalOverlay = () => {
-    const [menuState, setMenuState] = useState(false)
-    const toggleMenu = () => setMenuState(!menuState)
-    return (
-        <>
-            <div className="FunctionalOverlay__component">
-                <Navbar menuState={ menuState } />
-                <BottomMenu />
-                <CogChamp 
-                    menuState={ menuState } 
-                    toggleMenu={ () => toggleMenu() } 
-                    />
-            </div>
-            <div className="Navigation__padding" />
-        </>
-    )
+	const [menuState, setMenuState] = useState(false)
+	const toggleMenu = () => setMenuState(!menuState)
+	return (
+		<>
+			<div className="FunctionalOverlay__component">
+				<div className="FunctionalOverlay__container">
+					<Navbar setMenuState={ setMenuState } menuState={ menuState } toggleMenu={ toggleMenu } />
+					<CogChamp menuState={ menuState } toggleMenu={ toggleMenu } />
+					<BottomMenu />
+				</div>
+			</div>
+			<div className="Navigation__padding" />
+		</>
+	)
 }
 
 export default FunctionalOverlay

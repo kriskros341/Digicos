@@ -2,6 +2,7 @@
     h3, p {
         all: unset;
     }
+    overflow-x: hidden;
     padding: 4rem 0;
     display: flex;
     justify-content: center;
@@ -59,7 +60,8 @@
         background-color: rgba(0,0,0,0.4);
         border-radius: 100%;
         .content {
-            max-width: 80%;
+            width: 120px;
+            height: 84px;
         }
     }
 }

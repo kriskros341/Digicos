@@ -47,6 +47,7 @@ const data = [
 export default function Realizacje() {
     return (
         <div className="Realizacje__component">
+            <div className="bg" />
             <div className="Realizacje__Container container">
                 {data.map((item, index) => {
                     return (

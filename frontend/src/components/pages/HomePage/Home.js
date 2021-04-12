@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { useInView } from 'react-intersection-observer';
 import { AnimatePresence } from 'framer-motion';
 import RealizacjeCards from './Cards__Realizacje/RealizacjeCards.js'
@@ -7,8 +7,10 @@ import OFirmieCards from './Cards__OFirmie/OFirmieCards.js'
 import SecondaryNav from './SecondaryNav.js'
 import Overlay from '../../Overlay.js'
 import BigCard from './BigCard.js'
-import logo1 from '../../static/logo_stripped.svg'
 import './Home.scss'
+
+const Logo = lazy(() => import('../../static/logo_stripped.js'))
+
 
 const Header = () => {
     return (
@@ -27,7 +29,9 @@ const Header = () => {
                             </div>
                         </div>
                         <div className="Stripe__1">
-                            <img src={logo1} alt="Logo" />
+                            <Suspense fallback={<div />}>
+                                <Logo />
+                            </Suspense>
                         </div>
                     </div>
                 </div>
