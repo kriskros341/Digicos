@@ -4,8 +4,6 @@ import { AnimateSharedLayout, motion } from 'framer-motion'
 import './MobileMenu.scss'
 import getNavData from '../../getNavData.js'
 
-const navData = getNavData()
-
 const MobileMenuVariants = {
   hidden: {
     y: "-90vh",
@@ -20,6 +18,7 @@ const MobileMenuVariants = {
     }
   }
 }
+
 const MobileMenuContentVariants = {
   hiddenM: {
     x: 25,
@@ -32,11 +31,10 @@ const MobileMenuContentVariants = {
   }
 }
 
-
-const MobileMenu = ({setMenuState}) => {
-  const [ languageState, setLanguageState ] = useState("Polish")
-  const [ contrastState, setContrastState ] = useState(false)
+const MobileMenu = ({settingsState, setMenuState}) => {
   const [ animState, setAnimState] = useState(false)
+  const [ settings, setSettings ] = settingsState
+  const navData = getNavData(settings.language)
   const toggleAnimState = () => setAnimState(!animState)
   return (
     <motion.div variants={ MobileMenuVariants } className="MobileMenu__component" initial="hidden" animate="showed" exit="hidden" onAnimationComplete={ () => toggleAnimState() }>
@@ -54,28 +52,33 @@ const MobileMenu = ({setMenuState}) => {
         }) }
         <div className="LanguageOptions MobileMenu__item">
           <AnimateSharedLayout>
-            <div className="Globe" onClick={ () => setLanguageState("Polish") } >
-              { languageState === "Polish" && <motion.div className="outline" layoutId="GlobeOutline" /> }
+            <div className="Globe" onClick={ () => setSettings({...settings, language: "Polish"}) } >
+              { settings.language === "Polish" && <motion.div className="outline" layoutId="GlobeOutline6" /> }
             </div>
-            <div className="Globe" onClick={ () => setLanguageState("English") } >
-              { languageState === "English" && <motion.div className="outline" layoutId="GlobeOutline" /> }
+            <div className="Globe" onClick={ () => setSettings({...settings, language: "English"}) } >
+              { settings.language === "English" && <motion.div className="outline" layoutId="GlobeOutline6" /> }
             </div>
           </AnimateSharedLayout>
         </div>
         <div className="MobileMenu__item LanguageOptions">
           <AnimateSharedLayout>
-            <div className="Globe" onClick={ () => setContrastState(true) } >
-              { contrastState && <motion.div className="outline" layoutId="GlobeOutline1" /> }
+            <div className="Globe" onClick={ () => setSettings({...settings, highContrast: true}) } >
+              { settings.highContrast && <motion.div className="outline" layoutId="GlobeOutline1" /> }
             </div>
-            <div className="Globe" onClick={ () => setContrastState(false) } >
-              { !contrastState && <motion.div className="outline" layoutId="GlobeOutline1" /> }
+            <div className="Globe" onClick={ () => setSettings({...settings, highContrast: false}) } >
+              { !settings.highContrast && <motion.div className="outline" layoutId="GlobeOutline1" /> }
             </div>
           </AnimateSharedLayout>
         </div>
         <motion.div onClick={() => setMenuState(false)} className="MobileMenu__item__container">
           <Link to="/Administracja">
             <div className="MobileMenu__item">
-              Administracja
+              {
+                {
+                  "Polish": "Administracja",
+                  "English": "Admin Panel"
+                }[settings.language]
+              }
             </div>
           </Link>
         </motion.div>

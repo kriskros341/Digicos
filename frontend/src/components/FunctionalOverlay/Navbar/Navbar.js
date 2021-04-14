@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect, lazy, Suspense } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { Link } from "react-router-dom"
 import './NavbarUnified.scss'
 
@@ -9,8 +9,10 @@ const MobileNavigation = lazy(() => import('./NavbarComponents/MobileNavigation.
 const MobileMenu = lazy(() => import('./NavbarComponents/MobileMenu.js'))
 const BlackDrop = lazy(() => import('./BlackDrop.js'))
  
-const Navbar = ({setMenuState, menuState, toggleMenu}) => {
+const Navbar = ({settingsState, setMenuState, menuState, toggleMenu}) => {
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth)
+  const [ settings, setSettings ] = settingsState
+
   useLayoutEffect(() => {
     window.onresize = () => setWindowWidth(window.innerWidth)
     return () => window.onresize = null
@@ -26,7 +28,7 @@ const Navbar = ({setMenuState, menuState, toggleMenu}) => {
           </Link>
             { windowWidth > 992 ? (
               <Suspense fallback={<div></div>}>
-                <DesktopNavigation menuState={menuState} />
+                <DesktopNavigation settingsState={[ settings, setSettings ]} menuState={menuState} />
               </Suspense>
             ) : (
               <Suspense fallback={<div></div>}>
@@ -39,7 +41,7 @@ const Navbar = ({setMenuState, menuState, toggleMenu}) => {
         <AnimatePresence>
           { (windowWidth <= 992 && menuState) && (
             <Suspense fallback={<div></div>}>
-              <MobileMenu setMenuState={ setMenuState } toggleMenu={ toggleMenu } />
+              <MobileMenu settingsState={[ settings, setSettings ]} setMenuState={ setMenuState } toggleMenu={ toggleMenu } />
               <BlackDrop menuState={ menuState } toggleMenu={ toggleMenu } />
             </Suspense>
           ) }

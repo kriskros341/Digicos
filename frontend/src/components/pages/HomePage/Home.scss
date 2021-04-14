@@ -1,9 +1,11 @@
 .HomeNew_v2__component {
+    
     .Header__container {
         z-index: 102;
         position: relative;
         overflow-x: hidden;
         background: #118DF0;
+        
         .Header {
             display: flex;
             flex-direction: column;
@@ -205,6 +207,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            
             &.first {
                 z-index: 2;
                 padding-top: 200px;

@@ -151,11 +151,11 @@ const Cards = ({ViewCard}) => {
 const Presentation = () => {
   return (
     <div />
-    /*
-        <motion.iframe 
-          whileHover={{opacity: 1}}
-          title="Pres-Iframe" className="Pres-Iframe" src="https://docs.google.com/presentation/d/e/2PACX-1vSGvhpysXEjSuPLuWgeJioYbktYxXUdUdoo5w2gtzc_fVwos6iTYAlJ1BUrqLJMedEurHFs43MNQ7Cp/embed?start=false&loop=false" frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">Microsoft to śmieć i się psuje. Musieliśmy użyć google sheets, co usunęło przejścia.</motion.iframe>
-  */
+/*
+  <motion.iframe 
+    whileHover={{opacity: 1}}
+    title="Pres-Iframe" className="Pres-Iframe" src="https://docs.google.com/presentation/d/e/2PACX-1vSGvhpysXEjSuPLuWgeJioYbktYxXUdUdoo5w2gtzc_fVwos6iTYAlJ1BUrqLJMedEurHFs43MNQ7Cp/embed?start=false&loop=false" frameborder="0" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true">Microsoft to śmieć i się psuje. Musieliśmy użyć google sheets, co usunęło przejścia.</motion.iframe>
+*/
           )
 }
 

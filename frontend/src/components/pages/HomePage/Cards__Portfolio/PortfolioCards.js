@@ -4,7 +4,7 @@ import './PortfolioCards.scss'
 const cardList = getCardList()
 export default function Cards__Portfolio({setOverlayState, setViewCard}) {
     return (
-          <motion.div layout className="Cards__Portfolio__component" id="c2">
+          <motion.div layout className="Cards__Portfolio__component" id="oferta">
             {cardList.map(({index, text}) => {
               return (
                 <motion.div key={"Card-"+index}

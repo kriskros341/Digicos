@@ -72,6 +72,7 @@ const Card = ({title, text}) => {
     return (
         <div className="Card">
             <motion.div className="Card__contnet"
+                
                 onClick={() => setClicked(!clicked)}
                 variants={opacityTransition}
                 initial="initial"
@@ -105,7 +106,7 @@ const AfterTransition = () => {
 export default function OFirmieCards() {
     const [ ref, inView ] = useInView({treshold: 1, triggerOnce: true, delay: 1000})
     return (
-        <div ref={ref} className="Cards__OFirmie__component"  id="c3">
+        <div ref={ref} className="Cards__OFirmie__component"  id="firma">
             <AnimateSharedLayout >
                 { inView ? (
                     <motion.div layoutId="OFirmieTransition">

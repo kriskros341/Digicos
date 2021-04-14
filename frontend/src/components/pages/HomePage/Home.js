@@ -57,9 +57,7 @@ export default function HomeNew() {
         <div className="HomeNew_v2__component">
             {
             overlayState &&
-                <Overlay 
-                    overlayFunction={overlayFunction} 
-                    />
+                <Overlay overlayFunction={overlayFunction} />
             }
             <div className="Header__container">
                 <Header />
@@ -67,18 +65,13 @@ export default function HomeNew() {
             <div className="Content__container lazy_load_image">
                 <div className="SecondaryNav__offset"></div>
                 <div className="test">
-                    <SecondaryNav 
-                        viewStateUtil={[ viewState, setViewState ]}
-                        />
+                    <SecondaryNav viewStateUtil={[ viewState, setViewState ]} />
                 </div>
                 <div ref={ref1} className="Content__box">
                     <RealizacjeCards />
                 </div>
                 <div ref={ref2} className="Content__box darker">
-                    <PortfolioCards 
-                        setViewCard={ setViewCard } 
-                        setOverlayState = {setOverlayState}
-                        />
+                    <PortfolioCards setViewCard={ setViewCard } setOverlayState = {setOverlayState} />
                 </div>
                 <div ref={ref3} className="Content__box">
                     <OFirmieCards />
@@ -86,10 +79,7 @@ export default function HomeNew() {
                 <AnimatePresence>
                 {
                     viewCard &&
-                        <BigCard 
-                            setOverlayState={setOverlayState} 
-                            viewCard={ viewCard } 
-                            />
+                        <BigCard setOverlayState={setOverlayState} viewCard={ viewCard } />
                 }
                 </AnimatePresence>
             </div>

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion'
 import getMenuItems from '../../getNavData.js'
-const menuItems = getMenuItems()
+
 
 const DesktopMenuVariants = {
-  initial: { x: -30, opacity: 0, transition: {duration: 0.3}},
+	initial: { x: -30, opacity: 0, transition: {duration: 0.3}},
   animate: { x: 0, opacity: 1, transition: {duration: 0.3}},
   exit: { x: 30, opacity: 0, transition: {duration: 0.3}},
 }
@@ -17,7 +17,9 @@ const NavbarLink = ({item}) => {
 		</Link>
 	)
 }
-const DesktopNavigation = ({menuState}) => {
+const DesktopNavigation = ({settingsState, menuState}) => {
+	const [ settings, setSettings ] = settingsState
+	const menuItems = getMenuItems(settings.language)
 	return (
 		<AnimatePresence exitBeforeEnter>
 			{ !menuState ? (
@@ -46,26 +48,19 @@ const DesktopNavigation = ({menuState}) => {
 						exit="exit"
 						transition={{ transition: "spring" }}
 				>
-				<div className="Nav__link">
-						<div>
-						Język Strony
-						</div>
-				</div>
-				<div className="Nav__link">
-						<div>
-						Wyłącz Animacje
-						</div>
-				</div>
-				<div className="Nav__link">
-						<div>
-						Wysoki Kontrast
-						</div>
-				</div>
-				<div className="Nav__link">
-						<div>
-						Administracja
-						</div>
-				</div> 
+					<div className="Nav__link LanguageOptions margin">
+						<AnimateSharedLayout>
+							<div className="Globe" onClick={ () => setSettings({ ...settings, language: "Polish" }) } >
+								{ settings.language === "Polish" && <motion.div className="outline" layoutId="GlobeOutline2" /> }
+							</div>
+							<div className="Globe" onClick={ () => setSettings({ ...settings, language: "English" }) } >
+								{ settings.language === "English" && <motion.div className="outline" layoutId="GlobeOutline2" /> }
+							</div>
+						</AnimateSharedLayout>
+					</div>
+					<div className="Nav__link"> Wyłącz Animacje </div>
+					<div className="Nav__link"> Wysoki Kontrast </div>
+					<div className="Nav__link"> Administracja </div> 
 				</motion.div>
 		)}
 		</AnimatePresence>

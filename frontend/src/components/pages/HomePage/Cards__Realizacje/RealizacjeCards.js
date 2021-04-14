@@ -99,7 +99,7 @@ export default function RealizacjeCards() {
     const [ focused, setFocused ] = useState(false)
     const carouselRef = useRef(null)
     return (
-      <motion.div layout ref={carouselRef} className="Cards__Realizacje__component" id="c1">
+      <motion.div layout ref={carouselRef} className="Cards__Realizacje__component" id="realizacje">
           <div className="Placeholder"></div>
           <motion.div layout dragConstraints={carouselRef} drag="x" className="Carousel">
           

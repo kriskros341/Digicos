@@ -5,14 +5,15 @@ import Navbar from './Navbar/Navbar.js'
 import './FunctionalOverlay.scss'
 
 
-const FunctionalOverlay = () => {
+const FunctionalOverlay = ({settingsState}) => {
 	const [menuState, setMenuState] = useState(false)
 	const toggleMenu = () => setMenuState(!menuState)
+	const [ settings, setSettings ] = settingsState
 	return (
 		<>
 			<div className="FunctionalOverlay__component">
 				<div className="FunctionalOverlay__container">
-					<Navbar setMenuState={ setMenuState } menuState={ menuState } toggleMenu={ toggleMenu } />
+					<Navbar settingsState={[ settings, setSettings ]} setMenuState={ setMenuState } menuState={ menuState } toggleMenu={ toggleMenu } />
 					<CogChamp menuState={ menuState } toggleMenu={ toggleMenu } />
 					<BottomMenu />
 				</div>
