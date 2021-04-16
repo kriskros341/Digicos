@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 from apps.aktualnosci.routers import router as aktualnosci_router
 from apps.pliki.routers import router as pliki_router
+from apps.user.routers import router as user_router
 import certs
 
 from fastapi.staticfiles import StaticFiles
@@ -11,6 +13,23 @@ app = FastAPI()
 app.mongodb_client = None
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.templates = Jinja2Templates(directory="templates")
+
+allowed_origins = [
+    "http://localhost:8000",
+    "https://localhost:8003",
+    "http://digicos.ddns.net:8000",
+    "https://digicos.ddns.net:8003",
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.on_event("startup")
 async def startup_db_client():
@@ -25,6 +44,7 @@ async def shutdown_db_client():
 
 app.include_router(aktualnosci_router, tags=["Aktualności"], prefix="/aktualnosci")
 app.include_router(pliki_router, tags=["Pliki"], prefix="/pliki")
+app.include_router(user_router, tags=["Użytkownicy"], prefix="/user")
 
 @app.get('/')
 async def index():
