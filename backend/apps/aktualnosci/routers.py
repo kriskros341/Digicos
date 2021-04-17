@@ -48,8 +48,6 @@ async def upload_data(request: Request, data: BaseFormData, date: Optional[datet
 @router.get("/get_all")
 async def get_all(request: Request):
     d = await request.app.mongodb['Aktualnosci'].find({}, {"_id": False}).to_list(length=100)
-    print(dir(d[0]['date']))
-    print(d[0]['date'].timestamp())
     return d
 
 """

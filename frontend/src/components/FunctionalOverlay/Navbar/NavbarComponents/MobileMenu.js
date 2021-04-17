@@ -71,7 +71,7 @@ const MobileMenu = ({settingsState, setMenuState}) => {
           </AnimateSharedLayout>
         </div>
         <motion.div onClick={() => setMenuState(false)} className="MobileMenu__item__container">
-          <Link to="/Administracja">
+          <Link to="/admin">
             <div className="MobileMenu__item">
               {
                 {

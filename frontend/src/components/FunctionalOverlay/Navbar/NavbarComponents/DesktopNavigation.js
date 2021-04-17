@@ -58,9 +58,30 @@ const DesktopNavigation = ({settingsState, menuState}) => {
 							</div>
 						</AnimateSharedLayout>
 					</div>
-					<div className="Nav__link"> Wyłącz Animacje </div>
-					<div className="Nav__link"> Wysoki Kontrast </div>
-					<div className="Nav__link"> Administracja </div> 
+					<div className="Nav__link">
+					{
+						{
+						"Polish": "Animacje",
+						"English": "Animations"
+						}[settings.language]
+					}
+					</div>
+					<div className="Nav__link">
+					{
+						{
+						"Polish": "Wysoki Kontrast",
+						"English": "High Contrast"
+						}[settings.language]
+					}
+					</div>
+					<Link to="/admin" className="Nav__link">
+						{
+							{
+							"Polish": "Administracja",
+							"English": "Admin Panel"
+							}[settings.language]
+						}
+					</Link>
 				</motion.div>
 		)}
 		</AnimatePresence>

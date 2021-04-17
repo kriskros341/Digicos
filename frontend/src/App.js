@@ -2,9 +2,10 @@
 import FunctionalOverlay from './components/FunctionalOverlay/FunctionalOverlay.js'
 import { useState, lazy, Suspense} from 'react'
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import OptionsContext from "./components/OptionsContext"
+import SettingsContext from "./components/SettingsContext"
 import './App.scss';
 import './utilities.scss'
+import SecurePageWrapper from './components/pages/Admin/SecurePage.js'
 
 const Home = lazy(() => import('./components/pages/HomePage/Home.js'))
 const Contact = lazy(() => import('./components/pages/Contact/Contact.js'))
@@ -13,7 +14,8 @@ const Inwestorzy = lazy(() => import('./components/pages/Inwestorzy/Inwestorzy.j
 const HomeOld = lazy(() => import('./components/pages/HomeOld.js'))
 const Aktualnosci = lazy(() => import('./components/pages/Aktualnosci/Aktualnosci.js'))
 const Presentation = lazy(() => import('./components/pages/Misc/Presentation.js'))
-
+const Tests = lazy(() => import("./components/pages/Aktualnosci/Aktualnosci.js"))
+const Login = lazy(() => import("./components/pages/Admin/Login/Login.js"))
 
 const PageVariants = {
   hidden:{opacity: 0, y: -20},
@@ -34,9 +36,12 @@ const SuspendedPage = (props) => {
 }
 
 function App() {
+  const [ token, setToken ] = useState()
+  const [ username, setUsername ] = useState()
   const [ settings, setSettings ] = useState({language: "Polish", highContrast: false})
+  console.log(settings, token)
   return (
-    <OptionsContext.Provider value={{...settings, pageVariants: PageVariants}}>
+    <SettingsContext.Provider value={{...settings, pageVariants: PageVariants, tokenState: [ token, setToken ], userState: [ username, setUsername ]}}>
       <Router>
         <FunctionalOverlay settingsState={[ settings, setSettings ]}/>
         <Switch>
@@ -46,9 +51,12 @@ function App() {
             </SuspendedPage>
           </Route>
           <Route key="/homeold" path="/homeold">
-            <SuspendedPage>
-              <HomeOld />
-            </SuspendedPage>
+            <SecurePageWrapper>
+              <SuspendedPage>
+                <Login />
+              </SuspendedPage>
+            </SecurePageWrapper>
+
           </Route>
           <Route key="/kontakt" path="/kontakt">
             <SuspendedPage>
@@ -75,12 +83,19 @@ function App() {
               <Aktualnosci />
             </SuspendedPage>
           </Route>
+          <Route exact key="/admin" path="/admin">
+            <SecurePageWrapper>
+              <SuspendedPage>
+                <Tests />
+              </SuspendedPage>
+            </SecurePageWrapper>
+          </Route>
           <Route path="/*">
             <div className="not found"> Not found </div>
           </Route>
         </Switch>
       </Router>
-    </OptionsContext.Provider>
+    </SettingsContext.Provider>
   );
 };
 export default App;
