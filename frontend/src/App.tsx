@@ -1,21 +1,22 @@
 //import CogMenu from './components/CogMenu/CogMenu.js'
-import FunctionalOverlay from './components/FunctionalOverlay/FunctionalOverlay.js'
-import { useState, lazy, Suspense} from 'react'
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import SettingsContext from "./components/SettingsContext"
+import FunctionalOverlay from './components/FunctionalOverlay/FunctionalOverlay'
+import React, { useState, lazy, Suspense} from 'react'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"// @ts-ignore
+import SettingsContext from "./components/SettingsContext.tsx"
 import './App.scss';
 import './utilities.scss'
-import SecurePageWrapper from './components/pages/Admin/SecurePage.js'
+import SecurePageWrapper from './components/pages/Admin/SecurePage'
 
-const Home = lazy(() => import('./components/pages/HomePage/Home.js'))
-const Contact = lazy(() => import('./components/pages/Contact/Contact.js'))
-const Realizacje = lazy(() => import('./components/pages/Realizacje/Realizacje.js'))
-const Inwestorzy = lazy(() => import('./components/pages/Inwestorzy/Inwestorzy.js'))
-const HomeOld = lazy(() => import('./components/pages/HomeOld.js'))
-const Aktualnosci = lazy(() => import('./components/pages/Aktualnosci/Aktualnosci.js'))
+const Home = lazy(() => import('./components/pages/HomePage/Home'))
+const Contact = lazy(() => import('./components/pages/Contact/Contact'))
+const Realizacje = lazy(() => import('./components/pages/Realizacje/Realizacje'))
+const Inwestorzy = lazy(() => import('./components/pages/Inwestorzy/Inwestorzy'))
+// const HomeOld = lazy(() => import('./components/pages/HomeOld.js'))
+const Aktualnosci = lazy(() => import('./components/pages/Aktualnosci/Aktualnosci'))
 const Presentation = lazy(() => import('./components/pages/Misc/Presentation.js'))
-const Tests = lazy(() => import("./components/pages/Aktualnosci/Aktualnosci.js"))
-const Login = lazy(() => import("./components/pages/Admin/Login/Login.js"))
+// const Tests = lazy(() => import("./components/pages/Aktualnosci/Aktualnosci.js"))
+const Login = lazy(() => import("./components/pages/Admin/Login/Login"))
+const Admin = lazy(() => import('./components/pages/Admin/Admin'))
 
 const PageVariants = {
   hidden:{opacity: 0, y: -20},
@@ -25,13 +26,13 @@ const PageVariants = {
 const Fallback = () => {
   return (<div className="loading">loading</div>)
 }
-const SuspendedPage = (props) => {
+const SuspendedPage = (props: any) => {
   return (
-    <div>
+    <>
         <Suspense fallback={<Fallback />}>
           {props.children}
         </Suspense>
-    </div>
+    </>
   )
 }
 
@@ -39,7 +40,6 @@ function App() {
   const [ token, setToken ] = useState()
   const [ username, setUsername ] = useState()
   const [ settings, setSettings ] = useState({language: "Polish", highContrast: false})
-  console.log(settings, token)
   return (
     <SettingsContext.Provider value={{...settings, pageVariants: PageVariants, tokenState: [ token, setToken ], userState: [ username, setUsername ]}}>
       <Router>
@@ -83,10 +83,10 @@ function App() {
               <Aktualnosci />
             </SuspendedPage>
           </Route>
-          <Route exact key="/admin" path="/admin">
+          <Route key="/admin" path="/admin">
             <SecurePageWrapper>
               <SuspendedPage>
-                <Tests />
+                <Admin />
               </SuspendedPage>
             </SecurePageWrapper>
           </Route>

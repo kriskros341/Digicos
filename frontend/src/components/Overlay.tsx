@@ -1,9 +1,14 @@
 import { useEffect } from "react"
 import { motion } from "framer-motion"
 
-export default function Overlay({overlayFunction}) {
+interface Props {
+  overlayFunction: () => void
+}
+
+
+const Overlay: React.FC<Props> = ({overlayFunction}) => {
   useEffect(
-    () => {
+    (): any => {
       window.onscroll = () => overlayFunction()
       return () => window.onscroll = null
     }, [overlayFunction]
@@ -22,4 +27,5 @@ export default function Overlay({overlayFunction}) {
   )
 }
 
+export default Overlay
   

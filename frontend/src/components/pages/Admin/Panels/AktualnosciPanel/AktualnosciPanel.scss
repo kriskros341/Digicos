@@ -1,0 +1,58 @@
+.Aktualnosci__container {
+	display: flex;
+	flex-direction: column;
+	.Aktualnosci__item {
+		padding: 0.5em;
+		background-color: rgba(0, 0, 0, 0.25);
+		& + .Aktualnosci__item {
+			margin-top: 1em;
+		}
+		.A__item_title {
+			margin: 0;
+			& div {
+				font-weight: lighter;
+			}  
+		}
+	}
+}
+
+.Aktualnosci__container_n {
+	display: flex;
+	flex-direction: column;
+	.Aktualnosci__card__container {
+		position: relative;
+		padding: 0.5em;
+		background-color: rgba(0, 0, 0, 0.4);
+		& + .Aktualnosci__card__container {
+			margin-top: 1em;
+		}
+		.Card__options__container {
+			position: absolute;
+			top: 0.5em; right: 0.5em;
+			display: flex;
+			flex-direction: row-reverse;
+			.Card__options__item {
+				cursor: pointer;
+				& + .Card__options__item {
+					margin-right: 1em;
+				}
+			}
+		}
+		.Card__content__container {
+			.Card__content {
+        .add_btn {
+          cursor: pointer
+        }
+				.indented {
+					margin-left: #{"clamp(0.5em, 2vw, 1em)"};
+				}
+				.lighter {
+					font-weight: lighter;
+				}
+			}
+			.Card__Inner {
+				margin-top: 1em;
+			}
+		}
+	}
+}

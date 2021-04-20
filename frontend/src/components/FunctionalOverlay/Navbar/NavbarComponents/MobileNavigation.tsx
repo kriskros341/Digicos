@@ -1,4 +1,4 @@
-const MobileNavigation = ({toggleMenu}) => {
+const MobileNavigation: React.FC<{toggleMenu: () => void}> = ({toggleMenu}) => {
   return (
     <div 
       className="Nav__group Font__Card HiddenOnBigScreen Hbgr_container"

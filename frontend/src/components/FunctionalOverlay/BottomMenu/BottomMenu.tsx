@@ -8,6 +8,13 @@ const HelmetIcon = lazy(() => import("../../static/BottomMenu/Helmet.js"))
 const PhoneIcon = lazy(() => import("../../static/BottomMenu/Phone.js"))
 const DigicosIcon = lazy(() => import("../../static/BottomMenu/Digicos.js"))
 
+
+interface BottomMenuItemModel {
+  text: string;
+  icon: React.LazyExoticComponent<() => JSX.Element>;
+  to?: string;
+}
+
 const items = {
   "/": [
     {text: "Prezentacja", icon: <PresIcon />, to: "/prezentacja"},
@@ -31,16 +38,24 @@ const items = {
   ],
   "/prezentacja": [
     {text: "strona główna", icon: <DigicosIcon />}
+  ],
+  "defaultPath": [
+    {text: "Prezentacja", icon: <PresIcon />, to: "/prezentacja"},
+    {text: "Realizacje", icon: <HelmetIcon />, to: "/realizacje"},
+    {text: "Kontakt", icon: <PhoneIcon />, to: "/kontakt"},
   ]
 }
+
 const BottomMenu = () => {
   const location = useLocation()
   console.log(location)
+  //@ts-expect-error: No idea why it doesn't work
+  const iconsForCurrentPage = items[location.pathname] || items["defaultPath"]
   return (
     <div className="BottomMenu__component">
       <div className="Icons__container">
         {
-          items[location.pathname]?.map((item, index) => {
+          iconsForCurrentPage.map((item: BottomMenuItemModel, index: number) => {
             return (
               <Link to={item.to || "/"} key={index}>
                 <div className="Icon__box">

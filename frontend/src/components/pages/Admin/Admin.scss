@@ -1,0 +1,54 @@
+.Admin__component {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	display: flex;
+	align-items: stretch;
+	.bg {
+		z-index: -1;
+		position: fixed;
+		background: #118DF0;
+		top: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		&::before {
+			z-index: -1;
+			position: absolute;
+			will-change: transform;
+			top: 0; left: 0;
+			width: 100%;
+			height: 100vh;
+			content: "";
+			background: url("https://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg2-min.jpg") 80% center;
+			background-size: cover;
+			opacity: 0.5;
+			mix-blend-mode: luminosity;
+			filter: brightness(0.8);
+			@media (min-width: 768px) {
+				background-position: center;
+			}
+		}
+	}
+	.Admin__container {
+		overflow: hidden;
+		min-height: 100vh;
+		.Admin__content {
+			background-color: rgba(0, 0, 0, 0.25);
+			margin-top: 6vh;
+			.Admin {
+				padding: 2vh 0.5em;
+				min-height: 80vh;
+				display: flex;
+				flex-direction: column;
+				font-family: "Oswald", sans-serif;
+				font-style: normal;
+				font-weight: normal;
+				color: white;
+				font-size: #{"clamp(12px, 10vw, 1.5rem)"};
+				text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
+				text-decoration: none;
+			}
+		}
+	}
+}

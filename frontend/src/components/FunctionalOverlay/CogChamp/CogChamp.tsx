@@ -1,7 +1,12 @@
 import './CogChamp.scss'
 import CogChampSvg from '../../static/cog2.svg'
 
-const CogChamp = ({menuState, toggleMenu}) => {
+interface cogChampInterface {
+  menuState: boolean,
+  toggleMenu: () => void
+}
+
+const CogChamp: React.FC<cogChampInterface> = ({menuState, toggleMenu}) => {
   return (
     <div className="CogChamp__component HiddenOnSmallScreen">
       <div className="container">

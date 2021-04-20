@@ -1,22 +1,35 @@
 import { useState, useLayoutEffect, lazy, Suspense } from 'react'
+import { simpleSettingsModel } from "../FunctionalOverlay"
 import { AnimatePresence } from 'framer-motion'
 import { Link } from "react-router-dom"
 import './NavbarUnified.scss'
 
 const Logo = lazy(() => import('../../static/logo_stripped.js'))
-const DesktopNavigation = lazy(() => import('./NavbarComponents/DesktopNavigation.js'))
-const MobileNavigation = lazy(() => import('./NavbarComponents/MobileNavigation.js'))
-const MobileMenu = lazy(() => import('./NavbarComponents/MobileMenu.js'))
-const BlackDrop = lazy(() => import('./BlackDrop.js'))
+const DesktopNavigation = lazy(() => import('./NavbarComponents/DesktopNavigation'))
+const MobileNavigation = lazy(() => import('./NavbarComponents/MobileNavigation'))
+const MobileMenu = lazy(() => import('./NavbarComponents/MobileMenu'))
+const BlackDrop = lazy(() => import('./BlackDrop'))
  
-const Navbar = ({settingsState, setMenuState, menuState, toggleMenu}) => {
+
+interface NavbarInterface {
+  settingsState: [ 
+    simpleSettingsModel, 
+    (newData: simpleSettingsModel) => void 
+  ],
+  setMenuState: (newValue: boolean) => void,
+  menuState: boolean,
+  toggleMenu: () => void
+}
+
+const Navbar: React.FC<NavbarInterface> = ({settingsState, setMenuState, menuState, toggleMenu}) => {
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth)
   const [ settings, setSettings ] = settingsState
-
-  useLayoutEffect(() => {
-    window.onresize = () => setWindowWidth(window.innerWidth)
-    return () => window.onresize = null
-  }, [])
+  useLayoutEffect(
+    (): () => void => {
+      window.onresize = () => setWindowWidth(window.innerWidth)
+      return () => window.onresize = null
+    }, []
+  )
   return (
     <div className="Navbar__component">
       <div className="Navbar__container">
@@ -41,7 +54,7 @@ const Navbar = ({settingsState, setMenuState, menuState, toggleMenu}) => {
         <AnimatePresence>
           { (windowWidth <= 992 && menuState) && (
             <Suspense fallback={<div></div>}>
-              <MobileMenu settingsState={[ settings, setSettings ]} setMenuState={ setMenuState } toggleMenu={ toggleMenu } />
+              <MobileMenu settingsState={[ settings, setSettings ]} setMenuState={ setMenuState } />
               <BlackDrop menuState={ menuState } toggleMenu={ toggleMenu } />
             </Suspense>
           ) }

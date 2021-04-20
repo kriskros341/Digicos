@@ -1,5 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion"
-const SecondaryNav = ({viewStateUtil}) => {
+
+interface Props {
+  viewStateUtil: [
+    f1: number,
+    f2: (n: number) => any
+  ]
+}
+
+const SecondaryNav: React.FC<Props> = ({viewStateUtil}) => {
     const [ viewState, setViewState ] = viewStateUtil
     return (
         <div className="SecondaryNav__container">

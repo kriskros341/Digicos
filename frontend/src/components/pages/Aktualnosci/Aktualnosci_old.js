@@ -1,6 +1,6 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
 import { useState, useContext, useEffect } from "react"
-import settingsContext from "../../SettingsContext.js/index.js"
+import settingsContext from "../../SettingsContext.tsx/index.js.js"
 import './Aktualnosci.scss'
 
 const data = [

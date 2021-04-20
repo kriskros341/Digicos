@@ -17,10 +17,12 @@ const inwestorzy = [
         "akcje": 1060000,
     },
 ]
+
 const suma_akcji = inwestorzy.reduce((reducer, item) => {
     return reducer+=item.akcje
 }, 0)
-export default function Inwestorzy() {
+
+const Inwestorzy = () => {
     return (
     <div className="Inwestorzy__component">
         <div className="bg" />
@@ -79,3 +81,4 @@ export default function Inwestorzy() {
     </div>
     )
 }
+export default Inwestorzy

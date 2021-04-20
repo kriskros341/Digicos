@@ -98,54 +98,54 @@ const Cards = ({ViewCard}) => {
   }
   const [ viewCard, setViewCard ] = ViewCard
   return (
-        <div className="Card_Container">
-          <AnimateSharedLayout type="crossfade">
-            {CardList.map(({index, text}) => {
-                return (
-                  <motion.div layout layoutId={"Card-"+index} key={"Card-"+index} className="Card__Oferta" 
-                    whileHover={{y: -10}} onClick={() => setViewCard(index)}>
-                    <div className="Card__Oferta__content">
-                      <motion.div className="akaBefore" />
-                      <motion.div
+    <div className="Card_Container">
+      <AnimateSharedLayout type="crossfade">
+        {CardList.map(({index, text}) => {
+            return (
+              <motion.div layout layoutId={"Card-"+index} key={"Card-"+index} className="Card__Oferta" 
+                whileHover={{y: -10}} onClick={() => setViewCard(index)}>
+                <div className="Card__Oferta__content">
+                  <motion.div className="akaBefore" />
+                  <motion.div
+                  initial={{opacity: 0}}
+                  animate={{opacity: 1}}
+                  className="Card__Oferta-title"> 
+                    { text } 
+                  </motion.div>
+                  <motion.div className="akaAfter" />
+                </div>
+              </motion.div>
+            )
+        }) }
+        {viewCard && (
+          <>
+            <div onClick={() => setViewCard(null)} className="overlay"></div>
+            <AnimatePresence exitBeforeEnter>
+              <motion.div layout key={"Card-"+viewCard+"__Big"}  layoutId={"Card-"+viewCard} 
+              className="Card__Big">
+                <div className="Card__Big__content">
+                  <motion.div className="Card__Big-title"
                       initial={{opacity: 0}}
                       animate={{opacity: 1}}
-                      className="Card__Oferta-title"> 
-                        { text } 
-                      </motion.div>
-                      <motion.div className="akaAfter" />
-                    </div>
+                      >
+                      { CardList[viewCard-1].text }
                   </motion.div>
-                )
-            }) }
-            {viewCard && (
-              <>
-                <div onClick={() => setViewCard(null)} className="overlay"></div>
-                <AnimatePresence exitBeforeEnter>
-                  <motion.div layout key={"Card-"+viewCard+"__Big"}  layoutId={"Card-"+viewCard} 
-                  className="Card__Big">
-                    <div className="Card__Big__content">
-                      <motion.div className="Card__Big-title"
-                          initial={{opacity: 0}}
-                          animate={{opacity: 1}}
-                          >
-                          { CardList[viewCard-1].text }
-                      </motion.div>
-                      <motion.ul className="Card__Big-ul" variants={container} initial="hidden" animate="show">
-                        { CardList[viewCard-1]?.items?.map(item => {
-                          return ( 
-                            <motion.li 
-                              variants={listItem}>{ item }</motion.li> 
-                            )
-                        }) }
-                      </motion.ul>
-                    </div>
-                    <motion.span className="LearnMore"> Dowiedz się więcej </motion.span>
-                  </motion.div>
-                </AnimatePresence>
-              </>
-            )}
-            </AnimateSharedLayout>
-        </div>
+                  <motion.ul className="Card__Big-ul" variants={container} initial="hidden" animate="show">
+                    { CardList[viewCard-1]?.items?.map(item => {
+                      return ( 
+                        <motion.li 
+                          variants={listItem}>{ item }</motion.li> 
+                        )
+                    }) }
+                  </motion.ul>
+                </div>
+                <motion.span className="LearnMore"> Dowiedz się więcej </motion.span>
+              </motion.div>
+            </AnimatePresence>
+          </>
+        )}
+        </AnimateSharedLayout>
+    </div>
   )
 }
 const Presentation = () => {

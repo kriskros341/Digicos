@@ -1,12 +1,19 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion"
 import { useState, useContext, useEffect } from "react"
-import settingsContext from "../../SettingsContext.js"
+import settingsContext from "../../SettingsContext"
 import './Aktualnosci.scss'
 
-const Item = ({item, index}) => {
+interface ItemInterface {
+  date: string
+  title: string
+  tag: string
+  content: Array<{text: string}>
+}
+
+const Item: React.FC<{item: ItemInterface, index: number}> = ({item, index}) => {
 	const [ active, setActive ] = useState(false)
 	return (
-		<motion.div whileHover={!active && {scale: 1.02}} layout className="li__container">
+		<motion.div whileHover={active ? {scale: 1.02} : {}} layout className="li__container">
 			<div className="li">
 				<motion.div className="li__date">
 					{ item.date }
@@ -43,15 +50,13 @@ const Item = ({item, index}) => {
 
 const Aktualnosci = () => {
 	const settings = useContext(settingsContext)
-	const [ data, setData ] = useState()
-	console.log(settings)
+	const [ data, setData ] = useState<null | Array<ItemInterface>>(null)
+  const classes = settings.highContrast ? "Aktualnosci__component highContrast" : "Aktualnosci__component"
 	useEffect(() => {
-		console.log("ref")
-		fetch('http://localhost:8003/aktualnosci/get_all').then(resource => resource.json()).then(data => setData(data))
+		fetch('https://digicos.ddns.net:8001/aktualnosci/get_all').then(resource => resource.json()).then(data => setData(data))
 	}, [])
-	console.log("refreshed")
 	return (
-		<div className={settings.highContrast ? "Aktualnosci__component highContrast" : "Aktualnosci__component"}>
+		<div className={classes}> 
 			<motion.div layout className="bg" />
 			{data && (
 				<motion.div variants={ settings.pageVariants } initial="hidden" animate="visible">

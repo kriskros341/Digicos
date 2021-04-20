@@ -14,7 +14,13 @@ const BlackDropVariants = {
 		}
 	}
 } 
-const BlackDrop = ({menuState, toggleMenu}) => {
+
+interface BlackDropInterface {
+  menuState: boolean,
+  toggleMenu: () => void
+}
+
+const BlackDrop: React.FC<BlackDropInterface> = ({menuState, toggleMenu}) => {
 	return (
 		<AnimatePresence>
 			{menuState && (

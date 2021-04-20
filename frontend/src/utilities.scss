@@ -16,6 +16,24 @@
       width: 1170px;
     }
 }
+.container_sm {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  transition: width 0.3s;
+  will-change: transform;
+  width: calc(100% - 30px);
+  @media (min-width: 768px) {
+    width: 600px;
+  }
+  @media (min-width: 992px) {
+    width: 800px;
+  }
+  @media (min-width: 1200px) {
+    width: 1000px;
+  }
+}
 .Font__Card {
     font-family: "Oswald", sans-serif;
     font-style: normal;

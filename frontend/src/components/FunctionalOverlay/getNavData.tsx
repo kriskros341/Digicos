@@ -1,5 +1,9 @@
-const getNavData = (language) => {
+export interface navItemModel {
+  name: string
+  to: string
+}
 
+const getNavData: (language: string) => navItemModel[] | undefined = (language) => {
 	return {
 		"Polish" : [
 			{name: "Firma", to: "/#firma"},
