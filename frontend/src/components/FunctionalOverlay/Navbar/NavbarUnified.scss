@@ -40,6 +40,7 @@
         }
       }
       .Nav__link {
+        user-select: none;
         float: left;
         position: relative;
         height: 100%;
@@ -55,6 +56,33 @@
         color: white;
         text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
         text-decoration: none;
+        .Selection__container {
+          position: absolute;
+          top: 70%; right: 20%; bottom: 10px; left: 20%;
+          display: flex;
+          z-index: -1;
+          justify-content: center;
+          .Selection__indicator {
+            position: relative;
+            width: 0.5em;
+            border-radius: 100%;
+            background-color: blue;
+            & + .Selection__indicator {
+              margin-left: 1em;
+            }
+            .outline {
+              z-index: -1;
+              border-radius: 100%;
+              position: absolute;
+              top: -5px;
+              right: -5px;
+              bottom: -5px;
+              left: -5px;
+              border: 2px solid red;
+              content: "";
+            }
+          }
+        }
         & + .Nav__link {
           margin-left: 1em;
         }

@@ -213,23 +213,27 @@
                 padding-top: 200px;
             }
         }
-        .BigCard {
-            position: fixed;
-            font-size: 0.5em;
-            top: 30%;
-            left: 5%;
-            width: 90%;
-            height: 60%;
-            z-index: 101;
-            background: #0E2F56;
-            &::before {
-                z-index: -1;
-                position: absolute;
-                top: 0; left: 0;
-                width: 100%;
-                height: 100%;
-                content: "";
-            }
+        .BigCard__component {
+          position: fixed;
+          top: 30%;
+          height: 60%;
+          z-index: 101;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          .BigCard {
+
+              font-size: 0.5em;
+              &::before {
+                  background: #0E2F56;
+                  z-index: -1;
+                  position: absolute;
+                  top: 0; left: 0;
+                  width: 100%;
+                  height: 100%;
+                  content: "";
+              }
+          }
         }
     }
     .overlay {
@@ -246,5 +250,5 @@
     bottom: 0;
 }
 .darker {
-    justify-content: center;
+  background-color: rgba(0,0,0,0.25);
 }

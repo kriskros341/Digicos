@@ -1,5 +1,5 @@
 import './OFirmieCards.scss'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { motion, AnimateSharedLayout } from 'framer-motion'
 import { useInView } from 'react-intersection-observer';
 import getCards from "./getCards"
@@ -46,7 +46,7 @@ const OFirmieCards = () => {
       <AnimateSharedLayout >
         { inView ? (
           <motion.div layoutId="OFirmieTransition">
-            <div className="Cards__container">
+            <div className="Cards__container container">
               {
                 cardsContent.map(({title, contents}, index) => 
                   <Card key={`Card__${index}`} cardTitle={title} cardContents={contents} />
@@ -66,4 +66,4 @@ const OFirmieCards = () => {
   )
 }
 
-export default OFirmieCards
+export default memo(OFirmieCards)

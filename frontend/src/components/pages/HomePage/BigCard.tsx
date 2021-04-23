@@ -5,16 +5,19 @@ const cardList = getCardList()
 
 const BigCard: React.FC<{viewCard: number}> = ({ viewCard }) => {
     return (
-            <motion.div
-            className="BigCard"
-            initial={{opacity: 0, y:"50vh"}}
-            animate={{opacity: 1, y:0}}
-            exit={{opacity: 0, y:"90vh"}}
+            <div
+              className="BigCard__component"
             >
-                <div className="container Font__Card">
+              <motion.div className="BigCard container"
+                initial={{opacity: 0, y:"50vh"}}
+                animate={{opacity: 1, y:0}}
+                exit={{opacity: 0, y:"90vh"}}
+              >
+                <div className="Font__Card">
                     {cardList[viewCard-1].text}
                 </div>
-            </motion.div>
+              </motion.div>
+            </div>
     )
 }
 export default BigCard

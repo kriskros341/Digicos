@@ -2,16 +2,21 @@
   position: relative;
   flex-wrap: wrap;
   display: flex;
-  padding: 4rem 0;
-  width: 100%;
+  justify-content: center;
+  padding-top: 4rem;
+  padding-bottom: 4em;
   height: 100%;
-  background-color: rgba(0,0,0,0.25);
+  max-width: calc(100% - 30px);
+  overflow-x: hidden;
+  @media (min-width: 992px) {
+    justify-content: space-between;
+  }
   .Card {
     max-width: 90%;
     position: relative;
     cursor: pointer;
-    flex: 0 0 80%;
-    margin: 0.5rem 10%;
+    flex: 0 0 100%;
+    margin: 0.5rem 0;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     .Card__content {
@@ -71,8 +76,8 @@
       transform: scale(1.1)
     }
     @media (min-width: 992px) {
-      margin: 2rem 5%;
-      flex: 0 0 40%;
+      margin: 2rem 0;
+      flex: 0 0 45%;
       &::after {
         background: url("https://digicos.ddns.net:8001/pliki/get_file?filename=ant_bg1-min.jpg") repeat 80% center fixed;
         background-size: cover;

@@ -1,6 +1,6 @@
 import './RealizacjeCards.scss'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef, useState, memo } from 'react'
 
 const reviews = [
   {
@@ -80,7 +80,7 @@ const Card: React.FC<CardProps> = ({content}) => {
   const [ focused, setFocused ] = useState(false)
   return (
     <motion.div className="Card Font__Card" 
-      onClick={() => setFocused(true)}
+      onClick={() => setFocused(!focused)}
       transition={{type: "tween"}}
       animate={focused ? {scale: 1.1} : {}}
     >
@@ -107,17 +107,20 @@ const Card: React.FC<CardProps> = ({content}) => {
 const RealizacjeCards: React.FC = () => {
     const carouselRef = useRef(null)
     return (
-      <motion.div layout ref={carouselRef} className="Cards__Realizacje__component" id="realizacje">
-          <div className="Placeholder"></div>
-          <motion.div layout dragConstraints={carouselRef} drag="x" className="Carousel">
-          
-              {reviews.map(item => {
-                  return (<Card key={item.id} content={item}/>)
-              })}
+      <div className="Cards__Realizacje__component">
+        <motion.div layout ref={carouselRef} className="Cards__Realizacje" id="realizacje">
+            <div className="Placeholder"></div>
+            <motion.div layout dragConstraints={carouselRef} drag="x" className="Carousel">
+            
+                {reviews.map(item => {
+                    return (<Card key={item.id} content={item}/>)
+                })}
 
-          </motion.div>  
-      </motion.div>
+            </motion.div>  
+        </motion.div>
+      </div>
     )
 }
-
-export default RealizacjeCards
+// This makes child not rerender on parent state update.
+// A workaround of framer motion drag issue
+export default memo(RealizacjeCards)

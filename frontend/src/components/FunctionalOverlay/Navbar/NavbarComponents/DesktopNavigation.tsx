@@ -54,13 +54,23 @@ const DesktopNavigation: React.FC<DesktopNavigationInteface> = ({settingsState, 
               </div>
             </AnimateSharedLayout>
         </div>
-        <div className="Nav__link">
-        {
+        <div className="Nav__link" onClick={() => setSettings({...settings, highContrast: !settings.highContrast})}>
           {
-          "Polish": "Animacje",
-          "English": "Animations"
-          }[settings.language]
-        }
+            {
+            "Polish": "Animacje",
+            "English": "Animations"
+            }[settings.language]
+          }
+          <div className="Selection__container">
+            <AnimateSharedLayout>
+              <div className="Selection__indicator">
+                {settings.highContrast && <motion.div layoutId="Nav_animations_indicator" className="outline" />}
+              </div>
+              <div className="Selection__indicator">
+                {!settings.highContrast && <motion.div layoutId="Nav_animations_indicator" className="outline" />}
+              </div>
+            </AnimateSharedLayout>
+          </div>
         </div>
         <div className="Nav__link">
         {
@@ -73,7 +83,7 @@ const DesktopNavigation: React.FC<DesktopNavigationInteface> = ({settingsState, 
         <Link to="/admin" className="Nav__link">
           {
             {
-            "Polish": "Administracja",
+            "Polish": "Admin Panel",
             "English": "Admin Panel"
             }[settings.language]
           }

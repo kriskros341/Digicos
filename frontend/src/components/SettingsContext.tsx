@@ -3,14 +3,15 @@ import { createContext } from "react"
 interface SettingsContextInterface {
   language: string,
   highContrast: Boolean,
+  animations: boolean,
   pageVariants: {visible: object, hidden: object}, 
   tokenState: [ 
-    state: string | null, 
-    setState: (newToken: string | null) => void
+    state: string, 
+    setState: (newToken: string) => void
   ],
   userState: [ 
-    state: string | null,
-    setState: (newUsername: string| null) => void 
+    state: string,
+    setState: (newUsername: string) => void
   ]
 }
 //@ts-expect-error: Defaults are set in Provider value={}

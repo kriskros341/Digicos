@@ -1,21 +1,7 @@
 import { useState, useContext, useEffect } from "react"
 import { motion } from "framer-motion"
-import useAuth from "../../useAuth"
 import settingsContext from "../../../../SettingsContext"  // lol
 import "./AktualnosciPanel.scss"
-
-interface aktualnosciItemInterface {
-  itemData: aktualnosciItemData
-  editItem: (newObject: aktualnosciItemData) => void
-  card_index: number
-}
-
-interface aktualnosciItemData {
-  internal_id: string,
-  title: string,
-  date: string,
-  content: Array<cardInnerContentData>
-}
 
 interface cardInnerContentInterface {
   innerItemData: cardInnerContentData
@@ -29,6 +15,8 @@ interface cardInnerContentData {
 }
 
 interface cardOptionsInterface {
+  pushItemUpdate: () => void,
+  deleteItem: () => void,
   editedState: [
     currentState: Boolean,
     setStateFunction: (newState: Boolean) => void
@@ -63,21 +51,20 @@ const CardTitle: React.FC<cardTitleInteface> = ({title, isEdited, changeTitle}) 
 	)
 }
 
-const CardOptions: React.FC<cardOptionsInterface> = ({editedState}) => {
-	const [ isEdited, setEdited ] = editedState
+const CardOptions: React.FC<cardOptionsInterface> = ({editedState, pushItemUpdate, deleteItem}) => {
+  const [ isEdited, setEdited ] = editedState
+  const handleEditClick = () => {
+    isEdited && pushItemUpdate()
+    setEdited(!isEdited)
+  }
 	return (
 		<div className="Card__options__container">
-			{isEdited ? (
-				<>
-					<div className="Card__options__item" onClick={() => setEdited(false)}>Zapisz</div>
-					<div className="Card__options__item">Usuń</div>
-				</>
-			) : (
-				<>
-					<div className="Card__options__item" onClick={() => setEdited(true)}>Edytuj</div>
-          <div className="Card__options__item">Usuń</div>
-				</>
-			)}
+			{isEdited ? 
+        <div className="Card__options__item" onClick={() => handleEditClick()}>Zapisz</div>
+			: 
+				<div className="Card__options__item" onClick={() => handleEditClick()}>Edytuj</div>
+			}
+      <div className="Card__options__item" onClick={() => deleteItem()}>Usuń</div>
 		</div>
 	)
 }
@@ -113,49 +100,58 @@ const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdi
 	)
 }
 
+interface aktualnosciItemModel {
+  internal_id: string,
+  title: string,
+  date: string,
+  content: Array<cardInnerContentData>
+}
+interface aktualnosciItemInterface {
+  itemData: aktualnosciItemModel
+  pushItemUpdate: () => void
+  deleteItem: () => void
+  editItem: (newObject: aktualnosciItemModel) => void
+  card_index: number
+}
 
-
-
-
-
-const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem, card_index}) => {
+const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem, pushItemUpdate, deleteItem, card_index}) => {
 	const [ isEdited, setEdited ] = useState<Boolean>(false)
+  /* 
+    Unpack current item,
+    The child element doesn't need the whole item state to make changes to it
+    returns null 
+  */
   const partialEdit: (newData: any) => void = (newData) => {
-    /* 
-      Unpack current item,
-      The child element doesn't need the whole item state to make changes to it
-      returns null 
-    */
     editItem({...itemData, ...newData})
   }
+  /* 
+    For each element of item,
+    check if element's index is equal to the edited element
+    if it is then save new item to new array
+    else save old item to new array
+    returns object {content: Array}
+  */
   const handleArrayUpdate: (newData: any, index_to_update: number) => void = (newItem, index_to_update) => {
-    /* 
-      For each element of item,
-      check if element's index is equal to the edited element
-      if it is then save new item to new array
-      else save old item to new array
-      returns object {content: Array}
-    */
     partialEdit(
       {content: itemData.content.map((oldItem, subIndex) => subIndex === index_to_update ? newItem : oldItem)}
     )
   }
+  /*
+    Create new Array containg all the items from old Array + one default {text: "text", cont: "text"}
+    Im not yet sure if I prefer the spread operator over concat here
+  */
   const newArrayItem = () => {
-    /*
-      Create new Array containg all the items from old Array + one default {text: "text", cont: "text"}
-    */
     const defaultItem = {typee: "text", cont: "text"}
     partialEdit({content: [...itemData.content, defaultItem]})
   }
 	return (
 		<div className="Aktualnosci__card__container">
-			<CardOptions editedState={[ isEdited, setEdited ]} />
+			<CardOptions editedState={[ isEdited, setEdited ]} pushItemUpdate={pushItemUpdate} deleteItem={deleteItem}/>
 			<div className="Card__content__container">
 				<div className="Card__content">
 					<CardTitle title={itemData.title} isEdited={isEdited} changeTitle={(newTitle: string) => partialEdit({title: newTitle})}/>
 					<div className="Card__Inner">Zawartość:
 						{itemData.content.map((subItem, subIndex) => {
-              console.log(subItem)
               return (
                 <InnerContent 
                   key={`subitem_${subIndex}`}
@@ -175,26 +171,42 @@ const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem
 	)
 }
 
-const AktualnosciPanel: React.FC = () => {
+const AktualnosciPanel: React.FC<{isAuth: boolean, askBeforeDo: (fn: () => void) => void}> = ({isAuth, askBeforeDo}) => {
 	const settings = useContext(settingsContext)
-	const [ data, setData ] = useState<Array<aktualnosciItemData>>([])
-	const [ username, ] = settings.userState
-	const [ token, ] = settings.tokenState
-	const [ ,checkAuthState ] = useAuth()
-	useEffect(() => {
-		fetch('https://digicos.ddns.net:8001/aktualnosci/get_all')
+	const [ data, setData ] = useState<Array<aktualnosciItemModel>>([])
+  const [ language, setLanguage ] = useState<string>('')
+
+  const fetchData: (language?: string) => void = (language) => {
+    fetch(`http://digicos.ddns.net:8003/aktualnosci/get_all?language=${language || "any"}`)
       .then(resource => resource.json())
       .then(data => setData(data))
-	}, [])
+  }
+  const putData = (updatedItem: aktualnosciItemModel) => {
+    askBeforeDo(() => 
+      fetch(`http://digicos.ddns.net:8003/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem) })
+        .then(resource => resource.json())
+        .then(() => fetchData(language))
+    )
+  }
+  const deleteData = (updatedItem: aktualnosciItemModel) => {
+    askBeforeDo(() => 
+      fetch(`http://digicos.ddns.net:8003/aktualnosci/delete_one/${updatedItem.internal_id}`, {method: "DELETE"})
+        .then(resource => resource.json())
+        .then(() => fetchData(language))
+    )
+  }
+	useEffect(() => {
+    fetchData(language)
+	}, [language])
 
-  const handleArrayUpdate = (index_to_update: number, newData: aktualnosciItemData) => {
-    /* 
-      For each element of item,
-      check if element's index is equal to the edited element
-      if it is then save new item to new array
-      else save old item to new array
-      returns null
-    */
+  /* 
+    For each element of item,
+    check if element's index is equal to the edited element
+    if it is then save new item to new array
+    else save old item to new array
+    returns null
+  */
+  const handleArrayUpdate = (index_to_update: number, newData: aktualnosciItemModel) => {
     setData(
       data.map((item, index_of_item) => 
         index_of_item === index_to_update ? newData : item
@@ -205,22 +217,31 @@ const AktualnosciPanel: React.FC = () => {
 		<motion.div variants={settings.pageVariants} initial="hidden" animate="visible" className="Admin__container container_sm">
 			<div className="Admin__content">
 				<div className="Admin">
-					<button onClick={() => checkAuthState()}>test</button>
+          <div>
+            <div>Set Language</div>
+            <div>
+              <button onClick={() => setLanguage('Polish')}>Polski</button>
+              <button onClick={() => setLanguage('English')}>Anglielski</button>
+              <button onClick={() => setLanguage('')}>Brak Selekcji</button>
+
+            </div>
+
+          </div>
+
+					<button onClick={() => {}}>test</button>
 					<div className="Aktualnosci__container_n">
-						{data ? (
-							data.map((item, index) => {
-								return (
-                  <AktualnosciItem 
-                    key={"aktualnosci_"+index} 
-                    itemData={item} 
-                    editItem={(newData: aktualnosciItemData) => handleArrayUpdate(index, newData)} 
-                    card_index={index}
-                  />
-                )
-							})
-						) : (
-							<div>Loading</div>
-						)}
+            {data?.map((item, index) => {
+              return (
+                <AktualnosciItem 
+                  key={"aktualnosci_"+index}
+                  itemData={item}
+                  deleteItem={() => deleteData(item)}
+                  pushItemUpdate={() => putData(item)}
+                  editItem={(newData: aktualnosciItemModel) => handleArrayUpdate(index, newData)} 
+                  card_index={index}
+                />
+              )
+            })}
 					</div>
 				</div>
 			</div>

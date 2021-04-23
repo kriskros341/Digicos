@@ -1,26 +1,41 @@
-import { useState, useCallback, useContext } from "react"
+import { useState, useCallback, useContext, useMemo } from "react"
 import settingsContext from "../../SettingsContext"
 
-interface auth {
-  result: Boolean
-  response: string
-}
 
-const useAuth: () => [auth | null | undefined, () => void] = () => {
-	const [ isAuthorized, setAuthorized ] = useState()
+
+const useAuth = (): [boolean, () => void, (fcn: () => void) => void] => {
+	const [ isAuthorized, setAuthorized ] = useState<boolean>(false)
   const settings = useContext(settingsContext)
 	const [ username, ] = settings.userState
 	const [ token, ] = settings.tokenState
-	const checkAuthState = useCallback(
+  const requestBody = useMemo(
+    () => {return { method: "POST", body: JSON.stringify({'token': token})}}
+    , [token]
+  )
+
+  const checkAuthState = useCallback(
     () => {
-      const requestBody = {method: "POST", body: JSON.stringify({'token': token})}
+      if(!username) { return false }
       fetch(`https://digicos.ddns.net:8001/user/authorize/${username}`, requestBody)
         .then(resource => resource.json())
-        .then(data => {setAuthorized(data); console.log(data)})
-    },
-    [username, token]
+        .then(data => {
+          setAuthorized(data.result)
+          console.log("check res ", data.result)
+        }).catch(() => setAuthorized(false))
+    }, [username, requestBody]
   )
-	return isAuthorized ? [ isAuthorized, checkAuthState ] : [ null,  checkAuthState ]
+
+	const askBeforeDo = useCallback((fcn: () => void) => {
+    console.log("abd")
+    if(!username) { return }
+    fetch(`https://digicos.ddns.net:8001/user/authorize/${username}`, requestBody)
+      .then(resource => resource.json())
+      .then(data => {
+        data.result ? fcn() : setAuthorized(false)
+      })
+  }, [username, requestBody])
+
+  return [ isAuthorized, checkAuthState, askBeforeDo ]
 }
 
 export default useAuth

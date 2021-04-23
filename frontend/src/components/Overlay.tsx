@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { motion } from "framer-motion"
+import useVariants from "./misc/useVariants"
 
 interface Props {
   overlayFunction: () => void
@@ -7,6 +8,7 @@ interface Props {
 
 
 const Overlay: React.FC<Props> = ({overlayFunction}) => {
+  const variants = useVariants("fadeInOut")
   useEffect(
     (): any => {
       window.onscroll = () => overlayFunction()
@@ -15,9 +17,10 @@ const Overlay: React.FC<Props> = ({overlayFunction}) => {
   )
   return (
     <motion.div
-      initial={{opacity: 0}}
-      animate={{opacity: 1}}
-      exit={{opacity: 0}}
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
       transition={{
         type: "tween"
       }}

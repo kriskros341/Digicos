@@ -6,11 +6,10 @@ import './Aktualnosci.scss'
 interface ItemInterface {
   date: string
   title: string
-  tag: string
   content: Array<{text: string}>
 }
 
-const Item: React.FC<{item: ItemInterface, index: number}> = ({item, index}) => {
+const Item: React.FC<{item: ItemInterface, index: number, language: string}> = ({item, index, language}) => {
 	const [ active, setActive ] = useState(false)
 	return (
 		<motion.div whileHover={active ? {scale: 1.02} : {}} layout className="li__container">
@@ -29,7 +28,12 @@ const Item: React.FC<{item: ItemInterface, index: number}> = ({item, index}) => 
 							</motion.div>
 						) : (
 							<motion.div key={"o"+index}>
-								wyświetl { item.tag }
+								{
+                {
+                  'Polish': 'Wyświetl',
+                  'English': 'Show'
+                }[language]
+                }
 							</motion.div> 
 						) }
 					</AnimatePresence>
@@ -50,11 +54,15 @@ const Item: React.FC<{item: ItemInterface, index: number}> = ({item, index}) => 
 
 const Aktualnosci = () => {
 	const settings = useContext(settingsContext)
+  const language = useContext(settingsContext).language
 	const [ data, setData ] = useState<null | Array<ItemInterface>>(null)
   const classes = settings.highContrast ? "Aktualnosci__component highContrast" : "Aktualnosci__component"
-	useEffect(() => {
-		fetch('https://digicos.ddns.net:8001/aktualnosci/get_all').then(resource => resource.json()).then(data => setData(data))
-	}, [])
+	
+  useEffect(() => {
+    console.log('language')
+		fetch(`http://digicos.ddns.net:8003/aktualnosci/get_all?language=${language || 'any'}`).then(resource => resource.json()).then(data => setData(data))
+	}, [language])
+
 	return (
 		<div className={classes}> 
 			<motion.div layout className="bg" />
@@ -64,7 +72,7 @@ const Aktualnosci = () => {
 						<motion.div layout className="Aktualnosci__container container layout">
 							<div className="Aktualnosci__content">
 							{data?.map((item, index) => {
-								return ( <Item item={ item } index={ index } key={ index } /> )
+								return ( <Item item={ item } index={ index } key={ index } language={language}/> )
 							})}
 							</div>
 						</motion.div>

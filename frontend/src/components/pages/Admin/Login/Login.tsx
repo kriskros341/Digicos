@@ -8,8 +8,8 @@ const LoginForm = () => {
 	const [ username, setUsername ] = useContext(settingsContext).userState
 	const [ userInput, setUserInput ] = useState({username: "", password: ""})
 	const handleLogout = () => {
-		setToken(null)
-		setUsername(null)
+		setToken(''!) // ! means: typesript, look. I know in alternate universe it could be null, but trust me for a sec.
+		setUsername(''!)
 		setUserInput({username: "", password: ""})
 	}
 	const login = () => {

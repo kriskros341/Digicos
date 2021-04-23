@@ -8,7 +8,7 @@ interface Props {
 
 const SecurePageWrapper: React.FC<Props> = (props) => {
 	const settings = useContext(settingsContext)
-	const [ token ] = settings.tokenState
+	const [ token, ] = settings.tokenState
 	return (
 		<>
 			{token ? (

@@ -1,8 +1,8 @@
 //import CogMenu from './components/CogMenu/CogMenu.js'
 import FunctionalOverlay from './components/FunctionalOverlay/FunctionalOverlay'
-import React, { useState, lazy, Suspense} from 'react'
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"// @ts-ignore
-import SettingsContext from "./components/SettingsContext.tsx"
+import { useState, lazy, Suspense} from 'react'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import SettingsContext from "./components/SettingsContext"
 import './App.scss';
 import './utilities.scss'
 import SecurePageWrapper from './components/pages/Admin/SecurePage'
@@ -11,12 +11,13 @@ const Home = lazy(() => import('./components/pages/HomePage/Home'))
 const Contact = lazy(() => import('./components/pages/Contact/Contact'))
 const Realizacje = lazy(() => import('./components/pages/Realizacje/Realizacje'))
 const Inwestorzy = lazy(() => import('./components/pages/Inwestorzy/Inwestorzy'))
-// const HomeOld = lazy(() => import('./components/pages/HomeOld.js'))
 const Aktualnosci = lazy(() => import('./components/pages/Aktualnosci/Aktualnosci'))
 const Presentation = lazy(() => import('./components/pages/Misc/Presentation.js'))
-// const Tests = lazy(() => import("./components/pages/Aktualnosci/Aktualnosci.js"))
 const Login = lazy(() => import("./components/pages/Admin/Login/Login"))
 const Admin = lazy(() => import('./components/pages/Admin/Admin'))
+
+// const HomeOld = lazy(() => import('./components/pages/HomeOld.js'))
+// const Tests = lazy(() => import("./components/pages/Aktualnosci/Aktualnosci.js"))
 
 const PageVariants = {
   hidden:{opacity: 0, y: -20},
@@ -24,24 +25,25 @@ const PageVariants = {
 }
 
 const Fallback = () => {
-  return (<div className="loading">loading</div>)
+  return (
+    <div className="loading">loading</div>
+  )
 }
+
 const SuspendedPage = (props: any) => {
   return (
-    <>
-        <Suspense fallback={<Fallback />}>
-          {props.children}
-        </Suspense>
-    </>
+    <Suspense fallback={<Fallback />}>
+      {props.children}
+    </Suspense>
   )
 }
 
 function App() {
-  const [ token, setToken ] = useState()
-  const [ username, setUsername ] = useState()
-  const [ settings, setSettings ] = useState({language: "Polish", highContrast: false})
+  const [ token, setToken ] = useState<string>('')
+  const [ username, setUsername ] = useState<string>('')
+  const [ settings, setSettings ] = useState({language: "Polish", highContrast: false, animations: true})
   return (
-    <SettingsContext.Provider value={{...settings, pageVariants: PageVariants, tokenState: [ token, setToken ], userState: [ username, setUsername ]}}>
+    <SettingsContext.Provider value={{...settings, pageVariants: PageVariants, tokenState: [ token, (newToken: string) => setToken(newToken) ], userState: [ username, (newToken: string) => setUsername(newToken) ]}}>
       <Router>
         <FunctionalOverlay settingsState={[ settings, setSettings ]}/>
         <Switch>
@@ -56,7 +58,6 @@ function App() {
                 <Login />
               </SuspendedPage>
             </SecurePageWrapper>
-
           </Route>
           <Route key="/kontakt" path="/kontakt">
             <SuspendedPage>

@@ -1,7 +1,7 @@
 interface Oddzial {
   id: number, 
   nazwa: string, 
-  glowny: Boolean, 
+  glowny: boolean, 
   data: {
     type: string, 
     value: string

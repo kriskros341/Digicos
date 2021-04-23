@@ -6,7 +6,8 @@ import './FunctionalOverlay.scss'
 
 export interface simpleSettingsModel {
   language: string, 
-  highContrast: boolean
+  highContrast: boolean,
+  animations: boolean
 }
 
 interface functionalOverlayInterface {

@@ -4,8 +4,9 @@ import { Route, Switch } from "react-router-dom"
 import { useContext, useEffect } from "react"
 import settingsContext from "../../SettingsContext"
 import LeftPanel from "./Panels/LeftPanel/LeftPanel"
-import useAuth from "./useAuth"
 import AktualnosciPanel from "./Panels/AktualnosciPanel/AktualnosciPanel"
+import useAuth from './useAuth'
+import Login from './Login/Login'
 
 const MainPanel = () => {
 	const variants = useContext(settingsContext).pageVariants
@@ -19,15 +20,16 @@ const MainPanel = () => {
 }
 
 const Admin = () => {
-	const [ authState, checkAuthState ] = useAuth()
+  const [ isAuthorized, reAuthorize, askBeforeDo ] = useAuth()
   useEffect(() => {
-		checkAuthState()
-	}, [checkAuthState])
+    reAuthorize()
+	}, [reAuthorize])
 	return (
 		<div className="Admin__component">
-			{authState?.result ? (
-				<>
+      {isAuthorized ? (
+        <>
 					<div className="bg" />
+          <button onClick={() => console.log(isAuthorized)}></button>
 					<LeftPanel />
 					<Switch>
 						<Route exact path="/admin">
@@ -36,15 +38,13 @@ const Admin = () => {
 						<Route exact path="/admin/realizacje">realizacje</Route>
 						<Route exact path="/admin/uzytkownicy">uzytkownicy</Route>
 						<Route exact path="/admin/aktualnosci">
-							<AktualnosciPanel />
+							<AktualnosciPanel isAuth={isAuthorized} askBeforeDo={askBeforeDo}/>
 						</Route>
 						<Route exact path="/admin/konto">konto</Route>
 					</Switch>
 				</>
-				) : (
-					<div>Authentication required</div>
-				)
-			}
+      ):(< Login />)}
+				
 		</div>
 	)
 }
