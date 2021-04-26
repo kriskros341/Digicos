@@ -171,7 +171,7 @@ const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem
 	)
 }
 
-const AktualnosciPanel: React.FC<{isAuth: boolean, askBeforeDo: (fn: () => void) => void}> = ({isAuth, askBeforeDo}) => {
+const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({askBeforeDo}) => {
 	const settings = useContext(settingsContext)
 	const [ data, setData ] = useState<Array<aktualnosciItemModel>>([])
   const [ language, setLanguage ] = useState<string>('')
@@ -214,9 +214,7 @@ const AktualnosciPanel: React.FC<{isAuth: boolean, askBeforeDo: (fn: () => void)
     )
   }
 	return (
-		<motion.div variants={settings.pageVariants} initial="hidden" animate="visible" className="Admin__container container_sm">
-			<div className="Admin__content">
-				<div className="Admin">
+    <>
           <div>
             <div>Set Language</div>
             <div>
@@ -242,10 +240,8 @@ const AktualnosciPanel: React.FC<{isAuth: boolean, askBeforeDo: (fn: () => void)
                 />
               )
             })}
-					</div>
-				</div>
-			</div>
-		</motion.div>
+          </div>
+      </>
 	)
 }
 

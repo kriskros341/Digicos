@@ -13,7 +13,7 @@
   .Icons__container {
     justify-content: center;
     display: flex;
-    overflow-x: hidden;
+    overflow: hidden;
     .Icon__box {
       pointer-events: all;
       display: flex;
@@ -31,7 +31,6 @@
         color: white;
         text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
         text-decoration: none;
-      
       }
     }
   }

@@ -10,13 +10,7 @@ const SecurePageWrapper: React.FC<Props> = (props) => {
 	const settings = useContext(settingsContext)
 	const [ token, ] = settings.tokenState
 	return (
-		<>
-			{token ? (
-				props.children	
-			) : (
-				<Login />
-			)}
-		</>
+		props.children	
 	)
 }
 

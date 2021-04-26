@@ -1,5 +1,6 @@
-import { lazy, Suspense } from 'react'
+import { useState, lazy, Suspense, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom';
+import { motion } from "framer-motion"
 import './BottomMenu.scss'
 
 const PolandOutlineIcon = lazy(() => import("../../static/BottomMenu/Poland.js"))
@@ -46,33 +47,50 @@ const items = {
   ]
 }
 
+const BottomMenuItem: React.FC<{menuItemData: BottomMenuItemModel, scrollPosition: boolean}> = ({menuItemData, scrollPosition}) => {
+  const iconAnimationObject = scrollPosition ? {scale: 0.5} : {scale: 1}
+  const textAnimationObject = scrollPosition ? {y: 30} : {}
+  return (
+    <motion.div animate={textAnimationObject}>
+      <Link className="Icon__box" to={menuItemData.to || "/"} >
+        <div>
+          <Suspense fallback={<div style={{width: 100, height: 100}}/>}>
+            <motion.div animate={iconAnimationObject}>
+              {menuItemData.icon}
+            </motion.div>
+          </Suspense>
+        </div>
+        <div className="Icon__desc">
+          {menuItemData.text}
+        </div>
+      </Link>
+    </motion.div>
+  )
+}
+
 const BottomMenu = () => {
   const location = useLocation()
-  console.log(location)
-  //@ts-expect-error: No idea why it doesn't work
+  const [ scollPosition, setScollPosition ] = useState<boolean>(false)
+  const scrollHandler = () => setScollPosition(window.pageYOffset > 200)
+  const shouldShowIcons = () => {
+    if(location.pathname.includes('admin')) return false
+    return true
+  }
+  useEffect((): () => void => {
+    window.addEventListener('scroll', () => scrollHandler())
+    return () => window.removeEventListener('scroll', () => scrollHandler())
+  }, [])
+  // @ts-expect-error: No idea why it doesn't work
   const iconsForCurrentPage = items[location.pathname] || items["defaultPath"]
   return (
     <div className="BottomMenu__component">
-      <div className="Icons__container">
-        {
-          iconsForCurrentPage.map((item: BottomMenuItemModel, index: number) => {
-            return (
-              <Link to={item.to || "/"} key={index}>
-                <div className="Icon__box">
-                  <div>
-                    <Suspense fallback={<div style={{width: 100, height: 100}}/>}>
-                      {item.icon}
-                    </Suspense>
-                  </div>
-                  <div className="Icon__desc">
-                    {item.text}
-                  </div>
-                </div>
-              </Link>
-            )
-          })
-        }
-      </div> 
+      {shouldShowIcons() ? (
+      <motion.div className="Icons__container">
+        {iconsForCurrentPage.map((itemData: BottomMenuItemModel, index: number) => {
+          return <BottomMenuItem key={`bottomMenuItem_${index}`} scrollPosition={scollPosition} menuItemData={itemData} />
+        })}
+      </motion.div> 
+      ) : ""}
     </div>
   )
 }

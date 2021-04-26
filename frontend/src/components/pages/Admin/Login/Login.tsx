@@ -62,7 +62,6 @@ const Login = () => {
 	const settings = useContext(settingsContext)
 	return (
 		<div className="Login__component">
-			<div className="bg" />
 			<motion.div 
 				className="Login__container" 
 				variants={ settings.pageVariants } 

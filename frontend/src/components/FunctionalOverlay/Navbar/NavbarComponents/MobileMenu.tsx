@@ -22,13 +22,10 @@ const MobileMenuVariants = {
 
 const MobileMenuContentVariants = {
   hiddenM: {
-    x: 25,
-    opacity: 0
+    opacity: 0.7
   },
   visibleM: {
-    x: 0,
     opacity: 1,
-    delay: 5,
   }
 }
 

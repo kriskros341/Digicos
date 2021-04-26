@@ -4,6 +4,8 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 from apps.aktualnosci.routers import router as aktualnosci_router
 from apps.pliki.routers import router as pliki_router
 from apps.user.routers import router as user_router
+from apps.realizacje.routers import router as realizacje_router
+
 import certs
 
 from fastapi.staticfiles import StaticFiles
@@ -45,6 +47,7 @@ async def shutdown_db_client():
 app.include_router(aktualnosci_router, tags=["Aktualności"], prefix="/aktualnosci")
 app.include_router(pliki_router, tags=["Pliki"], prefix="/pliki")
 app.include_router(user_router, tags=["Użytkownicy"], prefix="/user")
+app.include_router(realizacje_router, tags=["realizacje"], prefix="/realizacje")
 
 @app.get('/')
 async def index():
