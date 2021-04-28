@@ -4,3 +4,6 @@ certs.py
 __pycache__
 */__pycache__/
 apps/user/myCrypt.py
+backend/fullchain.pem
+backend/privkey.pem
+backend/venv/

@@ -1,0 +1,1 @@
+serve -s build -l 8002 --ssl-cert=fullchain.pem --ssl-key=privkey.pem

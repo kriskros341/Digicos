@@ -59,9 +59,9 @@ const CardOptions: React.FC<cardOptionsInterface> = ({editedState, pushItemUpdat
   }
 	return (
 		<div className="Card__options__container">
-			{isEdited ? 
+			{isEdited ?
         <div className="Card__options__item" onClick={() => handleEditClick()}>Zapisz</div>
-			: 
+			:
 				<div className="Card__options__item" onClick={() => handleEditClick()}>Edytuj</div>
 			}
       <div className="Card__options__item" onClick={() => deleteItem()}>Usuń</div>
@@ -116,15 +116,15 @@ interface aktualnosciItemInterface {
 
 const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem, pushItemUpdate, deleteItem, card_index}) => {
 	const [ isEdited, setEdited ] = useState<Boolean>(false)
-  /* 
+  /*
     Unpack current item,
     The child element doesn't need the whole item state to make changes to it
-    returns null 
+    returns null
   */
   const partialEdit: (newData: any) => void = (newData) => {
     editItem({...itemData, ...newData})
   }
-  /* 
+  /*
     For each element of item,
     check if element's index is equal to the edited element
     if it is then save new item to new array
@@ -153,10 +153,10 @@ const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem
 					<div className="Card__Inner">Zawartość:
 						{itemData.content.map((subItem, subIndex) => {
               return (
-                <InnerContent 
+                <InnerContent
                   key={`subitem_${subIndex}`}
-                  innerItemData={subItem} 
-                  isEdited={isEdited} 
+                  innerItemData={subItem}
+                  isEdited={isEdited}
                   editSubItem={(newData) => handleArrayUpdate(newData, subIndex)}
                   />
               )
@@ -177,20 +177,20 @@ const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({as
   const [ language, setLanguage ] = useState<string>('')
 
   const fetchData: (language?: string) => void = (language) => {
-    fetch(`http://digicos.ddns.net:8003/aktualnosci/get_all?language=${language || "any"}`)
+    fetch(`https://digicos.ddns.net:8001/aktualnosci/get_all?language=${language || "any"}`)
       .then(resource => resource.json())
       .then(data => setData(data))
   }
   const putData = (updatedItem: aktualnosciItemModel) => {
-    askBeforeDo(() => 
-      fetch(`http://digicos.ddns.net:8003/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem) })
+    askBeforeDo(() =>
+      fetch(`https://digicos.ddns.net:8001/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem) })
         .then(resource => resource.json())
         .then(() => fetchData(language))
     )
   }
   const deleteData = (updatedItem: aktualnosciItemModel) => {
-    askBeforeDo(() => 
-      fetch(`http://digicos.ddns.net:8003/aktualnosci/delete_one/${updatedItem.internal_id}`, {method: "DELETE"})
+    askBeforeDo(() =>
+      fetch(`https://digicos.ddns.net:8001/aktualnosci/delete_one/${updatedItem.internal_id}`, {method: "DELETE"})
         .then(resource => resource.json())
         .then(() => fetchData(language))
     )
@@ -199,7 +199,7 @@ const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({as
     fetchData(language)
 	}, [language])
 
-  /* 
+  /*
     For each element of item,
     check if element's index is equal to the edited element
     if it is then save new item to new array
@@ -208,7 +208,7 @@ const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({as
   */
   const handleArrayUpdate = (index_to_update: number, newData: aktualnosciItemModel) => {
     setData(
-      data.map((item, index_of_item) => 
+      data.map((item, index_of_item) =>
         index_of_item === index_to_update ? newData : item
       )
     )
@@ -227,12 +227,12 @@ const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({as
       <div className="Aktualnosci__container_n">
         {data?.map((item, index) => {
           return (
-            <AktualnosciItem 
+            <AktualnosciItem
               key={"aktualnosci_"+index}
               itemData={item}
               deleteItem={() => deleteData(item)}
               pushItemUpdate={() => putData(item)}
-              editItem={(newData: aktualnosciItemModel) => handleArrayUpdate(index, newData)} 
+              editItem={(newData: aktualnosciItemModel) => handleArrayUpdate(index, newData)}
               card_index={index}
             />
           )

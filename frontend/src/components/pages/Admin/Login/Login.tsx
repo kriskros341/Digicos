@@ -15,7 +15,7 @@ const LoginForm = () => {
 
 
 	const handleLogout = () => {
-		setToken(''!) 
+		setToken(''!)
 		setUsername(''!)
 		setUserInput({username: "", password: ""})
 	}
@@ -31,8 +31,8 @@ const LoginForm = () => {
     // @ts-ignore
     Object.keys(userInput).forEach(item => TheForm.append(item, userInput[item]))
 		const requestBody = {method: "POST", body: TheForm}
-    console.log(requestBody)
-		fetch("http://digicos.ddns.net:8003/user/token", requestBody)
+		console.log("kkkkkkkk")
+		fetch("https://digicos.ddns.net:8001/user/token", requestBody)
 			.then(resource => resource.json())
 			.then(data => saveToken(data.access_token, data.token_type))
       .catch(detail => console.log(detail))
@@ -55,7 +55,7 @@ const LoginForm = () => {
 
   const TestToken = () => {
     console.log({ Authentication: createAuthString() })
-		fetch(`http://digicos.ddns.net:8003/user`, {method: "GET", headers: { Authorization: createAuthString() }})
+		fetch(`https://digicos.ddns.net:8001/user`, {method: "GET", headers: { Authorization: createAuthString() }})
 			.then(resource => resource.json())
 			.then(data => console.log(data))
 	}
@@ -86,10 +86,10 @@ const Login = () => {
 	const settings = useContext(settingsContext)
 	return (
 		<div className="Login__component">
-			<motion.div 
-				className="Login__container" 
-				variants={ settings.pageVariants } 
-				initial="hidden" 
+			<motion.div
+				className="Login__container"
+				variants={ settings.pageVariants }
+				initial="hidden"
 				animate="visible"
 			>
 				<LoginForm />

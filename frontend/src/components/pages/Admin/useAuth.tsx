@@ -60,7 +60,7 @@ export const useAuthToken: () => [ boolean, (token: string, token_type: string) 
   const checkAuthToken = useCallback(
     () => {
       if(!token) { return false }
-      fetch(`http://digicos.ddns.net:8003/user/`, {method: "GET", headers: { Authorization: createAuthString() }})
+      fetch(`https://digicos.ddns.net:8001/user/`, {method: "GET", headers: { Authorization: createAuthString() }})
         .then(response => response.json())
         .then(data => {
           setTokenState(data.status)

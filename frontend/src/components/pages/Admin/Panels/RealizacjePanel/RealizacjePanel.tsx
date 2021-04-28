@@ -55,7 +55,7 @@ const ItemOptions: React.FC<ItemOptionsInterface> = ({deleteItem, isEdited, togg
           <div className="pointer" onClick={() => {toggleEdit(); commitChange()}}>Zapisz</div>
         ) : (
           <div className="pointer" onClick={() => toggleEdit()}>Edytuj</div>
-        ) 
+        )
       }
       <div className="pointer" onClick={() => deleteItem()}>Usuń</div>
     </div>
@@ -151,56 +151,56 @@ const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({logout, createAuth
   }
 
   const fetchData: (language?: string) => void = (language) => {
-    fetch(`http://digicos.ddns.net:8003/realizacje/get_all`)
+    fetch(`https://digicos.ddns.net:8001/realizacje/get_all`)
       .then(resource => resource.json())
       .then(data => setData(data))
   }
 
   const commitChange = (itemId: string, newData: ItemModel) => {
-    fetch(`http://digicos.ddns.net:8003/realizacje/update_one/${itemId}`, {method: "PUT", body: JSON.stringify(newData), headers: { Authorization: createAuthString() }})
+    fetch(`https://digicos.ddns.net:8001/realizacje/update_one/${itemId}`, {method: "PUT", body: JSON.stringify(newData), headers: { Authorization: createAuthString() }})
       .then(resource => resource.json())
       .then(data => console.log(data))
   }
 
 
   const deleteItem = (itemId: string) => {
-    fetch(`http://digicos.ddns.net:8003/realizacje/delete_one/${itemId}`, {method: "DELETE", headers: { Authorization: createAuthString() }} )
+    fetch(`https://digicos.ddns.net:8001/realizacje/delete_one/${itemId}`, {method: "DELETE", headers: { Authorization: createAuthString() }} )
       .then(resource => handleResponse(resource))
       .then(() => fetchData())
   }
 
   const handleArrayUpdate = (index_to_update: number, newData: ItemModel) => {
     setData(
-      data?.map((item, index_of_item) => 
+      data?.map((item, index_of_item) =>
         index_of_item === index_to_update ? newData : item
       )
     )
   }
 
   const AddItem = () => {
-    fetch(`http://digicos.ddns.net:8003/realizacje/create_one`, {method: "POST", body: JSON.stringify({yearFrom: 2001, yearTo: "Nadal", text: "Treść"}), headers: { Authorization: createAuthString() }})
+    fetch(`https://digicos.ddns.net:8001/realizacje/create_one`, {method: "POST", body: JSON.stringify({yearFrom: 2001, yearTo: "Nadal", text: "Treść"}), headers: { Authorization: createAuthString() }})
       .then(resource => handleResponse(resource))
       .then(data => { data && fetchData() })
   }
-  
+
   useEffect(() => fetchData(), [])
   const doesMatch = (query: string, content: string) => content.toLowerCase().includes(query.toLowerCase())
   return (
     <div className="RealizacjePanel__component">
       <div className="RealizacjePanel__container">
         <Menu
-          setSearchString={(s: string) => setUserInput(s)} 
+          setSearchString={(s: string) => setUserInput(s)}
           searchString={userInput}
           AddItem={AddItem}
         />
         <div className="Items__container">
           {data && data.filter(item => doesMatch(userInput, item.text)).map((item, index) => {
             return (
-              <Item 
-                item={item} 
+              <Item
+                item={item}
                 key={`item_${index}`}
                 index={index}
-                deleteItem={() => deleteItem(item.internal_id)} 
+                deleteItem={() => deleteItem(item.internal_id)}
                 updateItem={(newItemData: ItemModel) => handleArrayUpdate(index, newItemData)}
                 commitChange={() => commitChange(item.internal_id, item)}/>
             )})}

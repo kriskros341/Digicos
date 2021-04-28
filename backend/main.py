@@ -19,9 +19,10 @@ app.templates = Jinja2Templates(directory="templates")
 
 allowed_origins = [
     "http://localhost:8000",
-    "https://localhost:8003",
+    "https://localhost:8002",
     "http://digicos.ddns.net:8000",
-    "https://digicos.ddns.net:8003",
+    "https://digicos.ddns.net:8002",
+    "http://digicos.ddns.net:8002",
 ]
 
 
@@ -53,13 +54,3 @@ app.include_router(realizacje_router, tags=["realizacje"], prefix="/realizacje")
 @app.get('/')
 async def index():
     return {'data': {'name': 'krzyś'}}
-
-
-
-
-
-
-
-
-
-
