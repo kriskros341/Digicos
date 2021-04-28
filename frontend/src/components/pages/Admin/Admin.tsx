@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom"
 import { useContext, useEffect, lazy, Suspense } from "react"
 import settingsContext from "../../SettingsContext"
 import LeftPanel from "./Panels/LeftPanel/LeftPanel"
-import useAuth from './useAuth'
+import useAuth, { useAuthToken } from './useAuth'
 import Login from './Login/Login'
 
 const RealizacjePanel = lazy(() => import('./Panels/RealizacjePanel/RealizacjePanel'))
@@ -17,28 +17,31 @@ const MainPanel = () => {
 	)
 }
 
+
 const Admin = () => {
   const variants = useContext(settingsContext).pageVariants
   const [ isAuthorized, reAuthorize, askBeforeDo ] = useAuth()
+  const [ tokenState, saveToken, createAuthString, checkAuthToken ] = useAuthToken()
   useEffect(() => {
-    reAuthorize()
-	}, [reAuthorize])
+    checkAuthToken()
+	}, [checkAuthToken])
+
 	return (
 		<div className="Admin__component">
       <div className="bg" />
-      <button onClick={() => console.log(isAuthorized)}></button>
+      <button onClick={() => console.log(checkAuthToken())}></button>
       <LeftPanel />
       <motion.div variants={variants} initial="hidden" animate="visible" className="Admin__container container_sm">
         <div className="Admin__content">
           <div className="Admin">
-            {isAuthorized ? (
+            {tokenState ? (
               <Switch>
                 <Route exact path="/admin">
                   <MainPanel />
                 </Route>
                 <Route exact path="/admin/realizacje">
                   <Suspense fallback={<div />}>
-                    <RealizacjePanel askBeforeDo={askBeforeDo} />
+                    <RealizacjePanel logout={() => {saveToken('', ''); checkAuthToken()}} createAuthString={createAuthString} askBeforeDo={askBeforeDo} />
                   </Suspense>
                 </Route>
                 <Route exact path="/admin/uzytkownicy">uzytkownicy</Route>

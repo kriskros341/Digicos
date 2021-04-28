@@ -2,13 +2,20 @@ import { useState, useContext } from "react"
 import { motion } from "framer-motion"
 import settingsContext from "../../../SettingsContext"
 import "./Login.scss"
+import { Formik } from 'formik'
+import { useAuthToken } from '../useAuth'
 
 const LoginForm = () => {
 	const [ token, setToken ] = useContext(settingsContext).tokenState
 	const [ username, setUsername ] = useContext(settingsContext).userState
 	const [ userInput, setUserInput ] = useState({username: "", password: ""})
+
+  const [ tokenState, saveToken, createAuthString, checkAuthToken, askBeforeDo ] = useAuthToken()
+
+
+
 	const handleLogout = () => {
-		setToken(''!) // ! means: typesript, look. I know in alternate universe it could be null, but trust me for a sec.
+		setToken(''!) 
 		setUsername(''!)
 		setUserInput({username: "", password: ""})
 	}
@@ -18,15 +25,24 @@ const LoginForm = () => {
 			.then(resource => resource.json())
 			.then(data => {setToken(data.Authentication); setUsername(data.username)})
 	}
+
+  const login_n = () => {
+    const TheForm = new FormData()
+    // @ts-ignore
+    Object.keys(userInput).forEach(item => TheForm.append(item, userInput[item]))
+		const requestBody = {method: "POST", body: TheForm}
+    console.log(requestBody)
+		fetch("http://digicos.ddns.net:8003/user/token", requestBody)
+			.then(resource => resource.json())
+			.then(data => saveToken(data.access_token, data.token_type))
+      .catch(detail => console.log(detail))
+    checkAuthToken()
+    console.log(tokenState)
+  }
+
 	const register = () => {
 		const requestBody = {method: "POST", body: JSON.stringify(userInput)}
 		fetch("https://digicos.ddns.net:8001/user/register", requestBody)
-			.then(resource => resource.json())
-			.then(data => console.log(data))
-	}
-	const Authorize = () => {
-		const requestBody = {method: "POST", body: JSON.stringify({'token': token})}
-		fetch(`https://digicos.ddns.net:8001/user/authorize/${username}`, requestBody)
 			.then(resource => resource.json())
 			.then(data => console.log(data))
 	}
@@ -36,6 +52,14 @@ const LoginForm = () => {
 			.then(resource => resource.json())
 			.then(data => {console.log(data); handleLogout()})
 	}
+
+  const TestToken = () => {
+    console.log({ Authentication: createAuthString() })
+		fetch(`http://digicos.ddns.net:8003/user`, {method: "GET", headers: { Authorization: createAuthString() }})
+			.then(resource => resource.json())
+			.then(data => console.log(data))
+	}
+
 	return (
 		<div className="Login__content container layout">
 			<div>
@@ -45,11 +69,11 @@ const LoginForm = () => {
 				<label htmlFor="Password"> Password </label>
 				<input onChange={ e => setUserInput({...userInput, password: e.target.value}) } type="password" id="Password" value={userInput.password} />
 				<div>{ userInput.password }</div>
-				<button onClick={() => login()}>Login</button>
+				<button onClick={() => login_n()}>Login</button>
 				<button onClick={() => register()}>Register</button>
-				{token && (
+				{tokenState && (
 					<>
-						<button onClick={() => Authorize()}>Check</button>
+						<button onClick={() => TestToken()}>Check</button>
 						<button onClick={() => Logout()}>Logout</button>
 					</>
 				)}

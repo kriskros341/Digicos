@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Request, Query
+from fastapi import APIRouter, Request, Depends
 from pydantic import BaseModel, validator
 from typing import List, Any, Dict, Optional, Union, Literal
 from enum import Enum
 from uuid import UUID, uuid4
 from datetime import datetime
+from ..user.routers import authorize
 router = APIRouter()
 
 
@@ -81,14 +82,14 @@ async def get_one(request: Request, internal_id: UUID):
 
 
 @router.put("/update_one/{internal_id}")
-async def update_one(request: Request, internal_id: UUID, body: BasePostData):
+async def update_one(request: Request, internal_id: UUID, body: BasePostData, t = Depends(authorize)):
 
     db = request.app.mongodb['Aktualnosci']
     await db.replace_one({"internal_id": internal_id}, {**body.dict(), "internal_id": internal_id})
 
 
 @router.delete("/delete_one/{internal_id}")
-async def update_one(request: Request, internal_id: UUID):
+async def update_one(request: Request, internal_id: UUID, t = Depends(authorize)):
 
     db = request.app.mongodb['Aktualnosci']
     await db.delete_one({"internal_id": internal_id})

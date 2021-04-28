@@ -215,33 +215,30 @@ const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({as
   }
 	return (
     <>
-          <div>
-            <div>Set Language</div>
-            <div>
-              <button onClick={() => setLanguage('Polish')}>Polski</button>
-              <button onClick={() => setLanguage('English')}>Anglielski</button>
-              <button onClick={() => setLanguage('')}>Brak Selekcji</button>
-
-            </div>
-
-          </div>
-
-					<button onClick={() => {}}>test</button>
-					<div className="Aktualnosci__container_n">
-            {data?.map((item, index) => {
-              return (
-                <AktualnosciItem 
-                  key={"aktualnosci_"+index}
-                  itemData={item}
-                  deleteItem={() => deleteData(item)}
-                  pushItemUpdate={() => putData(item)}
-                  editItem={(newData: aktualnosciItemModel) => handleArrayUpdate(index, newData)} 
-                  card_index={index}
-                />
-              )
-            })}
-          </div>
-      </>
+      <div>
+        <div>Set Language</div>
+        <div>
+          <button onClick={() => setLanguage('Polish')}>Polski</button>
+          <button onClick={() => setLanguage('English')}>Anglielski</button>
+          <button onClick={() => setLanguage('')}>Brak Selekcji</button>
+        </div>
+      </div>
+      <button onClick={() => {}}>test</button>
+      <div className="Aktualnosci__container_n">
+        {data?.map((item, index) => {
+          return (
+            <AktualnosciItem 
+              key={"aktualnosci_"+index}
+              itemData={item}
+              deleteItem={() => deleteData(item)}
+              pushItemUpdate={() => putData(item)}
+              editItem={(newData: aktualnosciItemModel) => handleArrayUpdate(index, newData)} 
+              card_index={index}
+            />
+          )
+        })}
+      </div>
+    </>
 	)
 }
 

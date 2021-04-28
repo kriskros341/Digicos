@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 from apps.aktualnosci.routers import router as aktualnosci_router
@@ -10,6 +10,7 @@ import certs
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 
 app = FastAPI()
 app.mongodb_client = None
@@ -52,3 +53,13 @@ app.include_router(realizacje_router, tags=["realizacje"], prefix="/realizacje")
 @app.get('/')
 async def index():
     return {'data': {'name': 'krzyś'}}
+
+
+
+
+
+
+
+
+
+

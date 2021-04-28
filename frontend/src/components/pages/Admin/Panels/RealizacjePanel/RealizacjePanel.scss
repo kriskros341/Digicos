@@ -1,7 +1,7 @@
 .RealizacjePanel__component {
 	width: 100%;
   height: 100%;
-  min-height: 100vh;
+  margin-bottom: 20vh;
   position: relative;
   .center {
     display: flex;
@@ -9,6 +9,7 @@
     align-items: center;
   }
   .Menu__container {
+    display: flex;
     background-color: rgba(0, 0, 0, 0.2);
     width: calc(100% - 1em);
     padding: 0.5em 0.5em;
@@ -46,9 +47,14 @@
   .Items__container {
     display: flex;
     flex-direction: column;
+    flex: 1;
     .Item {
+      order: 1;
       display: flex;
       padding: 1em 0;
+      &.onTop {
+        order: 0;
+      }
       &:hover {
         background-color:rgba(0, 0, 0, 0.2)
       }
@@ -60,7 +66,9 @@
         flex: 0 0 20%;
       }
       .Item__abbr {
-        flex: 0 0 60%;
+        font-weight: lighter;
+        width: 60%;
+        overflow-wrap: break-word;
       }
       .Item__options {
         display: flex;
@@ -68,6 +76,9 @@
         justify-content: center;
         align-items: center;
         flex: 0 0 20%;
+        .pointer {
+          cursor: pointer
+        }
       }
     }
   } 
@@ -106,7 +117,9 @@
 .queryFrom__container {
   position: relative;
   .queryForm {
-    width: 100%;
+    padding: 0;
+    max-width: 100%;
+    border-width: 0;
   }
   .Icon__clear {
     pointer-events: all;

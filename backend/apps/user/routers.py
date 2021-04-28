@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, Header
+from fastapi import APIRouter, Request, Header, Depends, HTTPException, status
 from pydantic import BaseModel, Field, validator
 from typing import Optional, Any, Dict
 from . import myCrypt
@@ -6,8 +6,15 @@ from hashlib import pbkdf2_hmac
 from string import ascii_lowercase, digits
 import random
 from uuid import UUID, uuid4
-from datetime import datetime
+from datetime import datetime, timedelta
+
+from pydantic import BaseModel
+from typing import Optional
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from jose import JWTError, jwt
+
 router = APIRouter()
+
 
 
 class UserFormInputModel(BaseModel):
@@ -101,7 +108,7 @@ async def logout(request: Request, username: str, body: UserAuthModel):
 
 
 @router.post("/authorize/{username}")
-async def authorize(request: Request, username: str, body: UserAuthModel):
+async def authorize_me(request: Request, username: str, body: UserAuthModel):
     data = body.dict()
     collection = request.app.mongodb['User']
     if user := await collection.find_one({'token': data['token']}):
@@ -115,6 +122,86 @@ async def authorize(request: Request, username: str, body: UserAuthModel):
         return {'result': False, 'response': 'Re-authentication Required'}
     print(f'{username} Credentials For User Authentication.')
     return {'result': False, 'response': 'Invalid Credentials'}
+
+
+
+
+
+class TestUser(BaseModel):
+    username: str
+    pw: Optional[str]
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/token")
+
+
+class UserModel(BaseModel):
+    username: str
+    password: Any
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+def encode_password(password):
+    return pbkdf2_hmac('sha256', password.encode('utf-8'), myCrypt.Crypt.salt, myCrypt.Crypt.num)
+
+
+def create_tokend(data: dict, expire_after: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expire_after:
+        expiration_date = datetime.utcnow() + expire_after
+    else:
+        expiration_date = datetime.utcnow() + timedelta(minutes=1)
+    to_encode.update({'exp': expiration_date})
+    encoded = jwt.encode(to_encode, myCrypt.Crypt.JWT_KEY, algorithm=myCrypt.Crypt.ALG)
+    return encoded
+
+
+@router.post('/token', response_model=Token)
+async def login_for_access_token(request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
+    collection = request.app.mongodb['User']
+    user_from_db = await collection.find_one({'username': form_data.username}, {'_id': False})
+    if not user_from_db:
+        raise HTTPException(status_code=400, detail="Incorrect username or password", headers={"WWW-Authenticate": "Bearer"})
+    user = UserModel(**user_from_db)
+    if not user.password == encode_password(form_data.password):
+        raise HTTPException(status_code=400, detail="Incorrect username or password", headers={"WWW-Authenticate": "Bearer"})
+    token_expiration = timedelta(minutes=myCrypt.Crypt.ACCESS_TOKEN_EXPIRATION_DEFAULT)
+    access_token = create_tokend(data={"sub": user.username}, expire_after=token_expiration)
+    return {"access_token": access_token, "token_type": "bearer"}
+
+
+async def authorize(request: Request, token: str = Depends(oauth2_scheme)):
+    print("t")
+    try:
+        decoded = jwt.decode(token, myCrypt.Crypt.JWT_KEY)
+        collection = request.app.mongodb['User']
+        if this_user := await collection.find_one({'username': decoded.get('sub')}, {'_id': False}):
+            return this_user
+        return False
+    except:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+
+
+
+class NewUserModel(BaseModel):
+    username: str
+    password: Any
+    active: bool
+    internal_id: Any
+
+
+@router.get("/")
+async def test_token(current_user: NewUserModel = Depends(authorize)):
+    print(current_user)
+    return {'response': 'access granted', 'status': True}
 
 
 @router.post("/register")

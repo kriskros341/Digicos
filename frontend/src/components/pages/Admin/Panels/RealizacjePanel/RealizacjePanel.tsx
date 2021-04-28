@@ -1,82 +1,19 @@
 import './RealizacjePanel.scss'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import settingsContext from '../../../../SettingsContext'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-const itemData = [
-  {
-    time: "2009-nadal",
-    desc: "Prace projektowe i wykonawcze linii światłowodowych dla potrzeb PTC Sp. z o.o. dla Biur Regionalnych Katowice i Warszawa"
-  },
-  {
-    time: "2009-nadal",
-    desc: "Prace remontowe budowlane i elektryczne obiektów na terenie ZAK S.A. (Kędzierzyn-Koźle)"
-  },
-  {
-    time: "2001-nadal",
-    desc: "Prace remontowe na obiektach PTC Sp. z o.o. w zakresie budowlanym i elektrycznym"
-  },
-  {
-    time: "2001-nadal",
-    desc: "Prace przy realizacji centrów handlowych, biurowych, hoteli i innych obiektów kubaturowych w zakresie infrastruktury telekomunikacyjnej"
-  },
-  {
-    time: "2001-nadal",
-    desc: "Prace remontowe na obiektach PTC Sp. z o.o. w zakresie budowlanym i elektrycznym"
-  },
-  {
-    time: "2001-nadal",
-    desc: "Prace przy realizacji centrów handlowych, biurowych, hoteli i innych obiektów kubaturowych w zakresie infrastruktury telekomunikacyjnej"
-  },
-  {
-    time: "1999-nadal",
-    desc: "Przeglądy budowlano – elektryczne i konserwacja obiektów dla PTC Sp. z o.o."
-  },
-  {
-    time: "1999-nadal",
-    desc: "Bieżące utrzymanie stacji bazowych telefonii komórkowej – wykonywanie zasilań awaryjnych, zabezpieczanie obiektów itp."
-  },
-  {
-    time: "1999-nadal",
-    desc: "Przeglądy budowlano – elektryczne i konserwacja obiektów dla PTC Sp. z o.o."
-  },
-  {
-    time: "1999-nadal",
-    desc: "Bieżące utrzymanie stacji bazowych telefonii komórkowej – wykonywanie zasilań awaryjnych, zabezpieczanie obiektów itp."
-  },
-]
-
-
-
-
-
 
 interface SearchMenuInterface {
   setSearchString: (s: string) => void
   searchString: string
+  AddItem: () => void
 }
 
-type ItemModel = {
-  internal_id: string
-  yearFrom: number
-  yearTo: string | number
-  text: string
-}
 
-interface ItemInterface {
-  item: ItemModel
-  index: number
-  updateItem: (newItemData: ItemModel) => void
-  commitChange: () => void
-}
 
-interface RealizacjePanelInterface {
-  askBeforeDo: (fn: () => void) => void
-}
-
-const Menu: React.FC<SearchMenuInterface> = ({setSearchString, searchString}) => {
+const Menu: React.FC<SearchMenuInterface> = ({setSearchString, AddItem, searchString}) => {
   const [ inputKey, setInputKey ] = useState(0)
-
   /* Change key of input so that defaultValue refreshes without initialization */
   const clearQueryInput = () => {
     setSearchString('')
@@ -98,6 +35,7 @@ const Menu: React.FC<SearchMenuInterface> = ({setSearchString, searchString}) =>
           </div>
         </div>
       </div>
+      <button onClick={() => AddItem()} className="Menu__options__title">Dodaj</button>
     </div>
   )
 }
@@ -106,19 +44,20 @@ interface ItemOptionsInterface {
   isEdited: boolean
   toggleEdit: () => void
   commitChange: () => void
+  deleteItem: () => void
 }
 
-const ItemOptions: React.FC<ItemOptionsInterface> = ({isEdited, toggleEdit, commitChange}) => {
+const ItemOptions: React.FC<ItemOptionsInterface> = ({deleteItem, isEdited, toggleEdit, commitChange}) => {
   return (
     <div className="Item__options">
       {
       isEdited ? (
-          <div onClick={() => {toggleEdit(); commitChange()}}>Zapisz</div>
+          <div className="pointer" onClick={() => {toggleEdit(); commitChange()}}>Zapisz</div>
         ) : (
-          <div onClick={() => toggleEdit()}>Edytuj</div>
+          <div className="pointer" onClick={() => toggleEdit()}>Edytuj</div>
         ) 
       }
-      <div>Usuń</div>
+      <div className="pointer" onClick={() => deleteItem()}>Usuń</div>
     </div>
   )
 }
@@ -155,11 +94,26 @@ const ItemDate: React.FC<{item: ItemModel, updateItem: (v: ItemModel) => void}> 
   )
 }
 
-const Item: React.FC<ItemInterface> = ({item, index, updateItem, commitChange}) => {
+type ItemModel = {
+  internal_id: string
+  yearFrom: number
+  yearTo: string | number
+  text: string
+}
+
+interface ItemInterface {
+  item: ItemModel
+  index: number
+  deleteItem: () => void
+  updateItem: (newItemData: ItemModel) => void
+  commitChange: () => void
+}
+
+const Item: React.FC<ItemInterface> = ({deleteItem, item, index, updateItem, commitChange}) => {
   const [ isEdited, setEdited ] = useState<boolean>(false)
   const toggleEdited = () => setEdited(!isEdited)
   return (
-    <div className="Item" key={`item__${index}`}>
+    <div className={["Item", item.text == "Treść" && "onTop"].join(" ")} key={`item__${index}`}>
       {
         isEdited ? (
           <>
@@ -169,22 +123,32 @@ const Item: React.FC<ItemInterface> = ({item, index, updateItem, commitChange}) 
         ) : (
           <>
             <div className="Item__date">{item.yearFrom}-{item.yearTo}</div>
-            <div className="Item__abbr">{item.text}</div>
+            <div className="Item__abbr">
+              {item.text}
+            </div>
           </>
         )
       }
-      <ItemOptions commitChange={commitChange} isEdited={isEdited} toggleEdit={toggleEdited} />
+      <ItemOptions deleteItem={deleteItem} commitChange={commitChange} isEdited={isEdited} toggleEdit={toggleEdited} />
     </div>
   )
 }
 
+interface RealizacjePanelInterface {
+  askBeforeDo: (fn: () => void) => void
+  createAuthString: () => string
+  logout: () => void
+}
 
-const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({askBeforeDo}) => {
-  const [ userInput, setUserInput ] = useState('')
+
+const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({logout, createAuthString, askBeforeDo}) => {
+  const [ userInput, setUserInput ] = useState<string>('')
   const [ data, setData ] = useState<ItemModel[]>()
-  useEffect(() => {
-    fetchData()
-  }, [])
+
+  const handleResponse = (response: Response) => {
+    if(response.status === 200) return response.json()
+    logout()
+  }
 
   const fetchData: (language?: string) => void = (language) => {
     fetch(`http://digicos.ddns.net:8003/realizacje/get_all`)
@@ -193,11 +157,16 @@ const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({askBeforeDo}) => {
   }
 
   const commitChange = (itemId: string, newData: ItemModel) => {
-    console.log(newData)
-    console.log(JSON.stringify(newData))
-    fetch(`http://digicos.ddns.net:8003/realizacje/update_one/${itemId}`, {method: "PUT", body: JSON.stringify(newData)})
+    fetch(`http://digicos.ddns.net:8003/realizacje/update_one/${itemId}`, {method: "PUT", body: JSON.stringify(newData), headers: { Authorization: createAuthString() }})
       .then(resource => resource.json())
       .then(data => console.log(data))
+  }
+
+
+  const deleteItem = (itemId: string) => {
+    fetch(`http://digicos.ddns.net:8003/realizacje/delete_one/${itemId}`, {method: "DELETE", headers: { Authorization: createAuthString() }} )
+      .then(resource => handleResponse(resource))
+      .then(() => fetchData())
   }
 
   const handleArrayUpdate = (index_to_update: number, newData: ItemModel) => {
@@ -207,15 +176,22 @@ const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({askBeforeDo}) => {
       )
     )
   }
-  console.log(data)
-  const doesMatch = (query: string, content: string) => content.toLowerCase().includes(query.toLowerCase())
 
+  const AddItem = () => {
+    fetch(`http://digicos.ddns.net:8003/realizacje/create_one`, {method: "POST", body: JSON.stringify({yearFrom: 2001, yearTo: "Nadal", text: "Treść"}), headers: { Authorization: createAuthString() }})
+      .then(resource => handleResponse(resource))
+      .then(data => { data && fetchData() })
+  }
+  
+  useEffect(() => fetchData(), [])
+  const doesMatch = (query: string, content: string) => content.toLowerCase().includes(query.toLowerCase())
   return (
     <div className="RealizacjePanel__component">
       <div className="RealizacjePanel__container">
         <Menu
           setSearchString={(s: string) => setUserInput(s)} 
           searchString={userInput}
+          AddItem={AddItem}
         />
         <div className="Items__container">
           {data && data.filter(item => doesMatch(userInput, item.text)).map((item, index) => {
@@ -223,7 +199,8 @@ const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({askBeforeDo}) => {
               <Item 
                 item={item} 
                 key={`item_${index}`}
-                index={index} 
+                index={index}
+                deleteItem={() => deleteItem(item.internal_id)} 
                 updateItem={(newItemData: ItemModel) => handleArrayUpdate(index, newItemData)}
                 commitChange={() => commitChange(item.internal_id, item)}/>
             )})}
