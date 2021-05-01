@@ -71,16 +71,24 @@
                 padding: 0;
                 min-height: 5em;
                 margin-bottom: 1em;
+                position: relative;
                 flex: 0 0 31%;
                 text-align: center;
                 justify-content: space-between;
                 background: rgba(17, 117, 240, 0.4);
                 color: white;
-                overflow: hidden;
                 &.Main {
                     background: rgba(14, 47, 86, 0.4);
                     flex: 0 0 48%;
-                    
+                }
+                .underline {
+                  position: absolute;
+                  bottom: -10px;
+                  z-index: -1;
+                  right: 0;
+                  height: 8px;
+                  background-color: #F03B29;
+                  width: 100%;
                 }
             }
         }

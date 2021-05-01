@@ -1,7 +1,8 @@
 import "./Contact.scss"
-import { useState } from "react"
-import { motion } from "framer-motion"
+import { useContext, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 import getContactData from "./ContactData"
+import SettingsContext from "../../SettingsContext"
 
 interface contactDataInterface {
   itemData: {
@@ -46,58 +47,70 @@ interface ContactItemInterface {
 }
 
 const ContactItem : React.FC<ContactItemInterface> = ({selectedCard, id, nazwa, glowny, selectThisCard}) => {
-  let classList = ["Menu__oddzial"]
-  glowny && (
-    classList = [...classList, "Main"]
-  )
-  id-1===selectedCard && (
-    classList = [...classList, "Selected"]
-  )
+  const isSelected = id-1===selectedCard
   return (
     <motion.button 
-      animate={{y: id-1===selectedCard ? -10 : 0}}
+      animate={{y: isSelected ? -10 : 0}}
       key={id} 
       onClick={() => selectThisCard()} 
-      className={glowny ? "Menu__oddzial Main" : "Menu__oddzial"}
+      className={["Menu__oddzial", glowny && "Main", isSelected && "selected"].join(" ")}
     >
       {nazwa}
+      <AnimatePresence>
+        {isSelected && (
+          <motion.div
+            className="underline"
+            initial={{opacity: 0.5, y: -10}}
+            animate={{opacity: 0.9, y: 0}}
+            exit={{opacity: 0, y: -10}}
+          />
+        )}
+      </AnimatePresence>
     </motion.button>
   )
 }
 
-
-
 const Contact: React.FC = () => {
   const [ selectedCard, setSelectedCard ] = useState<number>(1)
   const contactData = getContactData("Polish")
+  const settings = useContext(SettingsContext)
 	return (
-		<div className="Contact__component">
+		<motion.div variants={ settings.pageVariants } initial="hidden" animate="visible" className="Contact__component">
 			<div className="Content">
 				<div className="Contact__Selected container">
 					<h2> Oddział { contactData[selectedCard].nazwa } </h2>
 					{selectedCard+1 && (
-							<motion.div className="data"
-								initial={{opacity: 0, y: 10}}
-								animate={{opacity: 1, y: 0}}
-							>
-							  {contactData[selectedCard].data.map((item, index) => <ContactData key={`contact_${index}`} itemData={{...item, index: index}}/>)}
-							</motion.div>
+            <motion.div className="data"
+              initial={{opacity: 0, y: 10}}
+              animate={{opacity: 1, y: 0}} >
+              {contactData[selectedCard].data.map((item, index) => 
+                <ContactData key={`contact_${index}`} itemData={{...item, index: index}} />
+              )}
+            </motion.div>
 					)}
 				</div>
 				<div className="Contact__Menu container">
-				{contactData.map(({id, nazwa, glowny}) => <ContactItem selectedCard={selectedCard} selectThisCard={() => setSelectedCard(id-1)} id={id} nazwa={nazwa} glowny={glowny}/>)}
-				</div>
-
-		</div>
-		<div className="Media container">
-			<hr />
-				<div className="Media__content">
-					<a href="/">Facebook</a>
-					<a href="/">Email</a>
-				</div>
-			<hr />
-			</div>
-		</div>
+				{contactData.map(({id, nazwa, glowny}, index) => 
+          <ContactItem 
+            key={`contact_option__${index}`} 
+            selectedCard={selectedCard} 
+            selectThisCard={() => setSelectedCard(id-1)} 
+            id={id} 
+            nazwa={nazwa} 
+            glowny={glowny} />
+        )}
+        </div>
+		  </div>
+    
+		  <div className="Media container">
+        <hr />
+          <div className="Media__content">
+            <a href="https://www.facebook.com/DigicosSA/">Facebook</a>
+            <a href="zarzad@digicos.pl">Email</a>
+          </div>
+        <hr />
+      </div>
+		</motion.div>
 	)
 }
 

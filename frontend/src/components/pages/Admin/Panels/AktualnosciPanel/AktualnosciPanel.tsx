@@ -1,17 +1,11 @@
 import { useState, useContext, useEffect } from "react"
-import { motion } from "framer-motion"
-import settingsContext from "../../../../SettingsContext"  // lol
+import settingsContext from "../../../../SettingsContext"
 import "./AktualnosciPanel.scss"
 
 interface cardInnerContentInterface {
-  innerItemData: cardInnerContentData
+  innerItemData: cardInnerContentModel
   isEdited: Boolean | undefined
   editSubItem: (newObject: object) => void
-}
-
-interface cardInnerContentData {
-  typee: string,
-  cont: string
 }
 
 interface cardOptionsInterface {
@@ -28,10 +22,6 @@ interface cardTitleInteface {
   isEdited: Boolean | undefined
   changeTitle: (newTitle: string) => void
 }
-/*
-  Data models end with --data,
-  Props schemas end with --interface
-*/
 
 const CardTitle: React.FC<cardTitleInteface> = ({title, isEdited, changeTitle}) => {
   return (
@@ -69,6 +59,31 @@ const CardOptions: React.FC<cardOptionsInterface> = ({editedState, pushItemUpdat
 	)
 }
 
+type InnerLinkModel = {
+  cont: string | number
+  href: string
+} 
+
+type InnerFileModel = {
+  cont: any
+  alt: string
+}
+
+const InnerContentFile: React.FC<{setContent: (v: InnerFileModel) => void, current: {} | any}> = ({setContent, current}) => {
+  const [ cont, setCont ] = useState()
+  return (
+    <div className="indented lighter">
+      file <input onChange={(v: any) => setContent({...current, cont: v}) }  className="Input__file" type="file"/>
+      alt <input className="Input__file" type="text"/>
+    </div>
+  )
+}
+
+type cardInnerContentModel = {
+  typee: string,
+  cont: string | InnerLinkModel | InnerFileModel | any
+}
+
 const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdited, editSubItem}) => {
   const updateItem = (newData: any) => editSubItem({...innerItemData, ...newData})
 	return (
@@ -84,7 +99,7 @@ const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdi
 						{
 							{
 								"text": <textarea className="indented lighter" onChange={(e) => updateItem({cont: e.target.value})} defaultValue={innerItemData.cont} />,
-								"file": <input type="file" className="indented lighter"/>,
+								"file": <InnerContentFile current={innerItemData.cont} setContent={(swap: InnerFileModel) => updateItem({cont: swap})}/>,
 								"link": <input type="text" className="indented lighter" onChange={(e) => updateItem({cont: e.target.value})} defaultValue={innerItemData.cont} />
 							}[innerItemData.typee]
 						}
@@ -104,7 +119,8 @@ interface aktualnosciItemModel {
   internal_id: string,
   title: string,
   date: string,
-  content: Array<cardInnerContentData>
+  language: string
+  content: cardInnerContentModel[]
 }
 interface aktualnosciItemInterface {
   itemData: aktualnosciItemModel
@@ -170,31 +186,46 @@ const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem
 		</div>
 	)
 }
+interface AktualnosciPanelInterface {
+ logout: () => void
+ createAuthString: () => string
+}
 
-const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({askBeforeDo}) => {
-	const settings = useContext(settingsContext)
-	const [ data, setData ] = useState<Array<aktualnosciItemModel>>([])
-  const [ language, setLanguage ] = useState<string>('')
 
-  const fetchData: (language?: string) => void = (language) => {
-    fetch(`https://digicos.ddns.net:8001/aktualnosci/get_all?language=${language || "any"}`)
+
+const AktualnosciPanel: React.FC<AktualnosciPanelInterface> = ({logout, createAuthString}) => {
+	const [ data, setData ] = useState<aktualnosciItemModel[]>([])
+  const initialLanguage = useContext(settingsContext).language
+  const [ language, setLanguage ] = useState<string>(initialLanguage)
+
+  const handleResponse = (response: Response) => {
+    if(response.status === 401) {
+      logout()
+      return
+    }
+    return response.json()
+  }
+  const fetchData: (language: string) => void = () => {
+    fetch(`http://digicos.ddns.net:8003/aktualnosci/get_all`)
       .then(resource => resource.json())
       .then(data => setData(data))
   }
   const putData = (updatedItem: aktualnosciItemModel) => {
-    askBeforeDo(() =>
-      fetch(`https://digicos.ddns.net:8001/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem) })
-        .then(resource => resource.json())
-        .then(() => fetchData(language))
-    )
+    console.log(updatedItem)
+    fetch(`http://digicos.ddns.net:8003/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem), headers: { Authorization: createAuthString() } })
+      .then(resource => handleResponse(resource))
+      .then(() => fetchData(language))
   }
   const deleteData = (updatedItem: aktualnosciItemModel) => {
-    askBeforeDo(() =>
-      fetch(`https://digicos.ddns.net:8001/aktualnosci/delete_one/${updatedItem.internal_id}`, {method: "DELETE"})
-        .then(resource => resource.json())
+      fetch(`https://digicos.ddns.net:8001/aktualnosci/delete_one/${updatedItem.internal_id}`, {method: "DELETE", headers: { Authorization: createAuthString() }})
+        .then(resource => handleResponse(resource))
         .then(() => fetchData(language))
-    )
   }
+  const createItem = (language: string) => {
+    fetch(`http://digicos.ddns.net:8003/aktualnosci/create_one/${language}`, {method: "GET", headers: { Authorization: createAuthString() }})
+      .then(resource => handleResponse(resource))
+      .then(() => fetchData(language))
+}
 	useEffect(() => {
     fetchData(language)
 	}, [language])
@@ -220,12 +251,11 @@ const AktualnosciPanel: React.FC<{askBeforeDo: (fn: () => void) => void}> = ({as
         <div>
           <button onClick={() => setLanguage('Polish')}>Polski</button>
           <button onClick={() => setLanguage('English')}>Anglielski</button>
-          <button onClick={() => setLanguage('')}>Brak Selekcji</button>
         </div>
       </div>
-      <button onClick={() => {}}>test</button>
+      <button onClick={() => createItem(language)}>create item</button>
       <div className="Aktualnosci__container_n">
-        {data?.map((item, index) => {
+        {data.filter(item => item.language === language).map((item, index) => {
           return (
             <AktualnosciItem
               key={"aktualnosci_"+index}

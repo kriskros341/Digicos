@@ -1,6 +1,6 @@
 import { useState, useLayoutEffect, lazy, Suspense } from 'react'
 import { simpleSettingsModel } from "../FunctionalOverlay"
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from "react-router-dom"
 import './NavbarUnified.scss'
 
@@ -10,6 +10,33 @@ const MobileNavigation = lazy(() => import('./NavbarComponents/MobileNavigation'
 const MobileMenu = lazy(() => import('./NavbarComponents/MobileMenu'))
 const BlackDrop = lazy(() => import('./BlackDrop'))
  
+interface NavbarToggleInterface {
+  onToggle: () => void, 
+  toggledValue: boolean, 
+  children: string | undefined
+}
+
+export const NavbarToggle: React.FC <NavbarToggleInterface> = ({ onToggle, toggledValue, children }) => {
+  const [ isToggled, setToggled ]= useState<boolean>(false)
+  const toggle = () => setToggled(v => !v)
+  return (
+    <div className="Nav__link" onClick={() => onToggle()}>
+      {children}
+      <AnimatePresence>
+      {toggledValue && 
+        <motion.div 
+          style={{originX: isToggled ? 1 : 0}}
+          initial={{scaleX:0}} 
+          animate={{scaleX:1}}
+          exit={{scaleX:0}}
+          onAnimationComplete={() => toggle()}
+          className="underline"
+        />
+      }
+      </AnimatePresence>
+    </div>
+  )
+}
 
 interface NavbarInterface {
   settingsState: [ 

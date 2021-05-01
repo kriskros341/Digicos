@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimateSharedLayout, motion } from 'framer-motion'
 import './MobileMenu.scss'
 import getNavData from '../../getNavData'
 import { simpleSettingsModel } from "../../FunctionalOverlay"
+import settingsState from "../../../SettingsContext"
+import { NavbarToggle } from "../Navbar"
 
 const MobileMenuVariants = {
   hidden: {
@@ -37,11 +39,13 @@ interface mobileMenuInterface {
   setMenuState: (newMenuState: boolean) => void
 }
 
-
-const MobileMenu: React.FC<mobileMenuInterface> = ({settingsState, setMenuState}) => {
-  const [ animState, setAnimState] = useState(false)
-  const [ settings, setSettings ] = settingsState
-  const navData = getNavData(settings.language)
+const MobileMenu: React.FC<mobileMenuInterface> = ({setMenuState}) => {
+  const [ animState, setAnimState] = useState<boolean>(false)
+  const language = useContext(settingsState).language
+  const animations = useContext(settingsState).animations
+  const highContrast = useContext(settingsState).highContrast
+  const changeSettings = useContext(settingsState).changeSettings
+  const navData = getNavData(language)
   const toggleAnimState = () => setAnimState(!animState)
   return (
     <motion.div variants={ MobileMenuVariants } className="MobileMenu__component" initial="hidden" animate="showed" exit="hidden" onAnimationComplete={ () => toggleAnimState() }>
@@ -59,23 +63,39 @@ const MobileMenu: React.FC<mobileMenuInterface> = ({settingsState, setMenuState}
         }) }
         <div className="LanguageOptions MobileMenu__item">
           <AnimateSharedLayout>
-            <div className="Globe" onClick={ () => setSettings({...settings, language: "Polish"}) } >
-              { settings.language === "Polish" && <motion.div className="outline" layoutId="GlobeOutline6" /> }
+            <div className="Globe pol" onClick={ () => changeSettings({language: "Polish"}) } >
+              { language === "Polish" && <motion.div className="outline" layoutId="GlobeOutline6" /> }
             </div>
-            <div className="Globe" onClick={ () => setSettings({...settings, language: "English"}) } >
-              { settings.language === "English" && <motion.div className="outline" layoutId="GlobeOutline6" /> }
+            <div className="Globe eng" onClick={ () => changeSettings({language: "English"}) } >
+              { language === "English" && <motion.div className="outline" layoutId="GlobeOutline6" /> }
             </div>
           </AnimateSharedLayout>
         </div>
-        <div className="MobileMenu__item LanguageOptions">
-          <AnimateSharedLayout>
-            <div className="Globe" onClick={ () => setSettings({...settings, highContrast: true}) } >
-              { settings.highContrast && <motion.div className="outline" layoutId="GlobeOutline1" /> }
-            </div>
-            <div className="Globe" onClick={ () => setSettings({...settings, highContrast: false}) } >
-              { !settings.highContrast && <motion.div className="outline" layoutId="GlobeOutline1" /> }
-            </div>
-          </AnimateSharedLayout>
+        <div className="MobileMenu__item">
+          <NavbarToggle 
+            onToggle={() => changeSettings({animations: !animations})}
+            toggledValue={animations}
+          >
+            {
+              {
+              "Polish": "Animacje",
+              "English": "Animations"
+              }[language]
+            }
+          </NavbarToggle>
+        </div>
+        <div className="MobileMenu__item">
+          <NavbarToggle 
+            onToggle={() => changeSettings({highContrast: !highContrast})}
+            toggledValue={highContrast}
+          >
+            {
+              {
+              "Polish": "Zwiększony Kontrast",
+              "English": "High Contrast Mode"
+              }[language]
+            }
+          </NavbarToggle>
         </div>
         <motion.div onClick={() => setMenuState(false)} className="MobileMenu__item__container">
           <Link to="/admin">
@@ -84,7 +104,7 @@ const MobileMenu: React.FC<mobileMenuInterface> = ({settingsState, setMenuState}
                 {
                   "Polish": "Administracja",
                   "English": "Admin Panel"
-                }[settings.language]
+                }[language]
               }
             </div>
           </Link>

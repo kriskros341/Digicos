@@ -10,7 +10,7 @@ interface Props {
 const Overlay: React.FC<Props> = ({overlayFunction}) => {
   const variants = useVariants("fadeInOut")
   useEffect(
-    (): any => {
+    (): () => void => {
       window.onscroll = () => overlayFunction()
       return () => window.onscroll = null
     }, [overlayFunction]

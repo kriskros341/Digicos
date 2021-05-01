@@ -18,14 +18,13 @@
 
 .Aktualnosci__container_n {
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
+  margin-bottom: 10vh;
 	.Aktualnosci__card__container {
 		position: relative;
 		padding: 0.5em;
 		background-color: rgba(0, 0, 0, 0.4);
-		& + .Aktualnosci__card__container {
-			margin-top: 1em;
-		}
+    margin-top: 1em;
 		.Card__options__container {
 			position: absolute;
 			top: 0.5em; right: 0.5em;
@@ -33,9 +32,9 @@
 			flex-direction: row-reverse;
 			.Card__options__item {
 				cursor: pointer;
-				& + .Card__options__item {
-					margin-right: 1em;
-				}
+        & + .Card__options__item {
+          margin-right: 1em;
+        }
 			}
 		}
 		.Card__content__container {
@@ -53,6 +52,9 @@
 			.Card__Inner {
 				margin-top: 1em;
 			}
+      .Input__file {
+        display: block;
+      }
 		}
 	}
 }

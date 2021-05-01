@@ -1,8 +1,9 @@
 import './OFirmieCards.scss'
-import { useState, memo } from 'react'
+import { useState, memo, useContext } from 'react'
 import { motion, AnimateSharedLayout } from 'framer-motion'
 import { useInView } from 'react-intersection-observer';
 import getCards from "./getCards"
+import settingsState from '../../../SettingsContext'
 
 const opacityTransition = {
     initial: {
@@ -41,9 +42,11 @@ const Card: React.FC<CardProps> = ({cardTitle, cardContents}) => {
 const cardsContent = getCards()
 const OFirmieCards = () => {
   const [ ref, inView ] = useInView({threshold: 1, triggerOnce: true, delay: 1000})
+  const animations = useContext(settingsState).animations
   return (
     <div ref={ref} className="Cards__OFirmie__component"  id="firma">
-      <AnimateSharedLayout >
+      {animations ? (
+        <AnimateSharedLayout >
         { inView ? (
           <motion.div layoutId="OFirmieTransition">
             <div className="Cards__container container">
@@ -62,6 +65,18 @@ const OFirmieCards = () => {
           </motion.div>
         ) }
       </AnimateSharedLayout>
+      ) : (
+        <motion.div layoutId="OFirmieTransition">
+          <div className="Cards__container container">
+            {
+              cardsContent.map(({title, contents}, index) => 
+                <Card key={`Card__${index}`} cardTitle={title} cardContents={contents} />
+              )
+            }
+          </div>
+        </motion.div>
+      )}
+      
     </div>
   )
 }

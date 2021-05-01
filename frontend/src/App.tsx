@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import SettingsContext from "./components/SettingsContext"
 import './App.scss';
 import './utilities.scss'
-import SecurePageWrapper from './components/pages/Admin/SecurePage'
 
 const Home = lazy(() => import('./components/pages/HomePage/Home'))
 const Contact = lazy(() => import('./components/pages/Contact/Contact'))
@@ -15,9 +14,6 @@ const Aktualnosci = lazy(() => import('./components/pages/Aktualnosci/Aktualnosc
 const Presentation = lazy(() => import('./components/pages/Misc/Presentation.js'))
 const Login = lazy(() => import("./components/pages/Admin/Login/Login"))
 const Admin = lazy(() => import('./components/pages/Admin/Admin'))
-
-// const HomeOld = lazy(() => import('./components/pages/HomeOld.js'))
-// const Tests = lazy(() => import("./components/pages/Aktualnosci/Aktualnosci.js"))
 
 const PageVariants = {
   hidden:{opacity: 0, y: -20},
@@ -32,65 +28,49 @@ const Fallback = () => {
 
 const SuspendedPage = (props: any) => {
   return (
-    <Suspense fallback={<Fallback />}>
-      {props.children}
-    </Suspense>
+    <Route key={props.path} path={props.path}>
+      <Suspense fallback={<Fallback />}>
+        {props.children}
+      </Suspense>
+    </Route>
   )
 }
 
 function App() {
   const [ token, setToken ] = useState<string>('')
-  const [ username, setUsername ] = useState<string>('')
   const [ settings, setSettings ] = useState({language: "Polish", highContrast: false, animations: true})
+  const changeSettings = (swap: object) => setSettings({...settings, ...swap})
   return (
-    <SettingsContext.Provider value={{...settings, pageVariants: PageVariants, tokenState: [ token, (newToken: string) => setToken(newToken) ], userState: [ username, (newToken: string) => setUsername(newToken) ]}}>
+    <SettingsContext.Provider value={{...settings, changeSettings, pageVariants: PageVariants, tokenState: [ token, (newToken: string) => setToken(newToken) ]}}>
       <Router>
         <FunctionalOverlay settingsState={[ settings, setSettings ]}/>
         <Switch>
-          <Route exact key="/" path="/">
-            <SuspendedPage>
+          <Route exact path="/">
+            <Suspense fallback={<Fallback />}>
               <Home />
-            </SuspendedPage>
+            </Suspense>
           </Route>
-          <Route key="/homeold" path="/homeold">
-            <SecurePageWrapper>
-              <SuspendedPage>
-                <Login />
-              </SuspendedPage>
-            </SecurePageWrapper>
-          </Route>
-          <Route key="/kontakt" path="/kontakt">
-            <SuspendedPage>
-              <Contact />
-            </SuspendedPage>
-          </Route>
-          <Route exact key="/inwestorzy" path="/inwestorzy">
-            <SuspendedPage>
-              <Inwestorzy />
-            </SuspendedPage>
-          </Route>
-          <Route exact key="/realizacje" path="/realizacje">
-            <SuspendedPage>
-              <Realizacje />
-            </SuspendedPage>
-          </Route>
-          <Route exact key="/prezentacja" path="/prezentacja">
-            <SuspendedPage>
-              <Presentation />
-            </SuspendedPage>
-          </Route>
-          <Route exact key="/aktualnosci" path="/aktualnosci">
-            <SuspendedPage>
-              <Aktualnosci />
-            </SuspendedPage>
-          </Route>
-          <Route key="/admin" path="/admin">
-            <SecurePageWrapper>
-              <SuspendedPage>
-                <Admin />
-              </SuspendedPage>
-            </SecurePageWrapper>
-          </Route>
+          <SuspendedPage path="/homeold">
+            <Login />
+          </SuspendedPage>
+          <SuspendedPage path="/kontakt">
+            <Contact />
+          </SuspendedPage>
+          <SuspendedPage path="/inwestorzy">
+            <Inwestorzy />
+          </SuspendedPage>
+          <SuspendedPage path="/realizacje">
+            <Realizacje />
+          </SuspendedPage>
+          <SuspendedPage path="/prezentacja">
+            <Presentation />
+          </SuspendedPage>
+          <SuspendedPage path="/aktualnosci">
+            <Aktualnosci />
+          </SuspendedPage>
+          <SuspendedPage path="/admin">
+            <Admin />
+          </SuspendedPage>
           <Route path="/*">
             <div className="not found"> Not found </div>
           </Route>

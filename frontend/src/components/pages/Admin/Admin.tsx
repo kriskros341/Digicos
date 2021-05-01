@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom"
 import { useContext, useEffect, lazy, Suspense } from "react"
 import settingsContext from "../../SettingsContext"
 import LeftPanel from "./Panels/LeftPanel/LeftPanel"
-import useAuth, { useAuthToken } from './useAuth'
+import useAuthToken from './useAuth'
 import Login from './Login/Login'
 
 const RealizacjePanel = lazy(() => import('./Panels/RealizacjePanel/RealizacjePanel'))
@@ -20,7 +20,6 @@ const MainPanel = () => {
 
 const Admin = () => {
   const variants = useContext(settingsContext).pageVariants
-  const [ isAuthorized, reAuthorize, askBeforeDo ] = useAuth()
   const [ tokenState, saveToken, createAuthString, checkAuthToken ] = useAuthToken()
   useEffect(() => {
     checkAuthToken()
@@ -41,13 +40,13 @@ const Admin = () => {
                 </Route>
                 <Route exact path="/admin/realizacje">
                   <Suspense fallback={<div />}>
-                    <RealizacjePanel logout={() => {saveToken('', ''); checkAuthToken()}} createAuthString={createAuthString} askBeforeDo={askBeforeDo} />
+                    <RealizacjePanel logout={() => {saveToken('', ''); checkAuthToken()}} createAuthString={createAuthString} />
                   </Suspense>
                 </Route>
                 <Route exact path="/admin/uzytkownicy">uzytkownicy</Route>
                 <Route exact path="/admin/aktualnosci">
                   <Suspense fallback={<div />}>
-                    <AktualnosciPanel askBeforeDo={askBeforeDo} />
+                    <AktualnosciPanel logout={() => {saveToken('', ''); checkAuthToken()}} createAuthString={createAuthString} />
                   </Suspense>
                 </Route>
                 <Route exact path="/admin/konto">konto</Route>

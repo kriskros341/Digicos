@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Depends
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, conlist
 from typing import List, Any, Dict, Optional, Union, Literal
 from enum import Enum
 from uuid import UUID, uuid4
@@ -11,8 +11,22 @@ router = APIRouter()
 class ContentType(str, Enum):
     file = "file"
     link = "link"
-    text = "text"
+    text = 'text'
     mixed = "mixed"
+
+
+class TextContent(BaseModel):
+    cont: Optional[str]
+
+
+class LinkContent(BaseModel):
+    cont: Optional[str]
+    href: Optional[str]
+
+
+class FileContent(BaseModel):
+    cont: Any
+    alt: str
 
 
 class Language(str, Enum):
@@ -22,7 +36,7 @@ class Language(str, Enum):
 
 class ContentModel(BaseModel):
     typee: ContentType
-    cont: Any
+    cont: Union[FileContent, LinkContent, TextContent, Any]
 
     class Config:
         use_enum_values = True
@@ -30,14 +44,14 @@ class ContentModel(BaseModel):
 
 class BaseFormData(BaseModel):
     title: str
-    content: List[Dict[ContentType, Any]]
+    content: List[ContentModel]
 
 
 class BasePostData(BaseModel):
     title: str
     date: datetime
-    content: List[ContentModel]
-    language: Optional[Language]
+    language: str
+    content: conlist(ContentModel, min_items=1)
 
     @validator('title')
     def passwords_match(cls, v, **kwargs):
@@ -66,10 +80,10 @@ async def upload_data(request: Request, data: BaseFormData, date: Optional[datet
 
 
 @router.get("/get_all")
-async def get_all(request: Request, language: Optional[Union[Language, Literal['any']]]):
-    if not language or language == 'any':
-        return await request.app.mongodb['Aktualnosci'].find({}, {'_id': False}).to_list(length=100)
-    return await request.app.mongodb['Aktualnosci'].find({'language': language}, {'_id': False}).to_list(length=100)
+async def get_all(request: Request):
+    r = await request.app.mongodb['Aktualnosci'].find({}, {'_id': False}).to_list(length=100)
+    print(r)
+    return r
 
 
 @router.get("./get_one/{internal_id}")
@@ -82,15 +96,25 @@ async def get_one(request: Request, internal_id: UUID):
 
 
 @router.put("/update_one/{internal_id}")
-async def update_one(request: Request, internal_id: UUID, body: BasePostData, t = Depends(authorize)):
-
+async def update_one(request: Request, internal_id: UUID, body: BasePostData, t=Depends(authorize)):
     db = request.app.mongodb['Aktualnosci']
     await db.replace_one({"internal_id": internal_id}, {**body.dict(), "internal_id": internal_id})
 
+@router.get("/create_one/{language}")
+async def create_one(request: Request, language: str, t=Depends(authorize)):
+
+    title = {
+        "Enlish": "New Article",
+        "Polish": "Nowy Artykuł"
+    }.get(language, "New Article")
+
+    data = {"title": title, "date": datetime.now(), "content": [], "internal_id": uuid4(), "language": language}
+    print(data)
+    request.app.mongodb['Aktualnosci'].insert_one(data)
+    return {"response": "Done!"}
 
 @router.delete("/delete_one/{internal_id}")
-async def update_one(request: Request, internal_id: UUID, t = Depends(authorize)):
-
+async def update_one(request: Request, internal_id: UUID, t=Depends(authorize)):
     db = request.app.mongodb['Aktualnosci']
     await db.delete_one({"internal_id": internal_id})
 

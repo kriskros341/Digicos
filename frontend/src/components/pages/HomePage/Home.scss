@@ -216,23 +216,41 @@
         .BigCard__component {
           position: fixed;
           top: 30%;
-          height: 60%;
           z-index: 101;
           width: 100%;
           display: flex;
+          pointer-events: none;
           justify-content: center;
           .BigCard {
-
-              font-size: 0.5em;
-              &::before {
-                  background: #0E2F56;
-                  z-index: -1;
-                  position: absolute;
-                  top: 0; left: 0;
-                  width: 100%;
-                  height: 100%;
-                  content: "";
+            pointer-events: all;
+            font-size: 1em;
+            background: #0E2F56;
+            display: flex;
+            justify-content: center;
+            font-family: "Oswald", sans-serif;
+            font-style: normal;
+            font-size: clamp(20px, 5vw, 2rem);
+            color: white;
+            .BigCard__content {
+              min-height: 16em;
+              margin-top: 1em;
+              width: 100%;
+              @media (min-width: 768px) {
+                flex: 0 1 45vw;
               }
+            }
+            .BigCard__list {
+              font-size: 0.75em;
+              padding-inline-start: 0px;
+              font-weight: lighter;
+              li {
+                list-style-type: square;
+              }
+              
+            }
+            .Link {
+              color: white;
+            }
           }
         }
     }

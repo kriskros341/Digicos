@@ -1,6 +1,5 @@
 import './RealizacjePanel.scss'
-import { useState, useEffect, useContext } from 'react'
-import settingsContext from '../../../../SettingsContext'
+import { useState, useEffect } from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -113,7 +112,7 @@ const Item: React.FC<ItemInterface> = ({deleteItem, item, index, updateItem, com
   const [ isEdited, setEdited ] = useState<boolean>(false)
   const toggleEdited = () => setEdited(!isEdited)
   return (
-    <div className={["Item", item.text == "Treść" && "onTop"].join(" ")} key={`item__${index}`}>
+    <div className={["Item"].join(" ")} key={`item__${index}`}>
       {
         isEdited ? (
           <>
@@ -135,16 +134,15 @@ const Item: React.FC<ItemInterface> = ({deleteItem, item, index, updateItem, com
 }
 
 interface RealizacjePanelInterface {
-  askBeforeDo: (fn: () => void) => void
   createAuthString: () => string
   logout: () => void
 }
 
 
-const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({logout, createAuthString, askBeforeDo}) => {
+const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({logout, createAuthString}) => {
   const [ userInput, setUserInput ] = useState<string>('')
-  const [ data, setData ] = useState<ItemModel[]>()
-
+  const [ data, setData ] = useState<ItemModel[]>([])
+  const doesMatch = (query: string, content: string) => content.toLowerCase().includes(query.toLowerCase())
   const handleResponse = (response: Response) => {
     if(response.status === 200) return response.json()
     logout()
@@ -184,7 +182,6 @@ const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({logout, createAuth
   }
 
   useEffect(() => fetchData(), [])
-  const doesMatch = (query: string, content: string) => content.toLowerCase().includes(query.toLowerCase())
   return (
     <div className="RealizacjePanel__component">
       <div className="RealizacjePanel__container">
@@ -194,7 +191,7 @@ const RealizacjePanel: React.FC<RealizacjePanelInterface> = ({logout, createAuth
           AddItem={AddItem}
         />
         <div className="Items__container">
-          {data && data.filter(item => doesMatch(userInput, item.text)).map((item, index) => {
+          {data.filter(item => doesMatch(userInput, item.text)).map((item, index) => {
             return (
               <Item
                 item={item}

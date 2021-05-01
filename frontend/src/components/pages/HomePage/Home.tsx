@@ -1,10 +1,12 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react'
+import React, { useState, useEffect, lazy, Suspense, useContext } from 'react'
 import { useInView } from 'react-intersection-observer';
 import RealizacjeCards from './Cards__Realizacje/RealizacjeCards'
 import PortfolioCards from './Cards__Portfolio/PortfolioCards'
 import OFirmieCards from './Cards__OFirmie/OFirmieCards'
 import SecondaryNav from './SecondaryNav'
 import './Home.scss'
+import { motion } from "framer-motion"
+import SettingsContext from '../../SettingsContext';
 
 const Logo = lazy(() => import('../../static/logo_stripped.js'))
 
@@ -43,14 +45,14 @@ const HomeNew: React.FC = () => {
   const [ ref2, inView2 ] = useInView({threshold: 0.9})
   const [ ref3, inView3 ] = useInView({threshold: 0.3})
   const [ viewState, setViewState ] = useState<number>(0)
+  const settings = useContext(SettingsContext)
   useEffect(() => {
     inView1 && setViewState(1)
     inView2 && setViewState(2)
     inView3 && setViewState(3)
   }, [inView1, inView2, inView3])
-  
   return (
-    <div className="HomeNew_v2__component">
+    <motion.div variants={ settings.pageVariants } initial="hidden" animate="visible" className="HomeNew_v2__component">
       <div className="Header__container">
           <Header />
       </div>
@@ -68,10 +70,9 @@ const HomeNew: React.FC = () => {
         <div ref={ref3} className="Content__box">
           <OFirmieCards />
         </div>
-
       </div>
       <div style={{height: 100, backgroundColor: "#0E2F56"}} />
-    </div>
+    </motion.div>
   )
 }
 

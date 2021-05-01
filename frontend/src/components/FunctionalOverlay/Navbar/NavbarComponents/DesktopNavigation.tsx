@@ -3,7 +3,9 @@ import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion'
 import { navItemModel } from "../../getNavData"
 import { simpleSettingsModel } from "../../FunctionalOverlay"
 import getMenuItems from '../../getNavData'
-
+import settingsState from '../../../SettingsContext'
+import { useContext } from 'react'
+import { NavbarToggle } from "../Navbar"
 
 const DesktopMenuVariants = {
 	initial: { x: -30, opacity: 0, transition: {duration: 0.3}},
@@ -29,16 +31,19 @@ interface DesktopNavigationInteface {
   menuState: boolean
 }
 
-const DesktopNavigation: React.FC<DesktopNavigationInteface> = ({settingsState, menuState}) => {
-	const [ settings, setSettings ] = settingsState
-	const menuItems = getMenuItems(settings.language)
+const DesktopNavigation: React.FC<DesktopNavigationInteface> = ({menuState}) => {
+  const language = useContext(settingsState).language
+  const animations = useContext(settingsState).animations
+  const highContrast = useContext(settingsState).highContrast
+  const changeSettings = useContext(settingsState).changeSettings
+	const menuItems = getMenuItems(language)
 	return (
 		<AnimatePresence exitBeforeEnter>
 			{ menuState ? (
         <motion.div 
           key="NavigationDesktop"
           className="Nav__group Font__Card HiddenOnSmallScreen"
-          variants={DesktopMenuVariants}
+          variants={animations ? DesktopMenuVariants : {animate: { opacity: 1, x:0}}}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -46,67 +51,60 @@ const DesktopNavigation: React.FC<DesktopNavigationInteface> = ({settingsState, 
         >
           <div className="Nav__link LanguageOptions margin">
             <AnimateSharedLayout>
-              <div className="Globe" onClick={ () => setSettings({ ...settings, language: "Polish" }) } >
-                { settings.language === "Polish" && <motion.div className="outline" layoutId="GlobeOutline2" /> }
+              <div className="Globe pol" onClick={ () => changeSettings({language: "Polish" }) } >
+                { language === "Polish" && <motion.div className="outline" layoutId="GlobeOutline2" /> }
               </div>
-              <div className="Globe" onClick={ () => setSettings({ ...settings, language: "English" }) } >
-                { settings.language === "English" && <motion.div className="outline" layoutId="GlobeOutline2" /> }
-              </div>
-            </AnimateSharedLayout>
-        </div>
-        <div className="Nav__link" onClick={() => setSettings({...settings, highContrast: !settings.highContrast})}>
-          {
-            {
-            "Polish": "Animacje",
-            "English": "Animations"
-            }[settings.language]
-          }
-          <div className="Selection__container">
-            <AnimateSharedLayout>
-              <div className="Selection__indicator">
-                {settings.highContrast && <motion.div layoutId="Nav_animations_indicator" className="outline" />}
-              </div>
-              <div className="Selection__indicator">
-                {!settings.highContrast && <motion.div layoutId="Nav_animations_indicator" className="outline" />}
+              <div className="Globe eng" onClick={ () => changeSettings({language: "English" }) } >
+                { language === "English" && <motion.div className="outline" layoutId="GlobeOutline2" /> }
               </div>
             </AnimateSharedLayout>
           </div>
-        </div>
-        <div className="Nav__link">
-        {
-          {
-          "Polish": "Wysoki Kontrast",
-          "English": "High Contrast"
-          }[settings.language]
-        }
-        </div>
-        <Link to="/admin" className="Nav__link">
-          {
+          <NavbarToggle 
+            onToggle={() => changeSettings({animations: !animations})}
+            toggledValue={animations}
+          >
             {
-            "Polish": "Admin Panel",
-            "English": "Admin Panel"
-            }[settings.language]
-          }
-        </Link>
-      </motion.div>
-				
+              {
+              "Polish": "Animacje",
+              "English": "Animations"
+              }[language]
+            }
+          </NavbarToggle>
+          <NavbarToggle 
+            onToggle={() => changeSettings({highContrast: !highContrast})}
+            toggledValue={highContrast}
+          >
+            {
+              {
+              "Polish": "Zwiększony Kontrast",
+              "English": "High Contrast Mode"
+              }[language]
+            }
+          </NavbarToggle>
+          <Link to="/admin" className="Nav__link">
+            {
+              {
+              "Polish": "Admin Panel",
+              "English": "Admin Panel"
+              }[language]
+            }
+          </Link>
+        </motion.div>
 			) : (
 				<motion.div 
 					key="MenuDesktop"
 					className="Nav__group Font__Card HiddenOnSmallScreen"
-					variants={DesktopMenuVariants}
+					variants={animations ? DesktopMenuVariants : {}}
 					initial="initial"
 					animate="animate"
 					exit="exit"
 					transition={{ transition: "spring" }}
 				>
-					{ menuItems?.map((item, index) => {
-							return ( 
+					{ menuItems?.map((item, index) => 
 							<NavbarLink item={item} key={index} />
-							)
-					}) }
+					) }
 				</motion.div>
-		)}
+		  )}
 		</AnimatePresence>
 	)
 }
