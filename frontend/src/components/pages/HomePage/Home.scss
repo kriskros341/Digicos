@@ -232,9 +232,21 @@
             font-size: clamp(20px, 5vw, 2rem);
             color: white;
             .BigCard__content {
+              position: relative;
               min-height: 16em;
               margin-top: 1em;
               width: 100%;
+              .BigCard__hide__btn__container {
+                overflow: hidden;
+                position: absolute;
+                display: flex;
+                justify-content: flex-end;
+                top: 0.5em;
+                right: 1em;
+                svg {
+                  transform-origin: center;
+                }
+              }  
               @media (min-width: 768px) {
                 flex: 0 1 45vw;
               }

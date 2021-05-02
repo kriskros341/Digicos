@@ -3,9 +3,24 @@ import { useState, useContext, useEffect } from "react"
 import settingsContext from "../../SettingsContext"
 import './Aktualnosci.scss'
 
+
+type FileContentModel = {
+  alt?: string
+  cont: any
+}
+
+type textContentModel = {
+  cont: string
+}
+
+type linkContentModel = {
+  text: string
+  href?: string
+}
+
 type subItemModel = {
   typee: string
-  cont: any
+  cont: textContentModel | linkContentModel | FileContentModel
 }
 
 type ItemModel = {
@@ -36,7 +51,7 @@ const Item: React.FC<ItemInterface> = ({item, language}) => {
           </div>
         )}
       </AnimatePresence>
-        
+
       <ItemContent item={item} language={language} isActive={isActive}/>
 
       <AnimatePresence>
@@ -53,14 +68,38 @@ const Item: React.FC<ItemInterface> = ({item, language}) => {
 }
 
 const SubItem: React.FC<{typee: string, cont: any}> = ({typee, cont}) => {
-  switch(typee) {
-    case "text":
-      break
+  if(typee === "text") {
+    return <SubItemText cont={cont} />
+  }
+  if(typee === "file") {
+    return <SubItemFile cont={cont} />
+  }
+  if(typee === "link") {
+    return <SubItemLink cont={cont} />
   }
   return (
     <div>{cont}</div>
   )
 }
+
+const SubItemFile: React.FC<{cont: string}> = ({cont}) => {
+  return (
+    <div>{cont}</div>
+  )
+}
+
+const SubItemLink: React.FC<{cont: string}> = ({cont}) => {
+  return (
+    <div>{cont}</div>
+  )
+}
+
+const SubItemText: React.FC<{cont: string}> = ({cont}) => {
+  return (
+    <div>{cont}</div>
+  )
+}
+
 
 const ItemContent: React.FC<{item: ItemModel, language: string, isActive: boolean}> = ({item, language, isActive}) => {
   return (
@@ -72,7 +111,7 @@ const ItemContent: React.FC<{item: ItemModel, language: string, isActive: boolea
       <motion.div layout>
       {isActive && (
         <motion.div className="Item__content__container" initial={{opacity: 0}} animate={{opacity: 1, transition:{delay: 0.2}}}>
-          {item.content.map((subItem, index) => 
+          {item.content.map((subItem, index) =>
             <SubItem key={`${item}`} typee={subItem.typee} cont={subItem.cont} />
           )}
         </motion.div>
@@ -86,7 +125,7 @@ const Aktualnosci: React.FC = () => {
   const settings = useContext(settingsContext)
   const [ data, setData ] = useState<ItemModel[]>([])
   const fetchData = () => {
-    fetch(`http://digicos.ddns.net:8003/aktualnosci/get_all`)
+    fetch(`https://digicos.ddns.net:8001/aktualnosci/get_all`)
     .then(resource => resource.json())
     .then(data => setData(data))
   }
@@ -98,15 +137,14 @@ const Aktualnosci: React.FC = () => {
         <AnimateSharedLayout>
           <motion.div className="Aktualnosci__container container layout">
             <div className="Aktualnosci__content aktualnosci_f">
-            {console.log(data)}
             {data.filter((item) => item.language === settings.language).map((item, index) => {
               return (
                 <Item
-                  key={`Aktualnosci__item-${index}`} 
+                  key={`Aktualnosci__item-${index}`}
                   item={item}
-                  language={settings.language} 
+                  language={settings.language}
                 />
-              ) 
+              )
             })}
             </div>
           </motion.div>
