@@ -43,7 +43,7 @@ async def get_file_names(request: Request):
         result.append({x.filename: {
             "size": str(x.length) + " b",
             "uploaded": x.upload_date,
-            "link": f"http://digicos.ddns.net:8001/pliki/get_file?filename={x.filename}"
+            "link": f"https://digicos.ddns.net:8001/pliki/get_file?filename={x.filename}"
         }})
         print(x.filename)
     return {"files": result}
@@ -58,6 +58,6 @@ async def read_item(request: Request):
             "filename": x.filename,
             "size": str(x.length) + " b",
             "uploaded": x.upload_date,
-            "link": f"http://digicos.ddns.net:8001/pliki/get_file?filename={x.filename}"
+            "link": f"https://digicos.ddns.net:8001/pliki/get_file?filename={x.filename}"
         })
     return request.app.templates.TemplateResponse("files.html", {"request": request, "files": result})

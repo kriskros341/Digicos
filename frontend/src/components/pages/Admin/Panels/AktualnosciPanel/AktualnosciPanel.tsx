@@ -62,7 +62,7 @@ const CardOptions: React.FC<cardOptionsInterface> = ({editedState, pushItemUpdat
 type InnerLinkModel = {
   cont: string | number
   href: string
-} 
+}
 
 type InnerFileModel = {
   cont: any
@@ -206,13 +206,13 @@ const AktualnosciPanel: React.FC<AktualnosciPanelInterface> = ({logout, createAu
     return response.json()
   }
   const fetchData: (language: string) => void = () => {
-    fetch(`http://digicos.ddns.net:8003/aktualnosci/get_all`)
+    fetch(`https://digicos.ddns.net:8001/aktualnosci/get_all`)
       .then(resource => resource.json())
       .then(data => setData(data))
   }
   const putData = (updatedItem: aktualnosciItemModel) => {
     console.log(updatedItem)
-    fetch(`http://digicos.ddns.net:8003/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem), headers: { Authorization: createAuthString() } })
+    fetch(`https://digicos.ddns.net:8001/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem), headers: { Authorization: createAuthString() } })
       .then(resource => handleResponse(resource))
       .then(() => fetchData(language))
   }
@@ -222,7 +222,7 @@ const AktualnosciPanel: React.FC<AktualnosciPanelInterface> = ({logout, createAu
         .then(() => fetchData(language))
   }
   const createItem = (language: string) => {
-    fetch(`http://digicos.ddns.net:8003/aktualnosci/create_one/${language}`, {method: "GET", headers: { Authorization: createAuthString() }})
+    fetch(`https://digicos.ddns.net:8001/aktualnosci/create_one/${language}`, {method: "GET", headers: { Authorization: createAuthString() }})
       .then(resource => handleResponse(resource))
       .then(() => fetchData(language))
 }

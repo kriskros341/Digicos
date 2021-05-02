@@ -36,7 +36,7 @@ const Item: React.FC<ItemInterface> = ({item, language}) => {
           </div>
         )}
       </AnimatePresence>
-        
+
       <ItemContent item={item} language={language} isActive={isActive}/>
 
       <AnimatePresence>
@@ -72,7 +72,7 @@ const ItemContent: React.FC<{item: ItemModel, language: string, isActive: boolea
       <motion.div layout>
       {isActive && (
         <motion.div className="Item__content__container" initial={{opacity: 0}} animate={{opacity: 1, transition:{delay: 0.2}}}>
-          {item.content.map((subItem, index) => 
+          {item.content.map((subItem, index) =>
             <SubItem key={`${item}`} typee={subItem.typee} cont={subItem.cont} />
           )}
         </motion.div>
@@ -86,7 +86,7 @@ const Aktualnosci: React.FC = () => {
   const settings = useContext(settingsContext)
   const [ data, setData ] = useState<ItemModel[]>([])
   const fetchData = () => {
-    fetch(`http://digicos.ddns.net:8003/aktualnosci/get_all`)
+    fetch(`https://digicos.ddns.net:8001/aktualnosci/get_all`)
     .then(resource => resource.json())
     .then(data => setData(data))
   }
@@ -102,11 +102,11 @@ const Aktualnosci: React.FC = () => {
             {data.filter((item) => item.language === settings.language).map((item, index) => {
               return (
                 <Item
-                  key={`Aktualnosci__item-${index}`} 
+                  key={`Aktualnosci__item-${index}`}
                   item={item}
-                  language={settings.language} 
+                  language={settings.language}
                 />
-              ) 
+              )
             })}
             </div>
           </motion.div>
