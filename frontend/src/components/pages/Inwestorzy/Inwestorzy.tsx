@@ -26,6 +26,34 @@ const suma_akcji = inwestorzy.reduce((reducer, item) => {
     return reducer+=item.akcje
 }, 0)
 
+const InwestorzyTable_n = () => {
+  return (
+    <div className="InwestorzyTable">
+      <div className="fRow">
+        <div className="fCell">Nazwa Akcjonariusza</div>
+        <div className="fCell">Liczba Akcji i Głosów</div>
+        <div className="fCell">Udział Procentowy</div>
+      </div>
+      {
+        inwestorzy.map((inwestor, index) => {
+          return (
+            <div className="fRow data" key={index}>
+              <div className="fCell">{inwestor.nazwa}</div>
+              <div className="fCell">{inwestor.akcje}</div>
+              <div className="fCell">{((inwestor.akcje/suma_akcji)*100).toFixed(2)}%</div>
+            </div>
+          )
+        })
+      }
+      <div className="fRow">
+        <div className="fCell">Ogółem</div>
+        <div className="fCell">{suma_akcji}</div>
+        <div className="fCell">100%</div>
+      </div>
+    </div>
+  )
+}
+
 const Inwestorzy = () => {
   const [ deviceWidth, setDeviceWidth ] = useState(window.innerWidth <= 768)
   const settings = useContext(SettingsContext)
@@ -33,8 +61,6 @@ const Inwestorzy = () => {
     window.addEventListener("resize", () => setDeviceWidth(window.innerWidth <= 768))
     return () => window.removeEventListener("resize", () => setDeviceWidth(window.innerWidth <= 768))
   }, [])
-  
-
   return (
     <div className="Inwestorzy__component">
       <div className="bg" />
@@ -56,7 +82,10 @@ const Inwestorzy = () => {
             <div className="cell">
               <div className="title">Struktura Akcjonariatu</div>
               <li className="text">
-                Kapitał zakładowy Spółki wynosi 2.490.000,00 zł, Kapitał wpłacony 2.490.000,00 zł
+                Kapitał zakładowy Spółki wynosi 2.490.000,00 zł,
+              </li>
+              <li className="text">
+                Kapitał wpłacony 2.490.000,00 zł
               </li>
               <hr />
               <li>
@@ -66,29 +95,9 @@ const Inwestorzy = () => {
               </li>
             </div>
           </div>
-          <div className="column table">
-            <div className="row title">
-              <div className="cell">Nazwa Akcjonariusza</div>
-              <div className="cell">Liczba Akcji i Głosów</div>
-              <div className="cell">Udział Procentowy</div>
-            </div>
-              {
-              inwestorzy.map((inwestor, index) => {
-                return (
-                  <div className="row data" key={index}>
-                    <div>{inwestor.nazwa}</div>
-                    <div>{inwestor.akcje}</div>
-                    <div>{((inwestor.akcje/suma_akcji)*100).toFixed(2)}%</div>
-                  </div>
-                )
-              })
-              }
-            <div className="row sum">
-              <div>Ogółem</div>
-              <div>2490000</div>
-              <div>100%</div>
-            </div>
-          </div>
+        <div className="column">
+          <InwestorzyTable_n />
+        </div>
       </motion.div>
     </div>
   )

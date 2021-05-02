@@ -49,7 +49,7 @@ const Cards__Portfolio: React.FC = () => {
       <AnimatePresence>
       {
         viewCard !== 0 &&
-          <BigCard viewCard={ viewCard } />
+          <BigCard viewCard={ viewCard } exitBigCard={() => setViewCard(0)}/>
       }
       </AnimatePresence>
     </>

@@ -3,9 +3,24 @@ import { useState, useContext, useEffect } from "react"
 import settingsContext from "../../SettingsContext"
 import './Aktualnosci.scss'
 
+
+type FileContentModel = {
+  alt?: string
+  cont: any
+}
+
+type textContentModel = {
+  cont: string
+}
+
+type linkContentModel = {
+  text: string
+  href?: string
+}
+
 type subItemModel = {
   typee: string
-  cont: any
+  cont: textContentModel | linkContentModel | FileContentModel
 }
 
 type ItemModel = {
@@ -53,14 +68,38 @@ const Item: React.FC<ItemInterface> = ({item, language}) => {
 }
 
 const SubItem: React.FC<{typee: string, cont: any}> = ({typee, cont}) => {
-  switch(typee) {
-    case "text":
-      break
+  if(typee === "text") {
+    return <SubItemText cont={cont} />
+  }
+  if(typee === "file") {
+    return <SubItemFile cont={cont} />
+  }
+  if(typee === "link") {
+    return <SubItemLink cont={cont} />
   }
   return (
     <div>{cont}</div>
   )
 }
+
+const SubItemFile: React.FC<{cont: string}> = ({cont}) => {
+  return (
+    <div>{cont}</div>
+  )
+}
+
+const SubItemLink: React.FC<{cont: string}> = ({cont}) => {
+  return (
+    <div>{cont}</div>
+  )
+}
+
+const SubItemText: React.FC<{cont: string}> = ({cont}) => {
+  return (
+    <div>{cont}</div>
+  )
+}
+
 
 const ItemContent: React.FC<{item: ItemModel, language: string, isActive: boolean}> = ({item, language, isActive}) => {
   return (
@@ -98,7 +137,6 @@ const Aktualnosci: React.FC = () => {
         <AnimateSharedLayout>
           <motion.div className="Aktualnosci__container container layout">
             <div className="Aktualnosci__content aktualnosci_f">
-            {console.log(data)}
             {data.filter((item) => item.language === settings.language).map((item, index) => {
               return (
                 <Item
