@@ -3,8 +3,9 @@ This is my biggest project yet and I had lots of fun building it. I started it h
 Main motivation behind this project was to learn, mostly about modern frontend and CSS, since all of my previous web apps in Flask/Django looked bad. I'm looking forward to using Typescript and React a lot more in the future projects. ^^
 
 # The actual README:
-A website made for Digicos S.A. website contest. Even after wordpress, it went through many iterations. I Initially started with React and FastAPI + MongoDB. As the project grew I made a version of it in Next.js. It started with React Transition Group, but I switched to Framer-Motion. Another consideration was react-redux, but I found the ContextAPI to be sufficient. It uses React Router DOM. Later on I added Typescript and I love it. The dynamic dns points to the host with Let's Encrypt SSL certificate.
+A website made for Digicos S.A. website contest. Even after ditching wordpress, it went through many iterations. I Initially started with React and FastAPI + MongoDB. As the project grew I made a version of it in Next.js. It started with React Transition Group, but I switched to Framer-Motion. Another consideration was react-redux, but I later on found the ContextAPI to be sufficient. It uses React Router DOM. I added Typescript late in to the project, but It's so extremely useful I love it.
 
+The dynamic dns points to the host with Let's Encrypt SSL certificate.
 It's hosted on https://digicos.ddns.net:8002/
 , unless the laptop that serves it died.
 
