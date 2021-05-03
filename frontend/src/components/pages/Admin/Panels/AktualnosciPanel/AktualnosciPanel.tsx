@@ -79,7 +79,7 @@ const InnerContentFile: React.FC<{setContent: (swap: InnerFileModel) => void, cu
   useEffect(() => {
     if(current.typee !== "file")
     setContent({cont: null, alt: ""})
-  }, [])
+  }, [setContent, current.typee])
   return (
     <div className="indented lighter">
       <div>
@@ -97,11 +97,11 @@ const InnerContentText: React.FC<{current: cardInnerContentModel, setContent: (s
     if(current.typee !== "text") {
       setContent("")
     }
-  }, [])
+  }, [setContent, current.typee])
   return (
     <textarea 
       className="indented lighter" 
-      onChange={(e) => {setContent(e.target.value); console.log(current)}} defaultValue={current.cont} 
+      onChange={(e) => setContent(e.target.value)} defaultValue={current.cont} 
       />
   )
 }
@@ -111,7 +111,7 @@ const InnerContentLink: React.FC<{current: cardInnerContentModel, setContent: (s
     if(current.typee !== "link") {
       setContent({text: "", href: ""})
     }
-  }, [])
+  }, [setContent, current.typee])
   return (
     <div className="indented lighter">
       <div>
@@ -130,7 +130,6 @@ const InnerContentLink: React.FC<{current: cardInnerContentModel, setContent: (s
 
 const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdited, editSubItem}) => {
   const updateItem = (newData: any) => editSubItem({...innerItemData, ...newData})
-  console.log(innerItemData, "current")
 	return (
 		<div className="indented">
 			{isEdited ? (
@@ -273,7 +272,6 @@ const AktualnosciPanel: React.FC<AktualnosciPanelInterface> = ({logout, createAu
       .then(data => setData(data))
   }
   const putData = (updatedItem: aktualnosciItemModel) => {
-    console.log(updatedItem)
     fetch(`https://digicos.ddns.net:8001/aktualnosci/update_one/${updatedItem.internal_id}`, {method: "PUT", body: JSON.stringify(updatedItem), headers: { Authorization: createAuthString() } })
       .then(resource => handleResponse(resource))
       .then(() => fetchData(language))

@@ -41,7 +41,7 @@ const items = {
     {text: "Strona Główna", icon: <DigicosIcon />}
   ],
   "defaultPath": [
-    {text: "Prezentacja", icon: <PresIcon />, to: "/prezentacja"},
+    {text: "Strona Główna", icon: <PolandOutlineIcon />, to: "/"},
     {text: "Realizacje", icon: <HelmetIcon />, to: "/realizacje"},
     {text: "Kontakt", icon: <PhoneIcon />, to: "/kontakt"},
   ]

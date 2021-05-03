@@ -1,6 +1,6 @@
 import './Inwestorzy.scss'
 import { motion } from "framer-motion"
-import { useState, useEffect, useContext } from "react"
+import { useContext } from "react"
 import SettingsContext from '../../SettingsContext'
 
 const inwestorzy = [
@@ -26,7 +26,7 @@ const suma_akcji = inwestorzy.reduce((reducer, item) => {
     return reducer+=item.akcje
 }, 0)
 
-const InwestorzyTable_n = () => {
+const InwestorzyTable = () => {
   return (
     <div className="InwestorzyTable">
       <div className="fRow">
@@ -55,12 +55,7 @@ const InwestorzyTable_n = () => {
 }
 
 const Inwestorzy = () => {
-  const [ deviceWidth, setDeviceWidth ] = useState(window.innerWidth <= 768)
   const settings = useContext(SettingsContext)
-  useEffect(() => {
-    window.addEventListener("resize", () => setDeviceWidth(window.innerWidth <= 768))
-    return () => window.removeEventListener("resize", () => setDeviceWidth(window.innerWidth <= 768))
-  }, [])
   return (
     <div className="Inwestorzy__component">
       <div className="bg" />
@@ -96,7 +91,7 @@ const Inwestorzy = () => {
             </div>
           </div>
         <div className="column">
-          <InwestorzyTable_n />
+          <InwestorzyTable />
         </div>
       </motion.div>
     </div>
