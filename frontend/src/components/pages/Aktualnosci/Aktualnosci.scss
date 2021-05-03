@@ -31,7 +31,7 @@
     }
   }
   .Aktualnosci__container {
-    margin: 12vh auto;
+    margin: 12vh auto 24vh auto;
     .Aktualnosci__content {
       display: flex;
       flex-direction: column;
@@ -44,11 +44,10 @@
         margin-top: 1em;
         border-radius: 10px;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-        background-color: rgba(0, 0, 0, 0.4);
-        &:nth-child(3n+1) {
+        &:nth-child(2n+1) {
           background-color: rgba(0, 0, 0, 0.25);
         }
-        &:nth-child(3n+2) {
+        &:nth-child(2n) {
           background-color: #118DF0;
         }
       }
@@ -71,6 +70,7 @@
         }
       }
       .Item__hide__btn__container {
+        cursor: pointer;
         overflow: hidden;
         position: absolute;
         display: flex;
@@ -82,6 +82,7 @@
         }
       }
       .Item__expand__btn__container {
+        cursor: pointer;
         overflow: hidden;
         position: absolute;
         display: flex;
@@ -96,9 +97,13 @@
       overflow-wrap: break-word;
       font-weight: lighter;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       .Item__content {
         text-align: center;
+        a {
+          color: red;
+        }
       }
     }
   }
@@ -108,7 +113,13 @@
   font-style: normal;
   font-weight: normal;
   color: white;
-  font-size: #{"clamp(12px, 10vw, 1.5rem)"};
+  font-size: #{"clamp(12px, 4vw, 1.5rem)"};
   text-shadow: 0px 8px 8px rgba(0, 0, 0, 0.25);
   text-decoration: none;
+}
+
+.subitem {
+  a {
+    color: red;
+  }
 }

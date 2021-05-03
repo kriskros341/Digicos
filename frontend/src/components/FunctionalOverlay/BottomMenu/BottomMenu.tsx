@@ -23,22 +23,22 @@ const items = {
     {text: "Kontakt", icon: <PhoneIcon />, to: "/kontakt"},
   ],
   "/realizacje": [
-    {text: "text", icon: <PolandOutlineIcon />},
-    {text: "text", icon: <PolandOutlineIcon />},
-    {text: "text", icon: <PolandOutlineIcon />}
+    {text: "Strona Główna", icon: <DigicosIcon />},
+    {text: "Realizacje", icon: <HelmetIcon />, to: "/realizacje"},
+    {text: "Kontakt", icon: <PhoneIcon />, to: "/kontakt"},
   ],
   "/kontakt": [
-    {text: "text", icon: <PolandOutlineIcon />},
-    {text: "text", icon: <PolandOutlineIcon />},
-    {text: "text", icon: <PolandOutlineIcon />}
+    {text: "Strona Główna", icon: <DigicosIcon />},
+    {text: "Realizacje", icon: <HelmetIcon />, to: "/realizacje"},
+    {text: "Prezentacja", icon: <PresIcon />, to: "/prezentacja"},
   ],
   "/inwestorzy": [
-    {text: "text", icon: <PolandOutlineIcon />},
-    {text: "text", icon: <PolandOutlineIcon />},
-    {text: "text", icon: <PolandOutlineIcon />}
+    {text: "Prezentacja", icon: <PresIcon />, to: "/prezentacja"},
+    {text: "Realizacje", icon: <HelmetIcon />, to: "/realizacje"},
+    {text: "Kontakt", icon: <PhoneIcon />, to: "/kontakt"},
   ],
   "/prezentacja": [
-    {text: "strona główna", icon: <DigicosIcon />}
+    {text: "Strona Główna", icon: <DigicosIcon />}
   ],
   "defaultPath": [
     {text: "Prezentacja", icon: <PresIcon />, to: "/prezentacja"},

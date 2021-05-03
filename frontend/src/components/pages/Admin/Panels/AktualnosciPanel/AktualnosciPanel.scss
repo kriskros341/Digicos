@@ -25,6 +25,7 @@
 		padding: 0.5em;
 		background-color: rgba(0, 0, 0, 0.4);
     margin-top: 1em;
+    
 		.Card__options__container {
 			position: absolute;
 			top: 0.5em; right: 0.5em;
@@ -46,13 +47,16 @@
 					margin-left: #{"clamp(0.5em, 2vw, 1em)"};
 				}
 				.lighter {
-					font-weight: lighter;
+          font-weight: lighter;
+          a {
+            color: #ECECDC;
+          }
 				}
 			}
 			.Card__Inner {
 				margin-top: 1em;
 			}
-      .Input__file {
+      .Input {
         display: block;
       }
 		}

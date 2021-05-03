@@ -53,14 +53,13 @@ const SelectedItemMap: React.FC<{map_url: string}> = ({map_url}) => {
     <motion.div>
       <AnimatePresence>
         {isMapVisible && (
-          <motion.div className="map__container">
-            <iframe 
+          <motion.div layout className="map__container" initial={{scaleY: 0}} animate={{scaleY: 1}}>
+            <motion.iframe 
               src={map_url}
-              width="600" 
-              height="450" 
+              className="map"
               style={{border:0}} 
               loading="lazy">
-            </iframe>
+            </motion.iframe>
           </motion.div>
         )}
       </AnimatePresence>

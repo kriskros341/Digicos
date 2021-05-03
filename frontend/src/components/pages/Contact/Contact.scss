@@ -200,10 +200,14 @@
     }
     .map__container {
       background-color: rgba(17, 117, 240, 0.2);
-      width: 100%;
+      max-width: 100%;
       display: flex;
       justify-content: center;
       margin: 1em 0;
+      .map {
+        max-width: 100%;
+        min-height: 16em;
+      }
     }
     .Item__expand__btn__container {
       cursor: pointer;

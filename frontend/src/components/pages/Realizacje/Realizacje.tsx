@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import './Realizacje.scss'
 
 const data = [
@@ -43,20 +44,33 @@ const data = [
   },
 ]
 
+type RealizacjeItem = {
+  internal_id: number
+  yearFrom: number
+  yearTo: string | number
+  text: string
+}
 
 export default function Realizacje() {
+  const [clientData, setClientData] = useState<RealizacjeItem[]>([])
+  useEffect(() => {
+    fetch("https://digicos.ddns.net:8001/realizacje/get_all")
+    .then(response => response.json())
+    .then(serverData => setClientData(serverData))
+  }, [])
+  console.log(clientData)
     return (
         <div className="Realizacje__component">
             <div className="bg" />
             <div className="Realizacje__Container container">
-                {data.map((item, index) => {
+                {clientData.map((item, index) => {
                     return (
                     <div key={index} className="box">
                         <div className="time">
-                            <p>{item.time}</p>
+                            <p>{item.yearFrom}-{item.yearTo}</p>
                         </div>
                         <div className="desc">
-                            <p>{item.desc}</p>
+                            <p>{item.text}</p>
                         </div>
                     </div>
                     )

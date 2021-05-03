@@ -11,9 +11,7 @@ interface itemInterface {
 const LeftPanelItems = [
 	{text: 'Panel', to: '/admin'},
 	{text: 'Realizacje', to: '/admin/realizacje'},
-	{text: 'Użytkownicy', to: '/admin/uzytkownicy'},
 	{text: 'Aktualności', to: '/admin/aktualnosci'},
-	{text: 'Konto', to: '/admin/konto'},
 ]
 
 const LeftPanelItem: React.FC<{panelItem: itemInterface}> = ({panelItem}) => {

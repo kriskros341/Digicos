@@ -60,7 +60,7 @@ const CardOptions: React.FC<cardOptionsInterface> = ({editedState, pushItemUpdat
 }
 
 type InnerLinkModel = {
-  cont: string | number
+  text: string | number
   href: string
 }
 
@@ -69,23 +69,68 @@ type InnerFileModel = {
   alt: string
 }
 
-const InnerContentFile: React.FC<{setContent: (v: InnerFileModel) => void, current: {} | any}> = ({setContent, current}) => {
-  const [ cont, setCont ] = useState()
-  return (
-    <div className="indented lighter">
-      file <input onChange={(v: any) => setContent({...current, cont: v}) }  className="Input__file" type="file"/>
-      alt <input className="Input__file" type="text"/>
-    </div>
-  )
-}
-
 type cardInnerContentModel = {
   typee: string,
   cont: string | InnerLinkModel | InnerFileModel | any
 }
 
+
+const InnerContentFile: React.FC<{setContent: (swap: InnerFileModel) => void, current: cardInnerContentModel}> = ({setContent, current}) => {
+  useEffect(() => {
+    if(current.typee !== "file")
+    setContent({cont: null, alt: ""})
+  }, [])
+  return (
+    <div className="indented lighter">
+      <div>
+      file <input  className="Input__file" type="file"/>
+      </div>
+      <div>
+      alt <input className="" type="text"/>
+      </div>
+    </div>
+  )
+}
+
+const InnerContentText: React.FC<{current: cardInnerContentModel, setContent: (swap: string) => void}> = ({current, setContent}) => {
+  useEffect(() => {
+    if(current.typee !== "text") {
+      setContent("")
+    }
+  }, [])
+  return (
+    <textarea 
+      className="indented lighter" 
+      onChange={(e) => {setContent(e.target.value); console.log(current)}} defaultValue={current.cont} 
+      />
+  )
+}
+
+const InnerContentLink: React.FC<{current: cardInnerContentModel, setContent: (swap: InnerLinkModel) => void}> = ({current, setContent}) => {
+  useEffect(() => {
+    if(current.typee !== "link") {
+      setContent({text: "", href: ""})
+    }
+  }, [])
+  return (
+    <div className="indented lighter">
+      <div>
+        text 
+        <input className="indented" type="text" onChange={(v) => setContent({...current.cont, text: v.target.value})} defaultValue={current.cont.text}/>   
+      </div> 
+      <div>
+        link 
+        <input className="indented lighter" type="text" onChange={(v) => setContent({...current.cont, href: v.target.value})} defaultValue={current.cont.href}/>
+      </div>
+    </div>
+  )
+}
+
+
+
 const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdited, editSubItem}) => {
   const updateItem = (newData: any) => editSubItem({...innerItemData, ...newData})
+  console.log(innerItemData, "current")
 	return (
 		<div className="indented">
 			{isEdited ? (
@@ -98,17 +143,35 @@ const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdi
 					<div>
 						{
 							{
-								"text": <textarea className="indented lighter" onChange={(e) => updateItem({cont: e.target.value})} defaultValue={innerItemData.cont} />,
-								"file": <InnerContentFile current={innerItemData.cont} setContent={(swap: InnerFileModel) => updateItem({cont: swap})}/>,
-								"link": <input type="text" className="indented lighter" onChange={(e) => updateItem({cont: e.target.value})} defaultValue={innerItemData.cont} />
+								"text": <InnerContentText current={innerItemData} setContent={(swap: string) => updateItem({typee: "text", cont: swap})}/>,
+								"file": <InnerContentFile current={innerItemData} setContent={(swap: InnerFileModel) => updateItem({typee: "file", cont: swap})}/>,
+								"link": <InnerContentLink current={innerItemData} setContent={(swap: InnerLinkModel) => updateItem({typee: "link", cont: swap})}/>
 							}[innerItemData.typee]
 						}
 					</div>
 				</div>
 			) : (
-				<div className="indented">
-					<div className="">{innerItemData.typee}:</div>
-					<div className="indented lighter">{innerItemData.cont}</div>
+        <div className="indented">
+        {{
+          "text":
+            <div>
+              <div className="">{innerItemData.typee}:</div>
+              <div className="indented lighter">{innerItemData.cont}</div>
+            </div>
+          ,
+          "file": 
+            <div>
+              <div className="">{innerItemData.typee}:</div>
+              <div className="indented lighter">{innerItemData.cont}</div>
+            </div>
+          ,
+          "link": 
+            <div>
+              <div className="">{innerItemData.typee}:</div>
+              <div className="indented lighter">text: {innerItemData.cont.text}</div>
+              <div className="indented lighter">href:  <a href={innerItemData.cont.href}>{innerItemData.cont.href}</a></div>
+            </div>
+        }[innerItemData.typee]}
 				</div>
 			)}
 		</div>
@@ -186,12 +249,11 @@ const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem
 		</div>
 	)
 }
+
 interface AktualnosciPanelInterface {
  logout: () => void
  createAuthString: () => string
 }
-
-
 
 const AktualnosciPanel: React.FC<AktualnosciPanelInterface> = ({logout, createAuthString}) => {
 	const [ data, setData ] = useState<aktualnosciItemModel[]>([])
