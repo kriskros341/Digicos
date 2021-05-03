@@ -66,9 +66,7 @@ const ItemDate: React.FC<{item: ItemModel, updateItem: (v: ItemModel) => void}> 
   const fromDate = new Date(`${item.yearFrom}-01-01`)
   const toDate = new Date(`${item.yearTo}-01-01`)
   const modifyDateTo = (v?: number) => {
-    console.log(isNadal, "kddd")
     v ? updateItem({...item, yearTo: v}) : updateItem({...item, yearTo: "Nadal"})
-    console.log(item)
   }
   return (
     <div className="Item__date">

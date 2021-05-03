@@ -1,1 +1,0 @@
-git fetch https://github.com/kriskros341/Digicos.git main

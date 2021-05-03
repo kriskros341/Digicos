@@ -53,14 +53,13 @@ const SelectedItemMap: React.FC<{map_url: string}> = ({map_url}) => {
     <motion.div>
       <AnimatePresence>
         {isMapVisible && (
-          <motion.div className="map__container">
-            <iframe 
+          <motion.div layout className="map__container" initial={{scaleY: 0}} animate={{scaleY: 1}}>
+            <motion.iframe 
               src={map_url}
-              width="600" 
-              height="450" 
+              className="map"
               style={{border:0}} 
               loading="lazy">
-            </iframe>
+            </motion.iframe>
           </motion.div>
         )}
       </AnimatePresence>
@@ -78,16 +77,16 @@ const ItemSelection: React.FC<{selectedId: number, contactData: ContactDataModel
     <div className="ItemSelection__container">
       <div className="ItemSelection">
       {contactData.map((item, index) => 
-        <ContactItem_n isSelected={index === selectedId} isGlowny={item.glowny} handleSelect={() => selectItem(index)}>
+        <ContactItem isSelected={index === selectedId} isGlowny={item.glowny} handleSelect={() => selectItem(index)}>
           {item.nazwa}
-        </ContactItem_n>
+        </ContactItem>
       )}
       </div>
     </div>
   )
 }
 
-const ContactItem_n: React.FC<{children?: string | undefined, isSelected: boolean, isGlowny: boolean, handleSelect: () => void}> = ({isSelected, isGlowny, handleSelect, children}) => {
+const ContactItem: React.FC<{children?: string | undefined, isSelected: boolean, isGlowny: boolean, handleSelect: () => void}> = ({isSelected, isGlowny, handleSelect, children}) => {
   const [ isToggled, setToggled ]= useState<boolean>(false)
   const toggle = () => setToggled(v => !v)
   return (
@@ -113,7 +112,7 @@ const ContactItem_n: React.FC<{children?: string | undefined, isSelected: boolea
   )
 }
 
-const Contact_n: React.FC = () => {
+const Contact: React.FC = () => {
   const [ selectedCard, setSelectedCard ] = useState<number>(0)
   const settings = useContext(SettingsContext)
   const contactData = getContactData(settings.language)
@@ -138,4 +137,4 @@ const Contact_n: React.FC = () => {
   )
 }
 
-export default Contact_n
+export default Contact

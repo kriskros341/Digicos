@@ -20,7 +20,7 @@ class TextContent(BaseModel):
 
 
 class LinkContent(BaseModel):
-    cont: Optional[str]
+    text: Optional[str]
     href: Optional[str]
 
 

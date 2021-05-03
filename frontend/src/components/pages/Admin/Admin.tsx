@@ -10,13 +10,11 @@ import Login from './Login/Login'
 const RealizacjePanel = lazy(() => import('./Panels/RealizacjePanel/RealizacjePanel'))
 const AktualnosciPanel = lazy(() => import('./Panels/AktualnosciPanel/AktualnosciPanel'))
 
-
 const MainPanel = () => {
 	return (
     <div>afwfg</div>
 	)
 }
-
 
 const Admin = () => {
   const variants = useContext(settingsContext).pageVariants
@@ -28,7 +26,6 @@ const Admin = () => {
 	return (
 		<div className="Admin__component">
       <div className="bg" />
-      <button onClick={() => console.log(checkAuthToken())}></button>
       <LeftPanel />
       <motion.div variants={variants} initial="hidden" animate="visible" className="Admin__container container_sm">
         <div className="Admin__content">

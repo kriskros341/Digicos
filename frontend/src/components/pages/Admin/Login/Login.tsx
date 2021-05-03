@@ -18,13 +18,11 @@ const LoginForm = () => {
     // @ts-ignore
     Object.keys(userInput).forEach(item => TheForm.append(item, userInput[item]))
 		const requestBody = {method: "POST", body: TheForm}
-		console.log("kkkkkkkk")
 		fetch("https://digicos.ddns.net:8001/user/token", requestBody)
 			.then(resource => resource.json())
 			.then(data => saveToken(data.access_token, data.token_type))
       .catch(detail => console.log(detail))
     checkAuthToken()
-    console.log(tokenState)
   }
 
 	const register = () => {
@@ -41,7 +39,6 @@ const LoginForm = () => {
 	}
 
   const TestToken = () => {
-    console.log({ Authentication: createAuthString() })
 		fetch(`https://digicos.ddns.net:8001/user`, {method: "GET", headers: { Authorization: createAuthString() }})
 			.then(resource => resource.json())
 			.then(data => console.log(data))
