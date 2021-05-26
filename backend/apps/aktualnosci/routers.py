@@ -88,7 +88,6 @@ async def get_all(request: Request):
 
 @router.get("./get_one/{internal_id}")
 async def get_one(request: Request, internal_id: UUID):
-
     db = request.app.mongodb['Aktualnosci']
     if result := await db.find_one({"internal_id": internal_id}):
         return result
@@ -102,7 +101,6 @@ async def update_one(request: Request, internal_id: UUID, body: BasePostData, t=
 
 @router.get("/create_one/{language}")
 async def create_one(request: Request, language: str, t=Depends(authorize)):
-
     title = {
         "Enlish": "New Article",
         "Polish": "Nowy Artykuł"
