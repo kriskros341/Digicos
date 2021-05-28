@@ -32,7 +32,6 @@ const SelectedItemContent: React.FC<{index: number, item: ContactInnerDataModel}
 }
 
 const SelectedItem: React.FC<{thisContactData: ContactDataModel}> = ({thisContactData}) => {
-  console.log(thisContactData)
   return (
     <motion.div layout className="Selected__container">
       <h2 className="Selected__name"> Oddział { thisContactData.nazwa } </h2>
