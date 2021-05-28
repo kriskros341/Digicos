@@ -1,25 +1,26 @@
 import { useState, useContext, useEffect } from "react"
 import settingsContext from "../../../../SettingsContext"
+import { ItemModel } from "../../../Aktualnosci/AktualnosciTypes"
 import "./AktualnosciPanel.scss"
 
-interface cardInnerContentInterface {
-  innerItemData: cardInnerContentModel
-  isEdited: Boolean | undefined
-  editSubItem: (newObject: object) => void
+const useForceUpdate = () => {
+  const [ value ,setValue ] = useState<number>(0)
+  console.log(value)
+  return () => setValue(v => v + 1)
 }
 
 interface cardOptionsInterface {
   pushItemUpdate: () => void,
   deleteItem: () => void,
   editedState: [
-    currentState: Boolean,
-    setStateFunction: (newState: Boolean) => void
+    currentState: boolean,
+    setStateFunction: (newState: boolean) => void
   ]
 }
 
 interface cardTitleInteface {
   title: string
-  isEdited: Boolean | undefined
+  isEdited: boolean | undefined
   changeTitle: (newTitle: string) => void
 }
 
@@ -82,12 +83,8 @@ const InnerContentFile: React.FC<{setContent: (swap: InnerFileModel) => void, cu
   }, [setContent, current.typee])
   return (
     <div className="indented lighter">
-      <div>
-      file <input  className="Input__file" type="file"/>
-      </div>
-      <div>
+      file <input  className="Input__file" type="file"/><br />
       alt <input className="" type="text"/>
-      </div>
     </div>
   )
 }
@@ -100,8 +97,10 @@ const InnerContentText: React.FC<{current: cardInnerContentModel, setContent: (s
   }, [setContent, current.typee])
   return (
     <textarea 
-      className="indented lighter" 
-      onChange={(e) => setContent(e.target.value)} defaultValue={current.cont} 
+      name={current.cont}
+      className="indented lighter InnerContentTextarea" 
+      onChange={(e) => setContent(e.target.value)} 
+      value={current.cont} 
       />
   )
 }
@@ -116,39 +115,80 @@ const InnerContentLink: React.FC<{current: cardInnerContentModel, setContent: (s
     <div className="indented lighter">
       <div>
         text 
-        <input className="indented" type="text" onChange={(v) => setContent({...current.cont, text: v.target.value})} defaultValue={current.cont.text}/>   
+        <input 
+          className="indented" 
+          type="text" 
+          onChange={(v) => setContent({...current.cont, text: v.target.value})} 
+          defaultValue={current.cont.text}/>   
       </div> 
       <div>
         link 
-        <input className="indented lighter" type="text" onChange={(v) => setContent({...current.cont, href: v.target.value})} defaultValue={current.cont.href}/>
+        <input 
+          className="indented lighter" 
+          type="text" 
+          onChange={(v) => setContent({...current.cont, href: v.target.value})} 
+          defaultValue={current.cont.href}/>
       </div>
     </div>
   )
 }
 
+interface InnerContentOptionsInterface {
+  verticalPosition: verticalPosition
+  removeItem: () => void
+  move: (direction: verticalDirection) => void
+}
 
+const InnerContentOptions: React.FC<InnerContentOptionsInterface> = ({verticalPosition, removeItem, move}) => {
+  return (
+    <div className="InnerContent__Item__Options">
+      {verticalPosition !== "First" && 
+        <div onClick={() => move("Up")}>Up</div>
+      }
+      <div onClick={() => removeItem()}>
+        Remove
+      </div>
+      {verticalPosition !== "Last" && 
+        <div onClick={() => move("Down")}>Down</div>
+      }
+    </div>
+  )
+}
 
-const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdited, editSubItem}) => {
+type verticalPosition = "First" | "Last" | "Center"
+type verticalDirection = "Up" | "Down"
+
+interface cardInnerContentInterface {
+  innerItemData: cardInnerContentModel
+  verticalPosition: verticalPosition
+  isEdited: boolean | undefined
+  editSubItem: (newObject: object) => void
+  removeItem: () => void
+  move: (direction: verticalDirection) => void
+}
+
+const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdited, editSubItem, verticalPosition, removeItem, move}) => {
   const updateItem = (newData: any) => editSubItem({...innerItemData, ...newData})
 	return (
 		<div className="indented">
 			{isEdited ? (
-				<div>
-					<select className="" onChange={(e) => updateItem({typee: e.target.value})} value={innerItemData.typee}>
-						<option value="text">text</option>
-						<option value="file">file</option>
-						<option value="link">link</option>
-					</select>
-					<div>
-						{
-							{
-								"text": <InnerContentText current={innerItemData} setContent={(swap: string) => updateItem({typee: "text", cont: swap})}/>,
-								"file": <InnerContentFile current={innerItemData} setContent={(swap: InnerFileModel) => updateItem({typee: "file", cont: swap})}/>,
-								"link": <InnerContentLink current={innerItemData} setContent={(swap: InnerLinkModel) => updateItem({typee: "link", cont: swap})}/>
-							}[innerItemData.typee]
-						}
-					</div>
-				</div>
+				<div className="InnerContent__Item__Container">
+          <div className="InnerContent__Item__Content">
+            <select onChange={(e) => updateItem({typee: e.target.value})} value={innerItemData.typee}>
+              <option value="text">text</option>
+              <option value="file">file</option>
+              <option value="link">link</option>
+            </select>
+            <div>
+              {{
+                "text": <InnerContentText current={innerItemData} setContent={(swap: string) => updateItem({typee: "text", cont: swap})}/>,
+                "file": <InnerContentFile current={innerItemData} setContent={(swap: InnerFileModel) => updateItem({typee: "file", cont: swap})}/>,
+                "link": <InnerContentLink current={innerItemData} setContent={(swap: InnerLinkModel) => updateItem({typee: "link", cont: swap})}/>
+              }[innerItemData.typee]}
+            </div>
+          </div>
+          <InnerContentOptions verticalPosition={verticalPosition} removeItem={() => removeItem()} move={move} />
+        </div>
 			) : (
         <div className="indented">
         {{
@@ -173,35 +213,29 @@ const InnerContent: React.FC<cardInnerContentInterface> = ({innerItemData, isEdi
         }[innerItemData.typee]}
 				</div>
 			)}
+      <hr />
 		</div>
 	)
 }
 
-interface aktualnosciItemModel {
+
+
+type aktualnosciItemModel = {
   internal_id: string,
   title: string,
   date: string,
   language: string
   content: cardInnerContentModel[]
 }
-interface aktualnosciItemInterface {
-  itemData: aktualnosciItemModel
-  pushItemUpdate: () => void
-  deleteItem: () => void
-  editItem: (newObject: aktualnosciItemModel) => void
-  card_index: number
+
+interface InnerContentListInterface {
+  changeInnerContent: (newData: cardInnerContentModel[]) => void
+  innerContent: cardInnerContentModel[]
+  isEdited: boolean
 }
 
-const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem, pushItemUpdate, deleteItem, card_index}) => {
-	const [ isEdited, setEdited ] = useState<Boolean>(false)
-  /*
-    Unpack current item,
-    The child element doesn't need the whole item state to make changes to it
-    returns null
-  */
-  const partialEdit: (newData: any) => void = (newData) => {
-    editItem({...itemData, ...newData})
-  }
+
+const InnerContentList: React.FC<InnerContentListInterface> = ({innerContent, isEdited, changeInnerContent}) => {
   /*
     For each element of item,
     check if element's index is equal to the edited element
@@ -209,40 +243,103 @@ const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem
     else save old item to new array
     returns object {content: Array}
   */
-  const handleArrayUpdate: (newData: any, index_to_update: number) => void = (newItem, index_to_update) => {
-    partialEdit(
-      {content: itemData.content.map((oldItem, subIndex) => subIndex === index_to_update ? newItem : oldItem)}
+  const handleArrayUpdate: (newData: cardInnerContentModel, index_to_update: number) => void = (newItem, index_to_update) => {
+    changeInnerContent(
+      innerContent.map((oldItem, subIndex) => subIndex === index_to_update ? newItem : oldItem)
     )
   }
   /*
     Create new Array containg all the items from old Array + one default {text: "text", cont: "text"}
-    Im not yet sure if I prefer the spread operator over concat here
   */
   const newArrayItem = () => {
     const defaultItem = {typee: "text", cont: "text"}
-    partialEdit({content: [...itemData.content, defaultItem]})
+    changeInnerContent([...innerContent, defaultItem])
   }
+
+  const removeItem = (indexToUpdate: number) => {
+    changeInnerContent(
+      innerContent.filter((oldItem, subIndex) => subIndex !== indexToUpdate && oldItem)
+    )
+  }
+
+  const forceUpdate = useForceUpdate()
+  
+  const swapItems = (index1: number, index2: number) => {
+    console.log(index1, index2)
+    const temp = innerContent[index1]
+    innerContent[index1] = innerContent[index2]
+    innerContent[index2] = temp
+    forceUpdate()
+  }
+
+  
+
+  const moveVertically = (index: number, direction: verticalDirection) => 
+    swapItems(
+      index, 
+      {
+        "Up": index-1, 
+        "Down": index+1
+      }[direction]
+    )
+
+  const determinePosition = (lengthOfContentArray: number, subIndex: number) => {
+    if (subIndex == 0) {
+      return "First"
+    }
+    if (subIndex == lengthOfContentArray-1) {
+      return "Last"
+    }
+    return "Center"
+  }
+
+  return (
+    <div className="Card__Inner">Zawartość:
+      {innerContent.map((subItem, subIndex) => {
+        return (
+          <InnerContent
+            key={`subitem_${subIndex}`}
+            innerItemData={subItem}
+            isEdited={isEdited}
+            editSubItem={(newItem: any) => handleArrayUpdate(newItem, subIndex)}
+            verticalPosition={determinePosition(innerContent.length, subIndex)}
+            removeItem={() => removeItem(subIndex)}
+            move={(direction: verticalDirection) => moveVertically(subIndex, direction)}
+          />
+        )
+      })}
+      {isEdited &&
+        <div className="add_btn" onClick={() => newArrayItem()}>Dodaj więcej</div>
+      }
+    </div>
+  )
+}
+
+interface aktualnosciItemInterface {
+  itemData: aktualnosciItemModel
+  commitItemUpdate: () => void
+  deleteItem: () => void
+  editItem: (newObject: aktualnosciItemModel) => void
+  card_index: number
+}
+
+const AktualnosciItem: React.FC<aktualnosciItemInterface> = ({itemData, editItem, commitItemUpdate, deleteItem, card_index}) => {
+	const [ isEdited, setEdited ] = useState<boolean>(false)
 	return (
 		<div className="Aktualnosci__card__container">
-			<CardOptions editedState={[ isEdited, setEdited ]} pushItemUpdate={pushItemUpdate} deleteItem={deleteItem}/>
+			<CardOptions editedState={[ isEdited, setEdited ]} pushItemUpdate={commitItemUpdate} deleteItem={deleteItem}/>
 			<div className="Card__content__container">
 				<div className="Card__content">
-					<CardTitle title={itemData.title} isEdited={isEdited} changeTitle={(newTitle: string) => partialEdit({title: newTitle})}/>
-					<div className="Card__Inner">Zawartość:
-						{itemData.content.map((subItem, subIndex) => {
-              return (
-                <InnerContent
-                  key={`subitem_${subIndex}`}
-                  innerItemData={subItem}
-                  isEdited={isEdited}
-                  editSubItem={(newData) => handleArrayUpdate(newData, subIndex)}
-                  />
-              )
-						})}
-					</div>
-          {isEdited &&
-            <div className="add_btn" onClick={() => newArrayItem()}>Dodaj więcej</div>
-          }
+					<CardTitle 
+            title={itemData.title} 
+            isEdited={isEdited} 
+            changeTitle={(newTitle: string) => editItem({...itemData, title: newTitle})}
+          />
+					<InnerContentList 
+            innerContent={itemData.content} 
+            isEdited={isEdited}
+            changeInnerContent={(newInnerData: cardInnerContentModel[]) => editItem({...itemData, content: newInnerData})}
+          />
 				</div>
 			</div>
 		</div>
@@ -321,7 +418,7 @@ const AktualnosciPanel: React.FC<AktualnosciPanelInterface> = ({logout, createAu
               key={"aktualnosci_"+index}
               itemData={item}
               deleteItem={() => deleteData(item)}
-              pushItemUpdate={() => putData(item)}
+              commitItemUpdate={() => putData(item)}
               editItem={(newData: aktualnosciItemModel) => handleArrayUpdate(index, newData)}
               card_index={index}
             />

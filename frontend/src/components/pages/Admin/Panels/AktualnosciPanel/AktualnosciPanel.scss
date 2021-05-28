@@ -52,12 +52,31 @@
             color: #ECECDC;
           }
 				}
+        .InnerContentTextarea {
+          width: calc(100% - 4em);
+        }
 			}
 			.Card__Inner {
 				margin-top: 1em;
 			}
       .Input {
         display: block;
+      }
+      .InnerContent__Item__Container {
+        position: relative;
+        display: flex;
+        .InnerContent__Item__Options {
+          flex: 0 0 4.5rem;
+          overflow-x: hidden;
+          text-align: center;
+          &> div {
+            cursor: pointer
+          }
+        }
+        .InnerContent__Item__Content {
+          overflow-x: hidden;
+          flex: 1 1 100%;
+        }
       }
 		}
 	}
